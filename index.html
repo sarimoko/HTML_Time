@@ -1,0 +1,2141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TIME // SARIMOKO — Temporal Observatory & Global Chronometer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700;800&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-void: #070709;
+      --bg-panel: #0e0e13;
+      --bg-card: #14141d;
+      --bg-card-hover: #1b1b26;
+      --border-subtle: #232332;
+      --border-glow: #00f0ff33;
+      --neon-cyan: #00f0ff;
+      --neon-emerald: #00ff88;
+      --neon-amber: #ffb700;
+      --neon-magenta: #ff0055;
+      --text-main: #f0f3f8;
+      --text-muted: #8b92a5;
+      --text-dim: #4d5366;
+      --font-mono: 'JetBrains Mono', 'Fira Code', Menlo, Consolas, monospace;
+      --font-display: 'Orbitron', 'JetBrains Mono', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-void);
+      color: var(--text-main);
+      font-family: var(--font-mono);
+      min-height: 100vh;
+      overflow-x: hidden;
+      line-height: 1.5;
+      background-image: 
+        radial-gradient(circle at 50% 0%, rgba(0, 240, 255, 0.05) 0%, transparent 60%),
+        radial-gradient(circle at 85% 90%, rgba(255, 0, 85, 0.03) 0%, transparent 50%);
+    }
+
+    /* Scrollbars */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg-void); }
+    ::-webkit-scrollbar-thumb { background: var(--border-subtle); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--neon-cyan); }
+
+    /* Top Navigation */
+    header {
+      border-bottom: 1px solid var(--border-subtle);
+      background: rgba(14, 14, 19, 0.85);
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0.8rem 1.25rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: var(--text-main);
+    }
+
+    .brand-mark {
+      width: 28px;
+      height: 28px;
+      border: 2px solid var(--neon-cyan);
+      border-radius: 6px;
+      display: grid;
+      place-items: center;
+      box-shadow: 0 0 12px rgba(0, 240, 255, 0.4);
+      position: relative;
+    }
+    .brand-mark::after {
+      content: '';
+      width: 6px;
+      height: 6px;
+      background: var(--neon-magenta);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--neon-magenta);
+    }
+
+    .brand-text {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      background: linear-gradient(90deg, #fff, var(--neon-cyan));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .brand-sub {
+      font-size: 0.68rem;
+      color: var(--neon-emerald);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 0.15rem 0.5rem;
+      border: 1px solid rgba(0, 255, 136, 0.25);
+      background: rgba(0, 255, 136, 0.05);
+      border-radius: 12px;
+    }
+
+    nav.tab-bar {
+      display: flex;
+      background: var(--bg-void);
+      padding: 0.25rem;
+      border-radius: 8px;
+      border: 1px solid var(--border-subtle);
+      gap: 0.25rem;
+      overflow-x: auto;
+    }
+
+    .tab-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      font-weight: 600;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .tab-btn:hover {
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .tab-btn.active {
+      color: var(--bg-void);
+      background: var(--neon-cyan);
+      box-shadow: 0 0 15px rgba(0, 240, 255, 0.5);
+    }
+
+    /* Main Container */
+    main {
+      max-width: 1400px;
+      margin: 1.5rem auto 3rem;
+      padding: 0 1.25rem;
+    }
+
+    .tab-pane {
+      display: none;
+      animation: fadeIn 0.3s ease forwards;
+    }
+
+    .tab-pane.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Cards and Panels */
+    .panel {
+      background: var(--bg-panel);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 1.5rem;
+      position: relative;
+      margin-bottom: 1.5rem;
+    }
+
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.25rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .panel-title {
+      font-family: var(--font-display);
+      font-size: 0.95rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--neon-cyan);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.75rem;
+      padding: 0.2rem 0.6rem;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+    }
+
+    .badge-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--neon-emerald);
+      box-shadow: 0 0 6px var(--neon-emerald);
+    }
+
+    /* Master Chrono Screen */
+    .chrono-hero {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    @media (max-width: 960px) {
+      .chrono-hero {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .digital-readout-box {
+      background: radial-gradient(circle at center, #131722 0%, #0a0c12 100%);
+      border: 1px solid var(--border-glow);
+      border-radius: 14px;
+      padding: 2.25rem 2rem;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      box-shadow: inset 0 0 40px rgba(0, 240, 255, 0.03);
+    }
+
+    .digital-readout-box::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--neon-cyan), transparent);
+    }
+
+    .location-tag {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.25rem;
+    }
+
+    .tz-headline {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .tz-code {
+      font-size: 0.85rem;
+      color: var(--neon-amber);
+      background: rgba(255, 183, 0, 0.1);
+      padding: 0.1rem 0.5rem;
+      border-radius: 4px;
+      border: 1px solid rgba(255, 183, 0, 0.3);
+    }
+
+    .time-digits-container {
+      display: flex;
+      align-items: baseline;
+      font-family: var(--font-display);
+      font-size: clamp(3.2rem, 7.5vw, 6.2rem);
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      line-height: 1;
+      color: #ffffff;
+      text-shadow: 0 0 25px rgba(0, 240, 255, 0.45);
+      user-select: none;
+    }
+
+    .blink-colon {
+      animation: colonPulse 1s infinite steps(1, start);
+      color: var(--neon-cyan);
+      margin: 0 0.1em;
+    }
+
+    @keyframes colonPulse {
+      0%, 100% { opacity: 1; text-shadow: 0 0 10px var(--neon-cyan); }
+      50% { opacity: 0.2; text-shadow: none; }
+    }
+
+    .millisec {
+      font-size: 0.35em;
+      color: var(--neon-magenta);
+      margin-left: 0.25em;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      width: 2.2ch;
+      text-align: left;
+      text-shadow: 0 0 12px rgba(255, 0, 85, 0.5);
+    }
+
+    .ampm {
+      font-size: 0.28em;
+      color: var(--neon-amber);
+      margin-left: 0.35em;
+      font-weight: 700;
+    }
+
+    .date-readout {
+      margin-top: 1.25rem;
+      font-size: 1.15rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .date-highlight {
+      color: #ffffff;
+      font-weight: 700;
+    }
+
+    .controls-strip {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 1.5rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      flex-wrap: wrap;
+    }
+
+    .toggle-btn {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      padding: 0.4rem 0.85rem;
+      border-radius: 6px;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .toggle-btn:hover {
+      background: rgba(0, 240, 255, 0.1);
+      color: var(--neon-cyan);
+      border-color: var(--neon-cyan);
+    }
+
+    .toggle-btn.active {
+      background: rgba(0, 240, 255, 0.2);
+      border-color: var(--neon-cyan);
+      color: #fff;
+    }
+
+    /* Analog Clock Canvas Box */
+    .analog-panel {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      position: relative;
+    }
+
+    #analogClockCanvas {
+      width: 250px;
+      height: 250px;
+      max-width: 100%;
+    }
+
+    .analog-caption {
+      margin-top: 1rem;
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    /* Temporal Metrics Matrix */
+    .telemetry-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 1rem;
+    }
+
+    .telemetry-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 1rem 1.15rem;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .telemetry-card:hover {
+      border-color: rgba(0, 240, 255, 0.4);
+      transform: translateY(-2px);
+    }
+
+    .telemetry-label {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.4rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .telemetry-value {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #ffffff;
+      word-break: break-all;
+    }
+
+    .accent-cyan { color: var(--neon-cyan); }
+    .accent-emerald { color: var(--neon-emerald); }
+    .accent-amber { color: var(--neon-amber); }
+    .accent-magenta { color: var(--neon-magenta); }
+
+    /* Map Section */
+    .map-container {
+      position: relative;
+      background: #090b10;
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 1.5rem;
+    }
+
+    #worldMapSvg {
+      width: 100%;
+      height: auto;
+      display: block;
+      background: radial-gradient(circle at 50% 50%, #0d121d 0%, #07090e 100%);
+    }
+
+    .map-tooltip {
+      position: absolute;
+      pointer-events: none;
+      background: rgba(14, 17, 24, 0.95);
+      border: 1px solid var(--neon-cyan);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.8), 0 0 10px rgba(0, 240, 255, 0.25);
+      padding: 0.6rem 0.9rem;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      color: #fff;
+      display: none;
+      z-index: 50;
+      transform: translate(-50%, -120%);
+      white-space: nowrap;
+    }
+
+    .map-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      padding: 0.8rem 1.25rem;
+      background: var(--bg-card);
+      border-top: 1px solid var(--border-subtle);
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      align-items: center;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .legend-chip {
+      width: 12px;
+      height: 12px;
+      border-radius: 3px;
+    }
+
+    /* World Grid Matrix */
+    .search-bar-row {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+      flex-wrap: wrap;
+    }
+
+    .search-input {
+      flex: 1;
+      min-width: 260px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      color: #fff;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .search-input:focus {
+      border-color: var(--neon-cyan);
+      box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
+    }
+
+    .city-matrix-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1rem;
+    }
+
+    .city-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      padding: 1.15rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .city-card:hover {
+      background: var(--bg-card-hover);
+      border-color: rgba(0, 240, 255, 0.4);
+      transform: translateY(-2px);
+    }
+
+    .city-card.california-highlight {
+      border: 1px solid var(--neon-cyan);
+      background: linear-gradient(135deg, rgba(0, 240, 255, 0.05) 0%, var(--bg-card) 100%);
+    }
+
+    .city-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 0.5rem;
+    }
+
+    .city-name {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .city-region {
+      font-size: 0.72rem;
+      color: var(--text-dim);
+    }
+
+    .delta-badge {
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text-muted);
+    }
+
+    .city-time-huge {
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #fff;
+      margin: 0.4rem 0;
+    }
+
+    .city-date-sub {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* Tools & Utilities Section */
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+      gap: 1.5rem;
+    }
+
+    @media (max-width: 500px) {
+      .tools-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .input-group {
+      margin-bottom: 1rem;
+    }
+
+    .input-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.4rem;
+      display: block;
+    }
+
+    .cyber-input {
+      width: 100%;
+      background: #09090e;
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      padding: 0.65rem 0.85rem;
+      color: #fff;
+      font-family: var(--font-mono);
+      font-size: 0.88rem;
+    }
+
+    .cyber-input:focus {
+      outline: none;
+      border-color: var(--neon-cyan);
+    }
+
+    .btn-action {
+      background: rgba(0, 240, 255, 0.15);
+      border: 1px solid var(--neon-cyan);
+      color: var(--neon-cyan);
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 0.82rem;
+      padding: 0.6rem 1.2rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-action:hover {
+      background: var(--neon-cyan);
+      color: #000;
+      box-shadow: 0 0 15px rgba(0, 240, 255, 0.4);
+    }
+
+    .btn-danger {
+      background: rgba(255, 0, 85, 0.15);
+      border-color: var(--neon-magenta);
+      color: var(--neon-magenta);
+    }
+    .btn-danger:hover {
+      background: var(--neon-magenta);
+      color: #fff;
+      box-shadow: 0 0 15px rgba(255, 0, 85, 0.4);
+    }
+
+    /* Meeting Planner Matrix Bar */
+    .overlap-timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      margin-top: 1rem;
+    }
+
+    .overlap-row {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .overlap-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .timeline-bar {
+      display: grid;
+      grid-template-columns: repeat(24, 1fr);
+      height: 28px;
+      background: #07090e;
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .hour-block {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.62rem;
+      color: #555;
+      border-right: 1px solid rgba(255, 255, 255, 0.05);
+      position: relative;
+      user-select: none;
+    }
+
+    .hour-block.work-hour {
+      background: rgba(0, 255, 136, 0.18);
+      color: var(--neon-emerald);
+      font-weight: 700;
+    }
+
+    .hour-block.current-pointer::after {
+      content: '';
+      position: absolute;
+      top: 0; bottom: 0; width: 3px;
+      background: var(--neon-magenta);
+      box-shadow: 0 0 8px var(--neon-magenta);
+      left: calc(var(--curr-pct, 0%) - 1.5px);
+      z-index: 10;
+    }
+
+    /* Stopwatch and Timer Displays */
+    .stopwatch-display {
+      font-family: var(--font-display);
+      font-size: clamp(2.2rem, 5vw, 3.4rem);
+      font-weight: 900;
+      text-align: center;
+      margin: 1.2rem 0;
+      color: var(--neon-emerald);
+      text-shadow: 0 0 18px rgba(0, 255, 136, 0.35);
+    }
+
+    .laps-container {
+      max-height: 180px;
+      overflow-y: auto;
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      margin-top: 1rem;
+      font-size: 0.8rem;
+    }
+
+    .lap-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.4rem 0.8rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    }
+    .lap-row:nth-child(even) { background: rgba(255, 255, 255, 0.02); }
+
+    /* Astronomical / Exotic Systems */
+    .curious-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .curious-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .curious-value {
+      font-family: var(--font-display);
+      font-size: 2.1rem;
+      font-weight: 800;
+      margin: 0.8rem 0;
+    }
+
+    .progress-bar-wrap {
+      width: 100%;
+      height: 12px;
+      background: #08080c;
+      border-radius: 6px;
+      overflow: hidden;
+      border: 1px solid var(--border-subtle);
+      margin: 0.8rem 0;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--neon-cyan), var(--neon-magenta));
+      transition: width 0.3s ease;
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--border-subtle);
+      padding: 2rem 1.25rem;
+      text-align: center;
+      font-size: 0.78rem;
+      color: var(--text-dim);
+      background: var(--bg-panel);
+    }
+
+    footer a {
+      color: var(--neon-cyan);
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <header>
+    <div class="nav-container">
+      <a href="#" class="brand" onclick="switchTab('chrono'); return false;">
+        <div class="brand-mark"></div>
+        <div>
+          <div class="brand-text">TIME // SARIMOKO</div>
+        </div>
+        <span class="brand-sub">CA OBS // PT</span>
+      </a>
+
+      <nav class="tab-bar">
+        <button class="tab-btn active" onclick="switchTab('chrono')" id="tabBtn-chrono">
+          <span>◈</span> CHRONO
+        </button>
+        <button class="tab-btn" onclick="switchTab('world')" id="tabBtn-world">
+          <span>⬡</span> WORLD & MATRIX
+        </button>
+        <button class="tab-btn" onclick="switchTab('lab')" id="tabBtn-lab">
+          <span>⚙</span> TIME LAB
+        </button>
+        <button class="tab-btn" onclick="switchTab('astro')" id="tabBtn-astro">
+          <span>☾</span> ASTRONOMICAL
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Viewports -->
+  <main>
+
+    <!-- TAB 1: CHRONO (Master California & Global Observational Clock) -->
+    <section id="pane-chrono" class="tab-pane active">
+      
+      <div class="chrono-hero">
+        <!-- Big Digital Cyber Chrono -->
+        <div class="digital-readout-box">
+          <div class="location-tag">
+            <div class="tz-headline">
+              <span id="displayLocationTitle">CALIFORNIA / PACIFIC</span>
+              <span class="tz-code" id="tzAbbr">PST</span>
+            </div>
+            <div class="badge">
+              <span class="badge-dot"></span>
+              <span id="solarIndicator">DAYLIGHT</span>
+            </div>
+          </div>
+
+          <div class="time-digits-container">
+            <span id="digitHours">12</span>
+            <span class="blink-colon">:</span>
+            <span id="digitMinutes">00</span>
+            <span class="blink-colon">:</span>
+            <span id="digitSeconds">00</span>
+            <span class="millisec" id="digitMillis">.000</span>
+            <span class="ampm" id="digitAmpm">PM</span>
+          </div>
+
+          <div class="date-readout">
+            <span class="date-highlight" id="dateFullFormatted">Tuesday, November 10, 2026</span>
+            <span>•</span>
+            <span id="dateOffsetFormatted">UTC-8 (Pacific Standard Time)</span>
+          </div>
+
+          <div class="controls-strip">
+            <button class="toggle-btn" id="btnToggle24h" onclick="toggle24HourMode()">24H MODE: OFF</button>
+            <button class="toggle-btn active" id="btnToggleMillis" onclick="toggleMilliseconds()">MILLIS: ON</button>
+            <button class="toggle-btn" onclick="setTimezoneDefault('America/Los_Angeles')">CALIFORNIA (DEFAULT)</button>
+            <button class="toggle-btn" onclick="setTimezoneDefault('UTC')">UTC</button>
+            <button class="toggle-btn" onclick="setLocalBrowserTz()">DEVICE LOCAL</button>
+          </div>
+        </div>
+
+        <!-- Sweeping SVG/Canvas Analog Chrono -->
+        <div class="analog-panel">
+          <canvas id="analogClockCanvas" width="500" height="500"></canvas>
+          <div class="analog-caption" id="analogSubtext">PACIFIC TIME SWEEP</div>
+        </div>
+      </div>
+
+      <!-- Live Temporal Metrics Matrix Grid -->
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title"><span>❖</span> High-Precision Temporal Telemetry</div>
+          <span class="badge" id="telemetryStatusBadge">ACTIVE INT-CLOCK</span>
+        </div>
+
+        <div class="telemetry-grid">
+          <div class="telemetry-card">
+            <div class="telemetry-label">UNIX TIMESTAMP (S) <span class="accent-cyan">#EPOCH</span></div>
+            <div class="telemetry-value accent-cyan" id="metricUnixEpoch">0000000000</div>
+          </div>
+          <div class="telemetry-card">
+            <div class="telemetry-label">ISO 8601 EXTENDED <span class="accent-emerald">#STD</span></div>
+            <div class="telemetry-value" style="font-size:0.85rem;" id="metricIso">2026-11-10T00:00:00Z</div>
+          </div>
+          <div class="telemetry-card">
+            <div class="telemetry-label">DAY OF YEAR (DOY) <span class="accent-amber">#PROGRESS</span></div>
+            <div class="telemetry-value accent-amber" id="metricDoy">Day 314 / 365</div>
+          </div>
+          <div class="telemetry-card">
+            <div class="telemetry-label">ISO WEEK NUMBER <span class="accent-magenta">#CYCLE</span></div>
+            <div class="telemetry-value accent-magenta" id="metricIsoWeek">Week 46</div>
+          </div>
+          <div class="telemetry-card">
+            <div class="telemetry-label">JULIAN DAY NUMBER <span class="accent-cyan">#ASTRONOMICAL</span></div>
+            <div class="telemetry-value" id="metricJulianDay">2461355.12</div>
+          </div>
+          <div class="telemetry-card">
+            <div class="telemetry-label">LUNAR PHASE ESTIMATE <span class="accent-emerald">#SYNODIC</span></div>
+            <div class="telemetry-value" id="metricMoonPhase">Waxing Crescent (18%)</div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- TAB 2: WORLD MAP & GLOBAL MATRIX -->
+    <section id="pane-world" class="tab-pane">
+
+      <!-- Interactive Equirectangular World Map with Day/Night Terminator -->
+      <div class="map-container">
+        <svg id="worldMapSvg" viewBox="0 0 1000 500" preserveAspectRatio="xMidYMid meet">
+          <defs>
+            <pattern id="gridPattern" width="40" height="40" patternUnits="userSpaceOnUse">
+              <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255, 255, 255, 0.04)" stroke-width="0.5" />
+            </pattern>
+            <!-- Night gradient mask for smooth twilight terminator -->
+            <linearGradient id="twilightGrad" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#000" stop-opacity="0.82" />
+              <stop offset="50%" stop-color="#02040a" stop-opacity="0.75" />
+              <stop offset="100%" stop-color="#000" stop-opacity="0.82" />
+            </linearGradient>
+          </defs>
+
+          <!-- Background coordinate grid -->
+          <rect width="1000" height="500" fill="url(#gridPattern)" />
+
+          <!-- Prime Meridian and Equator markers -->
+          <line x1="500" y1="0" x2="500" y2="500" stroke="rgba(0, 240, 255, 0.2)" stroke-dasharray="4,4" stroke-width="1" />
+          <line x1="0" y1="250" x2="1000" y2="250" stroke="rgba(255, 255, 255, 0.1)" stroke-width="0.8" />
+
+          <!-- Simplified Continent Outlines in Vector Geo Paths -->
+          <g id="worldContinents" fill="#181e2b" stroke="#2a354b" stroke-width="0.9">
+            <!-- North America -->
+            <path d="M 120 70 L 190 60 L 260 85 L 290 120 L 250 160 L 230 190 L 190 230 L 170 270 L 145 230 L 130 170 L 80 140 L 70 95 Z" />
+            <!-- South America -->
+            <path d="M 270 270 L 330 280 L 370 330 L 350 400 L 320 460 L 290 440 L 270 360 L 250 300 Z" />
+            <!-- Europe -->
+            <path d="M 460 90 L 530 80 L 560 130 L 520 170 L 470 160 L 450 120 Z" />
+            <!-- Africa -->
+            <path d="M 460 180 L 540 180 L 570 240 L 560 330 L 520 390 L 480 340 L 460 260 Z" />
+            <!-- Asia & Siberia -->
+            <path d="M 550 70 L 830 70 L 870 130 L 830 190 L 760 210 L 700 240 L 640 220 L 580 180 Z" />
+            <!-- Australia & Oceania -->
+            <path d="M 760 320 L 850 310 L 880 370 L 840 420 L 770 410 L 750 360 Z" />
+            <!-- Greenland & Arctic -->
+            <path d="M 310 40 L 380 40 L 350 90 L 300 80 Z" />
+          </g>
+
+          <!-- Day/Night Solar Terminator Polygon Curve -->
+          <path id="terminatorPolygon" fill="url(#twilightGrad)" stroke="rgba(255, 183, 0, 0.4)" stroke-width="1.2" />
+
+          <!-- Interactive City Pins -->
+          <g id="mapPinsGroup"></g>
+        </svg>
+
+        <div id="mapTooltip" class="map-tooltip"></div>
+
+        <div class="map-legend">
+          <div class="legend-item">
+            <div class="legend-chip" style="background: rgba(0, 240, 255, 0.8);"></div>
+            <span>Hub Markers (Hover to Inspect)</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-chip" style="background: rgba(2, 4, 10, 0.75); border:1px solid #ffb700;"></div>
+            <span>Night Terminator Shadow (Real-time Solar Equation)</span>
+          </div>
+          <div class="legend-item">
+            <span class="accent-cyan">◎ California: Hub Anchor</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- City Matrix / Searchable Global Grid -->
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title"><span>❖</span> Global Metros Temporal Matrix</div>
+          <span class="badge" id="matrixCityCountBadge">16 CITIES MONITORED</span>
+        </div>
+
+        <div class="search-bar-row">
+          <input type="text" id="citySearchInput" class="search-input" placeholder="Search metro by city name, country, or timezone abbreviation (e.g. Tokyo, London, UTC)..." oninput="filterCities()">
+        </div>
+
+        <div class="city-matrix-grid" id="cityMatrixContainer">
+          <!-- Dynamically generated live city cards -->
+        </div>
+      </div>
+
+    </section>
+
+    <!-- TAB 3: TIME LAB & PRODUCTIVITY UTILITIES -->
+    <section id="pane-lab" class="tab-pane">
+
+      <!-- Meeting Overlap Visualizer Bar -->
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title"><span>❖</span> Global Synchronizer // 24-Hour Overlap Planner</div>
+          <span class="badge">GREEN = 09:00 - 18:00 LOCAL WORK HOURS</span>
+        </div>
+        <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:1rem;">
+          Compare working hour overlaps between California (PT) and major transatlantic & transpacific partners.
+        </p>
+
+        <div class="overlap-timeline" id="overlapTimelineBox">
+          <!-- Dynamically rendered timeline bars -->
+        </div>
+      </div>
+
+      <div class="tools-grid">
+
+        <!-- Precision Stopwatch & Laps -->
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><span>⏱</span> Precision Chronograph</div>
+            <span class="badge" id="stopwatchStateBadge">IDLE</span>
+          </div>
+
+          <div class="stopwatch-display" id="stopwatchDisplay">00:00:00.000</div>
+
+          <div style="display:flex; gap:0.6rem; justify-content:center; flex-wrap:wrap;">
+            <button class="btn-action" id="btnSwStart" onclick="startStopwatch()">START</button>
+            <button class="btn-action" id="btnSwLap" onclick="recordLapStopwatch()" style="display:none;">LAP</button>
+            <button class="btn-action" id="btnSwStop" onclick="pauseStopwatch()" style="display:none;">STOP</button>
+            <button class="btn-action btn-danger" id="btnSwReset" onclick="resetStopwatch()">RESET</button>
+          </div>
+
+          <div class="laps-container" id="lapsContainer" style="display:none;">
+            <div id="lapsList"></div>
+          </div>
+        </div>
+
+        <!-- Synthesized Countdown Timer -->
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><span>⏳</span> Audio Synthesized Timer</div>
+            <span class="badge" id="timerStateBadge">READY</span>
+          </div>
+
+          <div class="stopwatch-display" style="color:var(--neon-amber);" id="timerDisplay">25:00</div>
+
+          <div style="display:flex; gap:0.5rem; justify-content:center; margin-bottom:1rem; flex-wrap:wrap;">
+            <button class="toggle-btn" onclick="setTimerPreset(300)">5 MIN</button>
+            <button class="toggle-btn" onclick="setTimerPreset(600)">10 MIN</button>
+            <button class="toggle-btn" onclick="setTimerPreset(1500)">POMODORO (25M)</button>
+            <button class="toggle-btn" onclick="setTimerPreset(3600)">60 MIN</button>
+          </div>
+
+          <div style="display:flex; gap:0.6rem; justify-content:center;">
+            <button class="btn-action" id="btnTimerStart" onclick="startTimer()">START</button>
+            <button class="btn-action" id="btnTimerPause" onclick="pauseTimer()" style="display:none;">PAUSE</button>
+            <button class="btn-action btn-danger" onclick="resetTimer()">RESET</button>
+          </div>
+        </div>
+
+        <!-- Unix Epoch Timestamp Studio -->
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><span>⚡</span> Unix Timestamp Converter</div>
+          </div>
+
+          <div class="input-group">
+            <label class="input-label">Unix Epoch (Seconds or Milliseconds)</label>
+            <div style="display:flex; gap:0.5rem;">
+              <input type="number" id="inputEpochVal" class="cyber-input" placeholder="e.g. 1770000000">
+              <button class="btn-action" onclick="convertEpochToHuman()">CONVERT</button>
+              <button class="toggle-btn" onclick="fillCurrentEpoch()">NOW</button>
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label class="input-label">Resulting Calendar Datetime (PT & UTC)</label>
+            <div class="telemetry-value" style="font-size:0.85rem;" id="epochConvertResult">—</div>
+          </div>
+
+          <div style="margin-top:1.25rem; padding-top:1rem; border-top:1px solid rgba(255,255,255,0.06);">
+            <label class="input-label">Human Date to Unix Epoch</label>
+            <div style="display:flex; gap:0.5rem;">
+              <input type="datetime-local" id="inputHumanDate" class="cyber-input">
+              <button class="btn-action" onclick="convertHumanToEpoch()">GET EPOCH</button>
+            </div>
+            <div class="telemetry-value accent-cyan" style="font-size:0.85rem; margin-top:0.5rem;" id="humanToEpochResult">—</div>
+          </div>
+        </div>
+
+        <!-- Date Delta & Duration Calculator -->
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><span>🧮</span> Temporal Duration Calculator</div>
+          </div>
+
+          <div class="input-group">
+            <label class="input-label">Start Point</label>
+            <input type="date" id="calcStartDate" class="cyber-input">
+          </div>
+          <div class="input-group">
+            <label class="input-label">End Point</label>
+            <input type="date" id="calcEndDate" class="cyber-input">
+          </div>
+
+          <button class="btn-action" style="width:100%;" onclick="calculateDateDelta()">CALCULATE DELTA</button>
+
+          <div style="margin-top:1rem;" id="deltaResultsWrap">
+            <div class="telemetry-value accent-emerald" id="calcDeltaOutput" style="font-size:0.95rem;">Select dates to compute difference.</div>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- TAB 4: ASTRONOMICAL & CURIOUS TIME SYSTEMS -->
+    <section id="pane-astro" class="tab-pane">
+
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title"><span>♁</span> Annual Orbital Completion</div>
+          <span class="badge accent-cyan" id="earthProgressLabel">00.000000%</span>
+        </div>
+        <p style="font-size:0.8rem; color:var(--text-muted);">
+          Calculated precision progress of Earth through its current 365/366-day solar revolution around the Sun.
+        </p>
+        <div class="progress-bar-wrap">
+          <div class="progress-bar-fill" id="orbitProgressFill" style="width: 0%;"></div>
+        </div>
+      </div>
+
+      <div class="curious-grid">
+
+        <!-- Swatch Internet Time -->
+        <div class="curious-card">
+          <div>
+            <div class="telemetry-label">SWATCH INTERNET TIME <span class="accent-cyan">@BEATS</span></div>
+            <div class="curious-value accent-cyan" id="curiousSwatchBeats">@000.00</div>
+            <p style="font-size:0.75rem; color:var(--text-muted);">
+              Divides the solar day into 1000 equal ".beats" (1 beat = 1 min, 26.4 sec) synchronized to Biel Mean Time (UTC+1) without daylight savings.
+            </p>
+          </div>
+        </div>
+
+        <!-- Coordinated Mars Time (MTC) -->
+        <div class="curious-card">
+          <div>
+            <div class="telemetry-label">COORDINATED MARS TIME <span class="accent-magenta">MTC (AIRY-0)</span></div>
+            <div class="curious-value accent-magenta" id="curiousMarsTime">00:00:00</div>
+            <p style="font-size:0.75rem; color:var(--text-muted);">
+              Mean solar time at the Martian prime meridian (Airy-0 crater). 1 Martian Sol ≈ 24h 39m 35.244s Earth standard.
+            </p>
+          </div>
+        </div>
+
+        <!-- French Revolutionary Decimal Time -->
+        <div class="curious-card">
+          <div>
+            <div class="telemetry-label">METRIC / DECIMAL TIME <span class="accent-amber">FRENCH REV</span></div>
+            <div class="curious-value accent-amber" id="curiousDecimalTime">0h 00m 00s</div>
+            <p style="font-size:0.75rem; color:var(--text-muted);">
+              10 decimal hours per day, 100 decimal minutes per hour, 100 decimal seconds per minute.
+            </p>
+          </div>
+        </div>
+
+        <!-- Sidereal Time -->
+        <div class="curious-card">
+          <div>
+            <div class="telemetry-label">GREENWICH MEAN SIDEREAL <span class="accent-emerald">GMST</span></div>
+            <div class="curious-value accent-emerald" id="curiousGmst">00:00:00</div>
+            <p style="font-size:0.75rem; color:var(--text-muted);">
+              Time measured by the rotation of the Earth relative to the distant fixed stars rather than the Sun (approximated for astronomers).
+            </p>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- Footprint -->
+  <footer>
+    <div style="max-width: 1400px; margin: 0 auto; display:flex; justify-content:space-between; flex-wrap:wrap; gap:1rem; align-items:center;">
+      <div>
+        <strong>TIME BY SARIMOKO</strong> // Continuous High-Precision Chronometry
+      </div>
+      <div>
+        Primary Standard: <span class="accent-cyan">America/Los_Angeles (Pacific Time)</span> • Ready for <a href="https://time.sarimoko.com" target="_blank" rel="noopener">time.sarimoko.com</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Single-File Core Application Logic -->
+  <script>
+    /**
+     * TIME BY SARIMOKO — Core Engine
+     * Zero-dependency vanilla ES6+ with zero clock drift.
+     */
+
+    // --- State Management ---
+    const STATE = {
+      selectedTimezone: 'America/Los_Angeles',
+      display24Hour: false,
+      showMilliseconds: true,
+      stopwatch: {
+        running: false,
+        startTime: 0,
+        elapsedBefore: 0,
+        timerId: null,
+        laps: []
+      },
+      countdown: {
+        running: false,
+        totalDuration: 1500, // 25 mins
+        remaining: 1500,
+        timerId: null
+      }
+    };
+
+    // Major Global Financial & Tech Hubs
+    const WORLD_METROS = [
+      { name: "Los Angeles / SF", country: "USA (California)", tz: "America/Los_Angeles", x: 165, y: 185, isBase: true },
+      { name: "New York", country: "USA", tz: "America/New_York", x: 265, y: 165 },
+      { name: "London", country: "United Kingdom", tz: "Europe/London", x: 475, y: 120 },
+      { name: "Paris", country: "France", tz: "Europe/Paris", x: 495, y: 135 },
+      { name: "Berlin", country: "Germany", tz: "Europe/Berlin", x: 515, y: 120 },
+      { name: "Dubai", country: "UAE", tz: "Asia/Dubai", x: 625, y: 205 },
+      { name: "Singapore", country: "Singapore", tz: "Asia/Singapore", x: 745, y: 275 },
+      { name: "Tokyo", country: "Japan", tz: "Asia/Tokyo", x: 840, y: 175 },
+      { name: "Sydney", country: "Australia", tz: "Australia/Sydney", x: 865, y: 390 },
+      { name: "Auckland", country: "New Zealand", tz: "Pacific/Auckland", x: 940, y: 420 },
+      { name: "São Paulo", country: "Brazil", tz: "America/Sao_Paulo", x: 345, y: 370 },
+      { name: "Reykjavik", country: "Iceland", tz: "Atlantic/Reykjavik", x: 440, y: 80 },
+      { name: "Hong Kong", country: "China", tz: "Asia/Hong_Kong", x: 775, y: 215 },
+      { name: "Mumbai", country: "India", tz: "Asia/Kolkata", x: 675, y: 220 },
+      { name: "Honolulu", country: "USA (Hawaii)", tz: "Pacific/Honolulu", x: 60, y: 215 },
+      { name: "UTC Standard", country: "Universal Time", tz: "UTC", x: 475, y: 20 }
+    ];
+
+    // --- Audio Synthesis via Web Audio API (No External Audio Files) ---
+    let audioCtx = null;
+    function playBeep(freq = 880, duration = 0.15, type = 'sine') {
+      try {
+        if (!audioCtx) {
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+      } catch (e) {
+        // Audio might be blocked until user gesture
+      }
+    }
+
+    // --- Navigation Tabs ---
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-pane').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+      const pane = document.getElementById(`pane-${tabId}`);
+      const btn = document.getElementById(`tabBtn-${tabId}`);
+      if (pane) pane.classList.add('active');
+      if (btn) btn.classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // --- Core Master Clock Engine ---
+    function updateMasterClock() {
+      const now = new Date();
+
+      // Formatter options according to state
+      const timeOpts = {
+        timeZone: STATE.selectedTimezone,
+        hour12: !STATE.display24Hour,
+        hour: 'numeric',
+        minute: '2-digit',
+        second: '2-digit'
+      };
+
+      const parts = new Intl.DateTimeFormat('en-US', timeOpts).formatToParts(now);
+      let h = '', m = '', s = '', dayPeriod = '';
+
+      parts.forEach(p => {
+        if (p.type === 'hour') h = p.value.padStart(2, '0');
+        if (p.type === 'minute') m = p.value;
+        if (p.type === 'second') s = p.value;
+        if (p.type === 'dayPeriod') dayPeriod = p.value.toUpperCase();
+      });
+
+      // Milliseconds calculation
+      const ms = String(now.getMilliseconds()).padStart(3, '0');
+
+      // Update DOM
+      document.getElementById('digitHours').textContent = h;
+      document.getElementById('digitMinutes').textContent = m;
+      document.getElementById('digitSeconds').textContent = s;
+
+      const msElem = document.getElementById('digitMillis');
+      if (STATE.showMilliseconds) {
+        msElem.style.display = 'inline';
+        msElem.textContent = `.${ms}`;
+      } else {
+        msElem.style.display = 'none';
+      }
+
+      const ampmElem = document.getElementById('digitAmpm');
+      if (!STATE.display24Hour) {
+        ampmElem.style.display = 'inline';
+        ampmElem.textContent = dayPeriod || '';
+      } else {
+        ampmElem.style.display = 'none';
+      }
+
+      // Date Format in Selected TZ
+      const dateOpts = {
+        timeZone: STATE.selectedTimezone,
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      };
+      document.getElementById('dateFullFormatted').textContent = new Intl.DateTimeFormat('en-US', dateOpts).format(now);
+
+      // Timezone Offset Calculation
+      const tzOffsetStr = getTimezoneOffsetString(now, STATE.selectedTimezone);
+      document.getElementById('dateOffsetFormatted').textContent = `${tzOffsetStr} (${STATE.selectedTimezone})`;
+
+      // Day / Night state for California / current focus
+      const hourInTz = parseInt(new Intl.DateTimeFormat('en-US', { timeZone: STATE.selectedTimezone, hour: 'numeric', hour12: false }).format(now), 10);
+      const isDay = hourInTz >= 6 && hourInTz < 18;
+      const solarBadge = document.getElementById('solarIndicator');
+      solarBadge.textContent = isDay ? 'SOLAR DAY' : 'NOCTURNAL';
+      solarBadge.style.color = isDay ? 'var(--neon-amber)' : 'var(--neon-cyan)';
+
+      // Update Telemetry Metrics
+      updateTelemetry(now);
+
+      // Draw Analog Canvas Clock
+      drawAnalogClock(now);
+
+      // Update Exotic time representations
+      updateExoticTimes(now);
+    }
+
+    // Helper: Formatted Timezone Offset e.g. "UTC-8"
+    function getTimezoneOffsetString(date, tz) {
+      try {
+        const parts = new Intl.DateTimeFormat('en-US', {
+          timeZone: tz,
+          timeZoneName: 'shortOffset'
+        }).formatToParts(date);
+        const tzNamePart = parts.find(p => p.type === 'timeZoneName');
+        return tzNamePart ? tzNamePart.value : 'UTC';
+      } catch (e) {
+        return 'UTC';
+      }
+    }
+
+    // Toggle Handlers
+    function toggle24HourMode() {
+      STATE.display24Hour = !STATE.display24Hour;
+      document.getElementById('btnToggle24h').textContent = `24H MODE: ${STATE.display24Hour ? 'ON' : 'OFF'}`;
+      document.getElementById('btnToggle24h').classList.toggle('active', STATE.display24Hour);
+    }
+
+    function toggleMilliseconds() {
+      STATE.showMilliseconds = !STATE.showMilliseconds;
+      document.getElementById('btnToggleMillis').textContent = `MILLIS: ${STATE.showMilliseconds ? 'ON' : 'OFF'}`;
+      document.getElementById('btnToggleMillis').classList.toggle('active', STATE.showMilliseconds);
+    }
+
+    function setTimezoneDefault(tz) {
+      STATE.selectedTimezone = tz;
+      const title = tz === 'America/Los_Angeles' ? 'CALIFORNIA / PACIFIC' : (tz === 'UTC' ? 'UNIVERSAL TIME' : tz);
+      document.getElementById('displayLocationTitle').textContent = title;
+      document.getElementById('analogSubtext').textContent = `${title} SWEEP`;
+      updateTzBadge();
+    }
+
+    function setLocalBrowserTz() {
+      const detected = Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
+      setTimezoneDefault(detected);
+    }
+
+    function updateTzBadge() {
+      const now = new Date();
+      try {
+        const parts = new Intl.DateTimeFormat('en-US', { timeZone: STATE.selectedTimezone, timeZoneName: 'short' }).formatToParts(now);
+        const code = parts.find(p => p.type === 'timeZoneName')?.value || 'TZ';
+        document.getElementById('tzAbbr').textContent = code;
+      } catch (e) {
+        document.getElementById('tzAbbr').textContent = 'TZ';
+      }
+    }
+
+    // --- Telemetry Computation ---
+    function updateTelemetry(now) {
+      // Unix Timestamp
+      const epochSec = Math.floor(now.getTime() / 1000);
+      document.getElementById('metricUnixEpoch').textContent = epochSec.toString();
+
+      // ISO 8601
+      document.getElementById('metricIso').textContent = now.toISOString();
+
+      // Day of the Year
+      const startOfYear = new Date(Date.UTC(now.getUTCFullYear(), 0, 1));
+      const diffTime = now - startOfYear;
+      const doy = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
+      const isLeap = (now.getUTCFullYear() % 4 === 0 && now.getUTCFullYear() % 100 !== 0) || (now.getUTCFullYear() % 400 === 0);
+      const totalDaysInYear = isLeap ? 366 : 365;
+      document.getElementById('metricDoy').textContent = `Day ${doy} / ${totalDaysInYear}`;
+
+      // ISO Week
+      const d = new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()));
+      const dayNum = d.getUTCDay() || 7;
+      d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+      const yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1));
+      const weekNo = Math.ceil((((d - yearStart) / 86400000) + 1)/7);
+      document.getElementById('metricIsoWeek').textContent = `Week ${weekNo} of ${d.getUTCFullYear()}`;
+
+      // Julian Day Number
+      const timeMs = now.getTime();
+      const julian = (timeMs / 86400000) + 2440587.5;
+      document.getElementById('metricJulianDay').textContent = julian.toFixed(4);
+
+      // Lunar Phase approximation
+      const moon = getMoonPhaseEstimate(now);
+      document.getElementById('metricMoonPhase').textContent = `${moon.name} (~${moon.pct}%)`;
+    }
+
+    function getMoonPhaseEstimate(date) {
+      // Approximate synodic month formula
+      const synodic = 29.53058867;
+      const knownNewMoon = new Date('2000-01-06T18:14:00Z').getTime();
+      const diff = (date.getTime() - knownNewMoon) / 86400000;
+      const phase = (diff % synodic + synodic) % synodic;
+      const pct = Math.round((phase / synodic) * 100);
+
+      let name = "New Moon";
+      if (phase < 1.84) name = "New Moon";
+      else if (phase < 5.53) name = "Waxing Crescent";
+      else if (phase < 9.22) name = "First Quarter";
+      else if (phase < 12.91) name = "Waxing Gibbous";
+      else if (phase < 16.61) name = "Full Moon";
+      else if (phase < 20.30) name = "Waning Gibbous";
+      else if (phase < 23.99) name = "Last Quarter";
+      else if (phase < 27.68) name = "Waning Crescent";
+      else name = "New Moon";
+
+      return { name, pct };
+    }
+
+    // --- Analog Clock Canvas Drawing ---
+    function drawAnalogClock(now) {
+      const canvas = document.getElementById('analogClockCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const width = canvas.width;
+      const height = canvas.height;
+      const radius = width / 2;
+
+      ctx.clearRect(0, 0, width, height);
+
+      // Extract time in selected Timezone
+      const parts = new Intl.DateTimeFormat('en-US', {
+        timeZone: STATE.selectedTimezone,
+        hour12: false,
+        hour: 'numeric',
+        minute: 'numeric',
+        second: 'numeric'
+      }).formatToParts(now);
+
+      let hr = 0, min = 0, sec = 0;
+      parts.forEach(p => {
+        if (p.type === 'hour') hr = parseInt(p.value, 10);
+        if (p.type === 'minute') min = parseInt(p.value, 10);
+        if (p.type === 'second') sec = parseInt(p.value, 10);
+      });
+      const ms = now.getMilliseconds();
+      const smoothSec = sec + (ms / 1000);
+      const smoothMin = min + (smoothSec / 60);
+      const smoothHr = (hr % 12) + (smoothMin / 60);
+
+      ctx.save();
+      ctx.translate(radius, radius);
+
+      // Outer bezel ring
+      ctx.beginPath();
+      ctx.arc(0, 0, radius - 10, 0, 2 * Math.PI);
+      ctx.fillStyle = '#0b0c10';
+      ctx.fill();
+      ctx.lineWidth = 3;
+      ctx.strokeStyle = '#232332';
+      ctx.stroke();
+
+      // Subtle cyan glow ring
+      ctx.beginPath();
+      ctx.arc(0, 0, radius - 14, 0, 2 * Math.PI);
+      ctx.strokeStyle = 'rgba(0, 240, 255, 0.2)';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      // Dial Markers
+      for (let i = 0; i < 60; i++) {
+        const angle = (i * Math.PI) / 30;
+        const isHour = i % 5 === 0;
+        const outerR = radius - 18;
+        const innerR = isHour ? radius - 34 : radius - 24;
+
+        ctx.beginPath();
+        ctx.moveTo(Math.sin(angle) * innerR, -Math.cos(angle) * innerR);
+        ctx.lineTo(Math.sin(angle) * outerR, -Math.cos(angle) * outerR);
+        ctx.strokeStyle = isHour ? '#00f0ff' : 'rgba(255, 255, 255, 0.2)';
+        ctx.lineWidth = isHour ? 3 : 1;
+        ctx.stroke();
+      }
+
+      // Hour Hand
+      const hrAngle = (smoothHr * Math.PI) / 6;
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.lineTo(Math.sin(hrAngle) * (radius * 0.5), -Math.cos(hrAngle) * (radius * 0.5));
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = 5;
+      ctx.lineCap = 'round';
+      ctx.stroke();
+
+      // Minute Hand
+      const minAngle = (smoothMin * Math.PI) / 30;
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.lineTo(Math.sin(minAngle) * (radius * 0.72), -Math.cos(minAngle) * (radius * 0.72));
+      ctx.strokeStyle = '#00f0ff';
+      ctx.lineWidth = 3.5;
+      ctx.lineCap = 'round';
+      ctx.stroke();
+
+      // Second Hand (Sweeping Neon Magenta)
+      const secAngle = (smoothSec * Math.PI) / 30;
+      ctx.beginPath();
+      ctx.moveTo(-Math.sin(secAngle) * 20, Math.cos(secAngle) * 20);
+      ctx.lineTo(Math.sin(secAngle) * (radius * 0.82), -Math.cos(secAngle) * (radius * 0.82));
+      ctx.strokeStyle = '#ff0055';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      // Center Pin Cap
+      ctx.beginPath();
+      ctx.arc(0, 0, 5, 0, 2 * Math.PI);
+      ctx.fillStyle = '#00f0ff';
+      ctx.fill();
+
+      ctx.restore();
+    }
+
+    // --- Astronomical & Curious Time Computations ---
+    function updateExoticTimes(now) {
+      // 1. Swatch Internet Time (@beats)
+      // BMT is UTC+1. 1 beat = 86.4 seconds.
+      const utcSec = (now.getUTCHours() * 3600) + (now.getUTCMinutes() * 60) + now.getUTCSeconds() + (now.getUTCMilliseconds() / 1000);
+      const bmtSec = (utcSec + 3600) % 86400;
+      const beats = bmtSec / 86.4;
+      document.getElementById('curiousSwatchBeats').textContent = `@${beats.toFixed(2).padStart(6, '0')}`;
+
+      // 2. Coordinated Mars Time (MTC)
+      // Airy-0 mean solar time: MTC = (Julian Date - 2451549.5) / 1.0274912517...
+      const jd = (now.getTime() / 86400000) + 2440587.5;
+      const marsSolDate = (jd - 2451549.5) / 1.0274912517 + 44796.0 - 0.0009626;
+      const marsFraction = (marsSolDate % 1 + 1) % 1;
+      const marsHours = Math.floor(marsFraction * 24);
+      const marsMins = Math.floor((marsFraction * 24 - marsHours) * 60);
+      const marsSecs = Math.floor(((marsFraction * 24 - marsHours) * 60 - marsMins) * 60);
+      document.getElementById('curiousMarsTime').textContent = 
+        `${String(marsHours).padStart(2,'0')}:${String(marsMins).padStart(2,'0')}:${String(marsSecs).padStart(2,'0')} MTC`;
+
+      // 3. Metric / Decimal Time
+      // 10 metric hours in a standard day.
+      const dayFraction = (now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds() + now.getMilliseconds() / 1000) / 86400;
+      const decHours = Math.floor(dayFraction * 10);
+      const decMins = Math.floor((dayFraction * 10 - decHours) * 100);
+      const decSecs = Math.floor(((dayFraction * 10 - decHours) * 100 - decMins) * 100);
+      document.getElementById('curiousDecimalTime').textContent = `${decHours}h ${String(decMins).padStart(2,'0')}m ${String(decSecs).padStart(2,'0')}s`;
+
+      // 4. Greenwich Mean Sidereal Time (GMST) approximation
+      const d = (now.getTime() / 86400000) - 10957.5; // days from J2000.0
+      let gmstHours = (18.697374558 + 24.06570982441908 * d) % 24;
+      if (gmstHours < 0) gmstHours += 24;
+      const gmstH = Math.floor(gmstHours);
+      const gmstM = Math.floor((gmstHours - gmstH) * 60);
+      const gmstS = Math.floor(((gmstHours - gmstH) * 60 - gmstM) * 60);
+      document.getElementById('curiousGmst').textContent = 
+        `${String(gmstH).padStart(2,'0')}:${String(gmstM).padStart(2,'0')}:${String(gmstS).padStart(2,'0')}`;
+
+      // 5. Earth Orbit Completion Progress
+      const yr = now.getFullYear();
+      const yrStart = new Date(yr, 0, 1).getTime();
+      const yrEnd = new Date(yr + 1, 0, 1).getTime();
+      const progress = ((now.getTime() - yrStart) / (yrEnd - yrStart)) * 100;
+      const pctFormatted = `${progress.toFixed(6)}%`;
+      document.getElementById('earthProgressLabel').textContent = pctFormatted;
+      document.getElementById('orbitProgressFill').style.width = pctFormatted;
+    }
+
+    // --- World Map & Day/Night Terminator Calculation ---
+    function updateWorldMapTerminator() {
+      const now = new Date();
+      // Calculate Subsolar Point (approximate declination and Greenwich hour angle)
+      const startOfYear = new Date(Date.UTC(now.getUTCFullYear(), 0, 1));
+      const dayOfYear = (now - startOfYear) / 86400000;
+      // Solar declination formula: delta ≈ -23.44 * cos(360/365 * (DOY + 10))
+      const declinationDeg = -23.44 * Math.cos(((dayOfYear + 10) / 365.25) * 2 * Math.PI);
+      const declinationRad = (declinationDeg * Math.PI) / 180;
+
+      // Sun's longitude in Equirectangular coordinates (0 at lon -180, 1000 at lon +180)
+      const utcHours = now.getUTCHours() + now.getUTCMinutes() / 60 + now.getUTCSeconds() / 3600;
+      const sunLonDeg = (12 - utcHours) * 15; // Sun is over Greenwich at 12:00 UTC
+
+      // Construct Terminator curve path points (1000x500 coordinates)
+      // lon maps [-180, 180] -> [0, 1000], lat maps [90, -90] -> [0, 500]
+      const points = [];
+      const steps = 100;
+      for (let i = 0; i <= steps; i++) {
+        const x = (i / steps) * 1000;
+        const lon = ((x / 1000) * 360) - 180;
+        const deltaLonRad = ((lon - sunLonDeg) * Math.PI) / 180;
+
+        // Terminator condition: sin(lat)*sin(dec) + cos(lat)*cos(dec)*cos(deltaLon) = 0
+        // => tan(lat) = - cos(deltaLon) / tan(dec)
+        let latDeg = 0;
+        if (Math.abs(Math.tan(declinationRad)) > 0.001) {
+          const latRad = Math.atan(-Math.cos(deltaLonRad) / Math.tan(declinationRad));
+          latDeg = (latRad * 180) / Math.PI;
+        }
+
+        // Clamp latitude to [-85, 85]
+        latDeg = Math.max(-85, Math.min(85, latDeg));
+        const y = ((90 - latDeg) / 180) * 500;
+        points.push({ x, y });
+      }
+
+      // Close polygon over the dark hemisphere based on solar declination
+      let pathD = `M 0 500 `;
+      if (declinationDeg >= 0) {
+        // Northern summer: darkness at bottom (South pole)
+        pathD = `M ${points[0].x} ${points[0].y} `;
+        for (let p of points) pathD += `L ${p.x.toFixed(1)} ${p.y.toFixed(1)} `;
+        pathD += `L 1000 500 L 0 500 Z`;
+      } else {
+        // Northern winter: darkness at top (North pole)
+        pathD = `M ${points[0].x} ${points[0].y} `;
+        for (let p of points) pathD += `L ${p.x.toFixed(1)} ${p.y.toFixed(1)} `;
+        pathD += `L 1000 0 L 0 0 Z`;
+      }
+
+      const termElem = document.getElementById('terminatorPolygon');
+      if (termElem) termElem.setAttribute('d', pathD);
+    }
+
+    // Render Pins on Equirectangular Map
+    function renderMapPins() {
+      const g = document.getElementById('mapPinsGroup');
+      if (!g) return;
+      g.innerHTML = '';
+
+      WORLD_METROS.forEach((metro, idx) => {
+        const isAnchor = metro.tz === 'America/Los_Angeles';
+        const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        circle.setAttribute('cx', metro.x);
+        circle.setAttribute('cy', metro.y);
+        circle.setAttribute('r', isAnchor ? '7' : '4.5');
+        circle.setAttribute('fill', isAnchor ? '#00f0ff' : '#00ff88');
+        circle.setAttribute('stroke', '#070709');
+        circle.setAttribute('stroke-width', '1.5');
+        circle.setAttribute('cursor', 'pointer');
+        circle.classList.add('map-pin');
+
+        // Hover events
+        circle.addEventListener('mouseenter', (e) => showMapPinTooltip(e, metro));
+        circle.addEventListener('mouseleave', hideMapPinTooltip);
+        circle.addEventListener('click', () => {
+          setTimezoneDefault(metro.tz);
+          switchTab('chrono');
+        });
+
+        g.appendChild(circle);
+
+        // Text label for major hub
+        if (isAnchor || metro.name === 'London' || metro.name === 'Tokyo') {
+          const txt = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+          txt.setAttribute('x', metro.x + 8);
+          txt.setAttribute('y', metro.y + 4);
+          txt.setAttribute('fill', isAnchor ? '#00f0ff' : '#8b92a5');
+          txt.setAttribute('font-size', '10px');
+          txt.setAttribute('font-family', 'monospace');
+          txt.setAttribute('font-weight', 'bold');
+          txt.textContent = metro.name.split('/')[0].trim();
+          g.appendChild(txt);
+        }
+      });
+    }
+
+    const mapTooltip = document.getElementById('mapTooltip');
+    function showMapPinTooltip(evt, metro) {
+      const now = new Date();
+      const timeStr = new Intl.DateTimeFormat('en-US', {
+        timeZone: metro.tz,
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: !STATE.display24Hour
+      }).format(now);
+
+      const offsetStr = getTimezoneOffsetString(now, metro.tz);
+      mapTooltip.innerHTML = `
+        <div style="font-weight:bold; color:var(--neon-cyan);">${metro.name}</div>
+        <div style="font-size:0.75rem; color:#aaa;">${metro.country} (${offsetStr})</div>
+        <div style="font-size:1.1rem; font-weight:700; color:#fff; margin-top:2px;">${timeStr}</div>
+        <div style="font-size:0.7rem; color:var(--neon-emerald); margin-top:3px;">Click to set as primary chronometer</div>
+      `;
+      mapTooltip.style.display = 'block';
+
+      const rect = evt.target.getBoundingClientRect();
+      const containerRect = document.querySelector('.map-container').getBoundingClientRect();
+      mapTooltip.style.left = `${rect.left - containerRect.left + (rect.width / 2)}px`;
+      mapTooltip.style.top = `${rect.top - containerRect.top - 8}px`;
+    }
+
+    function hideMapPinTooltip() {
+      mapTooltip.style.display = 'none';
+    }
+
+    // --- City Matrix & Grid Management ---
+    function renderCityMatrix(filteredList = WORLD_METROS) {
+      const container = document.getElementById('cityMatrixContainer');
+      if (!container) return;
+      container.innerHTML = '';
+      const now = new Date();
+
+      // California base time for hour-differential
+      const caHour = parseInt(new Intl.DateTimeFormat('en-US', { timeZone: 'America/Los_Angeles', hour: 'numeric', hour12: false }).format(now), 10);
+
+      filteredList.forEach(item => {
+        const isCa = item.tz === 'America/Los_Angeles';
+        const timeFormatted = new Intl.DateTimeFormat('en-US', {
+          timeZone: item.tz,
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+          hour12: !STATE.display24Hour
+        }).format(now);
+
+        const dateFormatted = new Intl.DateTimeFormat('en-US', {
+          timeZone: item.tz,
+          month: 'short',
+          day: 'numeric',
+          weekday: 'short'
+        }).format(now);
+
+        // Delta from California
+        const cityHour = parseInt(new Intl.DateTimeFormat('en-US', { timeZone: item.tz, hour: 'numeric', hour12: false }).format(now), 10);
+        let delta = cityHour - caHour;
+        let deltaText = delta === 0 ? "CALIFORNIA REF" : (delta > 0 ? `+${delta}h vs CA` : `${delta}h vs CA`);
+
+        // Day/night indicator
+        const isDaytime = cityHour >= 6 && cityHour < 18;
+
+        const card = document.createElement('div');
+        card.className = `city-card ${isCa ? 'california-highlight' : ''}`;
+        card.onclick = () => {
+          setTimezoneDefault(item.tz);
+          switchTab('chrono');
+        };
+
+        card.innerHTML = `
+          <div class="city-card-header">
+            <div>
+              <div class="city-name">${item.name}</div>
+              <div class="city-region">${item.country}</div>
+            </div>
+            <span class="delta-badge" style="color:${isCa ? 'var(--neon-cyan)' : 'inherit'};">${deltaText}</span>
+          </div>
+          <div class="city-time-huge">${timeFormatted}</div>
+          <div class="city-date-sub">
+            <span>${dateFormatted}</span>
+            <span style="color:${isDaytime ? 'var(--neon-amber)' : 'var(--neon-cyan)'};">
+              ${isDaytime ? '☀ DAY' : '☾ NIGHT'}
+            </span>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+
+      document.getElementById('matrixCityCountBadge').textContent = `${filteredList.length} CITIES MONITORED`;
+    }
+
+    function filterCities() {
+      const q = document.getElementById('citySearchInput').value.toLowerCase().trim();
+      const filtered = WORLD_METROS.filter(m => 
+        m.name.toLowerCase().includes(q) || 
+        m.country.toLowerCase().includes(q) || 
+        m.tz.toLowerCase().includes(q)
+      );
+      renderCityMatrix(filtered);
+    }
+
+    // --- Meeting Planner Overlap Matrix ---
+    function renderMeetingPlanner() {
+      const container = document.getElementById('overlapTimelineBox');
+      if (!container) return;
+      container.innerHTML = '';
+
+      const keyCities = [
+        { name: 'California (Pacific)', tz: 'America/Los_Angeles' },
+        { name: 'New York (Eastern)', tz: 'America/New_York' },
+        { name: 'London (GMT/BST)', tz: 'Europe/London' },
+        { name: 'Tokyo (JST)', tz: 'Asia/Tokyo' }
+      ];
+
+      const now = new Date();
+
+      keyCities.forEach(city => {
+        const row = document.createElement('div');
+        row.className = 'overlap-row';
+
+        // Current hour and minute in this zone
+        const currentHr = parseInt(new Intl.DateTimeFormat('en-US', { timeZone: city.tz, hour: 'numeric', hour12: false }).format(now), 10);
+        const currentMin = now.getMinutes();
+        const currPct = ((currentMin / 60) * 100);
+
+        let blocksHtml = '';
+        for (let h = 0; h < 24; h++) {
+          const isWork = h >= 9 && h < 18;
+          const isCurr = h === currentHr;
+          blocksHtml += `
+            <div class="hour-block ${isWork ? 'work-hour' : ''} ${isCurr ? 'current-pointer' : ''}" 
+                 style="${isCurr ? `--curr-pct:${currPct}%;` : ''}" title="${h}:00 in ${city.name}">
+              ${h}
+            </div>
+          `;
+        }
+
+        row.innerHTML = `
+          <div class="overlap-header">
+            <span style="font-weight:700; color:#fff;">${city.name}</span>
+            <span class="accent-cyan">Current: ${currentHr.toString().padStart(2,'0')}:${currentMin.toString().padStart(2,'0')}</span>
+          </div>
+          <div class="timeline-bar">${blocksHtml}</div>
+        `;
+        container.appendChild(row);
+      });
+    }
+
+    // --- Time Lab: Precision Stopwatch ---
+    function formatStopwatchTime(ms) {
+      const m = Math.floor(ms / 60000);
+      const s = Math.floor((ms % 60000) / 1000);
+      const millis = Math.floor(ms % 1000);
+      return `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}.${String(millis).padStart(3,'0')}`;
+    }
+
+    function startStopwatch() {
+      if (STATE.stopwatch.running) return;
+      playBeep(600, 0.08);
+      STATE.stopwatch.running = true;
+      STATE.stopwatch.startTime = performance.now() - STATE.stopwatch.elapsedBefore;
+      document.getElementById('stopwatchStateBadge').textContent = 'RUNNING';
+      document.getElementById('btnSwStart').style.display = 'none';
+      document.getElementById('btnSwStop').style.display = 'inline-block';
+      document.getElementById('btnSwLap').style.display = 'inline-block';
+
+      STATE.stopwatch.timerId = requestAnimationFrame(stepStopwatch);
+    }
+
+    function stepStopwatch(timestamp) {
+      if (!STATE.stopwatch.running) return;
+      const elapsed = timestamp - STATE.stopwatch.startTime;
+      document.getElementById('stopwatchDisplay').textContent = formatStopwatchTime(elapsed);
+      STATE.stopwatch.timerId = requestAnimationFrame(stepStopwatch);
+    }
+
+    function pauseStopwatch() {
+      if (!STATE.stopwatch.running) return;
+      playBeep(400, 0.08);
+      STATE.stopwatch.running = false;
+      cancelAnimationFrame(STATE.stopwatch.timerId);
+      STATE.stopwatch.elapsedBefore = performance.now() - STATE.stopwatch.startTime;
+      document.getElementById('stopwatchStateBadge').textContent = 'PAUSED';
+      document.getElementById('btnSwStart').style.display = 'inline-block';
+      document.getElementById('btnSwStop').style.display = 'none';
+      document.getElementById('btnSwLap').style.display = 'none';
+    }
+
+    function resetStopwatch() {
+      playBeep(300, 0.08);
+      STATE.stopwatch.running = false;
+      cancelAnimationFrame(STATE.stopwatch.timerId);
+      STATE.stopwatch.elapsedBefore = 0;
+      STATE.stopwatch.laps = [];
+      document.getElementById('stopwatchDisplay').textContent = '00:00:00.000';
+      document.getElementById('stopwatchStateBadge').textContent = 'IDLE';
+      document.getElementById('btnSwStart').style.display = 'inline-block';
+      document.getElementById('btnSwStop').style.display = 'none';
+      document.getElementById('btnSwLap').style.display = 'none';
+      document.getElementById('lapsContainer').style.display = 'none';
+      document.getElementById('lapsList').innerHTML = '';
+    }
+
+    function recordLapStopwatch() {
+      if (!STATE.stopwatch.running) return;
+      playBeep(800, 0.05);
+      const currentElapsed = performance.now() - STATE.stopwatch.startTime;
+      const lapIndex = STATE.stopwatch.laps.length + 1;
+      STATE.stopwatch.laps.unshift({ idx: lapIndex, time: currentElapsed });
+
+      const container = document.getElementById('lapsContainer');
+      const list = document.getElementById('lapsList');
+      container.style.display = 'block';
+
+      list.innerHTML = STATE.stopwatch.laps.map(lap => `
+        <div class="lap-row">
+          <span style="color:var(--text-muted);">LAP ${String(lap.idx).padStart(2,'0')}</span>
+          <span style="font-weight:700; color:var(--neon-emerald);">${formatStopwatchTime(lap.time)}</span>
+        </div>
+      `).join('');
+    }
+
+    // --- Time Lab: Audio Synthesized Countdown Timer ---
+    function formatTimerDisplay(totalSeconds) {
+      const m = Math.floor(totalSeconds / 60);
+      const s = totalSeconds % 60;
+      return `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+    }
+
+    function setTimerPreset(seconds) {
+      pauseTimer();
+      STATE.countdown.totalDuration = seconds;
+      STATE.countdown.remaining = seconds;
+      document.getElementById('timerDisplay').textContent = formatTimerDisplay(seconds);
+      document.getElementById('timerStateBadge').textContent = 'PRESET READY';
+    }
+
+    function startTimer() {
+      if (STATE.countdown.running) return;
+      playBeep(520, 0.1);
+      STATE.countdown.running = true;
+      document.getElementById('timerStateBadge').textContent = 'COUNTING';
+      document.getElementById('btnTimerStart').style.display = 'none';
+      document.getElementById('btnTimerPause').style.display = 'inline-block';
+
+      STATE.countdown.timerId = setInterval(() => {
+        if (STATE.countdown.remaining > 0) {
+          STATE.countdown.remaining--;
+          document.getElementById('timerDisplay').textContent = formatTimerDisplay(STATE.countdown.remaining);
+          if (STATE.countdown.remaining <= 3 && STATE.countdown.remaining > 0) {
+            playBeep(700, 0.05);
+          }
+        } else {
+          // Timer finished
+          clearInterval(STATE.countdown.timerId);
+          STATE.countdown.running = false;
+          document.getElementById('timerStateBadge').textContent = 'COMPLETE';
+          document.getElementById('btnTimerStart').style.display = 'inline-block';
+          document.getElementById('btnTimerPause').style.display = 'none';
+          // Synthesize distinct alarm sequence
+          playBeep(880, 0.2, 'square');
+          setTimeout(() => playBeep(880, 0.2, 'square'), 250);
+          setTimeout(() => playBeep(1100, 0.4, 'square'), 500);
+        }
+      }, 1000);
+    }
+
+    function pauseTimer() {
+      if (!STATE.countdown.running) return;
+      clearInterval(STATE.countdown.timerId);
+      STATE.countdown.running = false;
+      document.getElementById('timerStateBadge').textContent = 'PAUSED';
+      document.getElementById('btnTimerStart').style.display = 'inline-block';
+      document.getElementById('btnTimerPause').style.display = 'none';
+    }
+
+    function resetTimer() {
+      pauseTimer();
+      STATE.countdown.remaining = STATE.countdown.totalDuration;
+      document.getElementById('timerDisplay').textContent = formatTimerDisplay(STATE.countdown.remaining);
+      document.getElementById('timerStateBadge').textContent = 'READY';
+    }
+
+    // --- Time Lab: Epoch Converter & Date Delta Tools ---
+    function fillCurrentEpoch() {
+      document.getElementById('inputEpochVal').value = Math.floor(Date.now() / 1000);
+      convertEpochToHuman();
+    }
+
+    function convertEpochToHuman() {
+      const raw = document.getElementById('inputEpochVal').value.trim();
+      if (!raw) return;
+      let val = Number(raw);
+      // Auto detect seconds vs milliseconds
+      if (val < 10000000000) val = val * 1000;
+      const date = new Date(val);
+
+      if (isNaN(date.getTime())) {
+        document.getElementById('epochConvertResult').textContent = "Invalid Epoch Value";
+        return;
+      }
+
+      const caTime = new Intl.DateTimeFormat('en-US', {
+        timeZone: 'America/Los_Angeles',
+        dateStyle: 'full',
+        timeStyle: 'long'
+      }).format(date);
+
+      const utcTime = date.toUTCString();
+      document.getElementById('epochConvertResult').innerHTML = `
+        <div style="color:var(--neon-cyan);">CA (PT): ${caTime}</div>
+        <div style="color:var(--text-muted); margin-top:3px;">UTC: ${utcTime}</div>
+      `;
+    }
+
+    function convertHumanToEpoch() {
+      const val = document.getElementById('inputHumanDate').value;
+      if (!val) return;
+      const date = new Date(val);
+      if (isNaN(date.getTime())) {
+        document.getElementById('humanToEpochResult').textContent = "Invalid date format.";
+        return;
+      }
+      const epochSec = Math.floor(date.getTime() / 1000);
+      const epochMs = date.getTime();
+      document.getElementById('humanToEpochResult').innerHTML = `
+        <strong>${epochSec}</strong> seconds &nbsp;|&nbsp; <strong>${epochMs}</strong> ms
+      `;
+    }
+
+    function calculateDateDelta() {
+      const start = document.getElementById('calcStartDate').value;
+      const end = document.getElementById('calcEndDate').value;
+      if (!start || !end) {
+        document.getElementById('calcDeltaOutput').textContent = "Please pick both dates.";
+        return;
+      }
+
+      const d1 = new Date(start);
+      const d2 = new Date(end);
+      const diffMs = Math.abs(d2 - d1);
+      const diffDays = Math.round(diffMs / (1000 * 60 * 60 * 24));
+      const hours = diffDays * 24;
+      const weeks = (diffDays / 7).toFixed(1);
+
+      // Business days computation
+      let cur = new Date(Math.min(d1, d2));
+      const finish = new Date(Math.max(d1, d2));
+      let workdays = 0;
+      while (cur < finish) {
+        cur.setDate(cur.getDate() + 1);
+        const day = cur.getDay();
+        if (day !== 0 && day !== 6) workdays++;
+      }
+
+      document.getElementById('calcDeltaOutput').innerHTML = `
+        Difference: <strong>${diffDays} days</strong> (${weeks} weeks)<br>
+        • Working Days: <strong>${workdays} days</strong><br>
+        • Total Hours: <strong>${hours.toLocaleString()} hours</strong>
+      `;
+    }
+
+    // --- Initialization & Master RequestAnimationFrame Loop ---
+    window.onload = function() {
+      // Set current datetime for inputs
+      const todayIso = new Date().toISOString().split('T')[0];
+      document.getElementById('calcStartDate').value = todayIso;
+      document.getElementById('calcEndDate').value = todayIso;
+
+      // Populate pins and city matrix
+      renderMapPins();
+      renderCityMatrix();
+      renderMeetingPlanner();
+      updateWorldMapTerminator();
+
+      // Start high-refresh loop for smooth swept clock and real-time milliseconds
+      function loop() {
+        updateMasterClock();
+        requestAnimationFrame(loop);
+      }
+      requestAnimationFrame(loop);
+
+      // Secondary cadence for map terminator shadow and matrix ticks
+      setInterval(() => {
+        updateWorldMapTerminator();
+        renderCityMatrix(WORLD_METROS);
+        renderMeetingPlanner();
+      }, 10000);
+    };
+  </script>
+</body>
+</html>
