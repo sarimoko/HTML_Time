@@ -1,2140 +1,1600 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TIME // SARIMOKO — Temporal Observatory & Global Chronometer</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700;800&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --bg-void: #070709;
-      --bg-panel: #0e0e13;
-      --bg-card: #14141d;
-      --bg-card-hover: #1b1b26;
-      --border-subtle: #232332;
-      --border-glow: #00f0ff33;
-      --neon-cyan: #00f0ff;
-      --neon-emerald: #00ff88;
-      --neon-amber: #ffb700;
-      --neon-magenta: #ff0055;
-      --text-main: #f0f3f8;
-      --text-muted: #8b92a5;
-      --text-dim: #4d5366;
-      --font-mono: 'JetBrains Mono', 'Fira Code', Menlo, Consolas, monospace;
-      --font-display: 'Orbitron', 'JetBrains Mono', monospace;
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>time.sarimoko.com — Advanced Metronome & Polyrhythm Studio</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+            mono: ['JetBrains Mono', 'Fira Code', 'ui-monospace', 'monospace'],
+          },
+          colors: {
+            obsidian: '#090a0f',
+            studio: '#11131a',
+            panel: '#171a24',
+            panelBorder: '#252938',
+            cyanGlow: '#00f0ff',
+            amberGlow: '#ff9e00',
+            magentaGlow: '#ff2a85',
+            emeraldGlow: '#00e676',
+            violetGlow: '#a855f7',
+          }
+        }
+      }
     }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap');
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
+    :root {
+      --bg-obsidian: #090a0f;
+      --bg-panel: #171a24;
+      --border-subtle: #252938;
     }
 
     body {
-      background-color: var(--bg-void);
-      color: var(--text-main);
-      font-family: var(--font-mono);
-      min-height: 100vh;
+      background-color: var(--bg-obsidian);
+      color: #e2e8f0;
+      font-family: 'Inter', sans-serif;
       overflow-x: hidden;
-      line-height: 1.5;
-      background-image: 
-        radial-gradient(circle at 50% 0%, rgba(0, 240, 255, 0.05) 0%, transparent 60%),
-        radial-gradient(circle at 85% 90%, rgba(255, 0, 85, 0.03) 0%, transparent 50%);
+      user-select: none;
     }
 
-    /* Scrollbars */
-    ::-webkit-scrollbar { width: 6px; height: 6px; }
-    ::-webkit-scrollbar-track { background: var(--bg-void); }
-    ::-webkit-scrollbar-thumb { background: var(--border-subtle); border-radius: 3px; }
-    ::-webkit-scrollbar-thumb:hover { background: var(--neon-cyan); }
-
-    /* Top Navigation */
-    header {
-      border-bottom: 1px solid var(--border-subtle);
-      background: rgba(14, 14, 19, 0.85);
-      backdrop-filter: blur(12px);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-
-    .nav-container {
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 0.8rem 1.25rem;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      align-items: center;
-      gap: 1rem;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      text-decoration: none;
-      color: var(--text-main);
-    }
-
-    .brand-mark {
-      width: 28px;
-      height: 28px;
-      border: 2px solid var(--neon-cyan);
-      border-radius: 6px;
-      display: grid;
-      place-items: center;
-      box-shadow: 0 0 12px rgba(0, 240, 255, 0.4);
-      position: relative;
-    }
-    .brand-mark::after {
-      content: '';
-      width: 6px;
-      height: 6px;
-      background: var(--neon-magenta);
-      border-radius: 50%;
-      box-shadow: 0 0 8px var(--neon-magenta);
-    }
-
-    .brand-text {
-      font-family: var(--font-display);
-      font-size: 1.15rem;
-      font-weight: 800;
-      letter-spacing: 0.08em;
-      background: linear-gradient(90deg, #fff, var(--neon-cyan));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .brand-sub {
-      font-size: 0.68rem;
-      color: var(--neon-emerald);
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      padding: 0.15rem 0.5rem;
-      border: 1px solid rgba(0, 255, 136, 0.25);
-      background: rgba(0, 255, 136, 0.05);
-      border-radius: 12px;
-    }
-
-    nav.tab-bar {
-      display: flex;
-      background: var(--bg-void);
-      padding: 0.25rem;
-      border-radius: 8px;
-      border: 1px solid var(--border-subtle);
-      gap: 0.25rem;
-      overflow-x: auto;
-    }
-
-    .tab-btn {
+    /* Custom Range Sliders */
+    input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
       background: transparent;
-      border: none;
-      color: var(--text-muted);
-      font-family: var(--font-mono);
-      font-size: 0.82rem;
-      font-weight: 600;
-      padding: 0.5rem 1rem;
-      border-radius: 6px;
       cursor: pointer;
-      white-space: nowrap;
-      transition: all 0.2s ease;
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
     }
-
-    .tab-btn:hover {
-      color: var(--text-main);
-      background: rgba(255, 255, 255, 0.04);
-    }
-
-    .tab-btn.active {
-      color: var(--bg-void);
-      background: var(--neon-cyan);
-      box-shadow: 0 0 15px rgba(0, 240, 255, 0.5);
-    }
-
-    /* Main Container */
-    main {
-      max-width: 1400px;
-      margin: 1.5rem auto 3rem;
-      padding: 0 1.25rem;
-    }
-
-    .tab-pane {
-      display: none;
-      animation: fadeIn 0.3s ease forwards;
-    }
-
-    .tab-pane.active {
-      display: block;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(6px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* Cards and Panels */
-    .panel {
-      background: var(--bg-panel);
-      border: 1px solid var(--border-subtle);
-      border-radius: 12px;
-      padding: 1.5rem;
-      position: relative;
-      margin-bottom: 1.5rem;
-    }
-
-    .panel-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1.25rem;
-      padding-bottom: 0.75rem;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    }
-
-    .panel-title {
-      font-family: var(--font-display);
-      font-size: 0.95rem;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--neon-cyan);
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.35rem;
-      font-size: 0.75rem;
-      padding: 0.2rem 0.6rem;
-      border-radius: 20px;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid var(--border-subtle);
-      color: var(--text-muted);
-    }
-
-    .badge-dot {
-      width: 6px;
+    input[type="range"]::-webkit-slider-runnable-track {
       height: 6px;
+      border-radius: 999px;
+      background: #252938;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      height: 16px;
+      width: 16px;
       border-radius: 50%;
-      background: var(--neon-emerald);
-      box-shadow: 0 0 6px var(--neon-emerald);
+      background: #00f0ff;
+      margin-top: -5px;
+      box-shadow: 0 0 10px rgba(0, 240, 255, 0.6);
+      transition: transform 0.1s ease;
     }
-
-    /* Master Chrono Screen */
-    .chrono-hero {
-      display: grid;
-      grid-template-columns: 1fr 340px;
-      gap: 1.5rem;
-      margin-bottom: 1.5rem;
-    }
-
-    @media (max-width: 960px) {
-      .chrono-hero {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .digital-readout-box {
-      background: radial-gradient(circle at center, #131722 0%, #0a0c12 100%);
-      border: 1px solid var(--border-glow);
-      border-radius: 14px;
-      padding: 2.25rem 2rem;
-      position: relative;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      box-shadow: inset 0 0 40px rgba(0, 240, 255, 0.03);
-    }
-
-    .digital-readout-box::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0; height: 1px;
-      background: linear-gradient(90deg, transparent, var(--neon-cyan), transparent);
-    }
-
-    .location-tag {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 1.25rem;
-    }
-
-    .tz-headline {
-      font-size: 1.35rem;
-      font-weight: 700;
-      color: #fff;
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-    }
-
-    .tz-code {
-      font-size: 0.85rem;
-      color: var(--neon-amber);
-      background: rgba(255, 183, 0, 0.1);
-      padding: 0.1rem 0.5rem;
-      border-radius: 4px;
-      border: 1px solid rgba(255, 183, 0, 0.3);
-    }
-
-    .time-digits-container {
-      display: flex;
-      align-items: baseline;
-      font-family: var(--font-display);
-      font-size: clamp(3.2rem, 7.5vw, 6.2rem);
-      font-weight: 900;
-      letter-spacing: -0.02em;
-      line-height: 1;
-      color: #ffffff;
-      text-shadow: 0 0 25px rgba(0, 240, 255, 0.45);
-      user-select: none;
-    }
-
-    .blink-colon {
-      animation: colonPulse 1s infinite steps(1, start);
-      color: var(--neon-cyan);
-      margin: 0 0.1em;
-    }
-
-    @keyframes colonPulse {
-      0%, 100% { opacity: 1; text-shadow: 0 0 10px var(--neon-cyan); }
-      50% { opacity: 0.2; text-shadow: none; }
-    }
-
-    .millisec {
-      font-size: 0.35em;
-      color: var(--neon-magenta);
-      margin-left: 0.25em;
-      font-family: var(--font-mono);
-      font-weight: 700;
-      width: 2.2ch;
-      text-align: left;
-      text-shadow: 0 0 12px rgba(255, 0, 85, 0.5);
-    }
-
-    .ampm {
-      font-size: 0.28em;
-      color: var(--neon-amber);
-      margin-left: 0.35em;
-      font-weight: 700;
-    }
-
-    .date-readout {
-      margin-top: 1.25rem;
-      font-size: 1.15rem;
-      font-weight: 500;
-      color: var(--text-muted);
-      display: flex;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 0.75rem;
-    }
-
-    .date-highlight {
-      color: #ffffff;
-      font-weight: 700;
-    }
-
-    .controls-strip {
-      display: flex;
-      gap: 0.5rem;
-      margin-top: 1.5rem;
-      padding-top: 1rem;
-      border-top: 1px solid rgba(255, 255, 255, 0.08);
-      flex-wrap: wrap;
-    }
-
-    .toggle-btn {
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid var(--border-subtle);
-      color: var(--text-muted);
-      padding: 0.4rem 0.85rem;
-      border-radius: 6px;
-      font-family: var(--font-mono);
-      font-size: 0.75rem;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .toggle-btn:hover {
-      background: rgba(0, 240, 255, 0.1);
-      color: var(--neon-cyan);
-      border-color: var(--neon-cyan);
-    }
-
-    .toggle-btn.active {
-      background: rgba(0, 240, 255, 0.2);
-      border-color: var(--neon-cyan);
-      color: #fff;
-    }
-
-    /* Analog Clock Canvas Box */
-    .analog-panel {
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      border-radius: 14px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 1.5rem;
-      position: relative;
-    }
-
-    #analogClockCanvas {
-      width: 250px;
-      height: 250px;
-      max-width: 100%;
-    }
-
-    .analog-caption {
-      margin-top: 1rem;
-      font-size: 0.75rem;
-      color: var(--text-dim);
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-    }
-
-    /* Temporal Metrics Matrix */
-    .telemetry-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-      gap: 1rem;
-    }
-
-    .telemetry-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      border-radius: 8px;
-      padding: 1rem 1.15rem;
-      transition: transform 0.2s, border-color 0.2s;
-    }
-
-    .telemetry-card:hover {
-      border-color: rgba(0, 240, 255, 0.4);
-      transform: translateY(-2px);
-    }
-
-    .telemetry-label {
-      font-size: 0.72rem;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      margin-bottom: 0.4rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .telemetry-value {
-      font-size: 1.05rem;
-      font-weight: 700;
-      color: #ffffff;
-      word-break: break-all;
-    }
-
-    .accent-cyan { color: var(--neon-cyan); }
-    .accent-emerald { color: var(--neon-emerald); }
-    .accent-amber { color: var(--neon-amber); }
-    .accent-magenta { color: var(--neon-magenta); }
-
-    /* Map Section */
-    .map-container {
-      position: relative;
-      background: #090b10;
-      border: 1px solid var(--border-subtle);
-      border-radius: 12px;
-      overflow: hidden;
-      margin-bottom: 1.5rem;
-    }
-
-    #worldMapSvg {
-      width: 100%;
-      height: auto;
-      display: block;
-      background: radial-gradient(circle at 50% 50%, #0d121d 0%, #07090e 100%);
-    }
-
-    .map-tooltip {
-      position: absolute;
-      pointer-events: none;
-      background: rgba(14, 17, 24, 0.95);
-      border: 1px solid var(--neon-cyan);
-      box-shadow: 0 4px 20px rgba(0,0,0,0.8), 0 0 10px rgba(0, 240, 255, 0.25);
-      padding: 0.6rem 0.9rem;
-      border-radius: 6px;
-      font-size: 0.8rem;
-      color: #fff;
-      display: none;
-      z-index: 50;
-      transform: translate(-50%, -120%);
-      white-space: nowrap;
-    }
-
-    .map-legend {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1.5rem;
-      padding: 0.8rem 1.25rem;
-      background: var(--bg-card);
-      border-top: 1px solid var(--border-subtle);
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      align-items: center;
-    }
-
-    .legend-item {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .legend-chip {
-      width: 12px;
-      height: 12px;
-      border-radius: 3px;
-    }
-
-    /* World Grid Matrix */
-    .search-bar-row {
-      display: flex;
-      gap: 1rem;
-      margin-bottom: 1.25rem;
-      flex-wrap: wrap;
-    }
-
-    .search-input {
-      flex: 1;
-      min-width: 260px;
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      padding: 0.75rem 1rem;
-      border-radius: 8px;
-      color: #fff;
-      font-family: var(--font-mono);
-      font-size: 0.85rem;
-      outline: none;
-      transition: border-color 0.2s;
-    }
-
-    .search-input:focus {
-      border-color: var(--neon-cyan);
-      box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
+    input[type="range"]::-webkit-slider-thumb:hover {
+      transform: scale(1.15);
     }
 
-    .city-matrix-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 1rem;
+    /* Hardware Button Depression */
+    .hw-btn {
+      transition: all 0.12s cubic-bezier(0.2, 0.8, 0.2, 1);
     }
-
-    .city-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      border-radius: 10px;
-      padding: 1.15rem;
-      cursor: pointer;
-      transition: all 0.2s;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .city-card:hover {
-      background: var(--bg-card-hover);
-      border-color: rgba(0, 240, 255, 0.4);
-      transform: translateY(-2px);
-    }
-
-    .city-card.california-highlight {
-      border: 1px solid var(--neon-cyan);
-      background: linear-gradient(135deg, rgba(0, 240, 255, 0.05) 0%, var(--bg-card) 100%);
-    }
-
-    .city-card-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 0.5rem;
-    }
-
-    .city-name {
-      font-size: 1.05rem;
-      font-weight: 700;
-      color: #fff;
-    }
-
-    .city-region {
-      font-size: 0.72rem;
-      color: var(--text-dim);
-    }
-
-    .delta-badge {
-      font-size: 0.72rem;
-      font-weight: 600;
-      padding: 0.2rem 0.5rem;
-      border-radius: 4px;
-      background: rgba(255, 255, 255, 0.06);
-      color: var(--text-muted);
-    }
-
-    .city-time-huge {
-      font-family: var(--font-display);
-      font-size: 1.6rem;
-      font-weight: 700;
-      color: #fff;
-      margin: 0.4rem 0;
-    }
-
-    .city-date-sub {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    /* Tools & Utilities Section */
-    .tools-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
-      gap: 1.5rem;
-    }
-
-    @media (max-width: 500px) {
-      .tools-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .input-group {
-      margin-bottom: 1rem;
-    }
-
-    .input-label {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-bottom: 0.4rem;
-      display: block;
-    }
-
-    .cyber-input {
-      width: 100%;
-      background: #09090e;
-      border: 1px solid var(--border-subtle);
-      border-radius: 6px;
-      padding: 0.65rem 0.85rem;
-      color: #fff;
-      font-family: var(--font-mono);
-      font-size: 0.88rem;
-    }
-
-    .cyber-input:focus {
-      outline: none;
-      border-color: var(--neon-cyan);
-    }
-
-    .btn-action {
-      background: rgba(0, 240, 255, 0.15);
-      border: 1px solid var(--neon-cyan);
-      color: var(--neon-cyan);
-      font-family: var(--font-mono);
-      font-weight: 700;
-      font-size: 0.82rem;
-      padding: 0.6rem 1.2rem;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .btn-action:hover {
-      background: var(--neon-cyan);
-      color: #000;
-      box-shadow: 0 0 15px rgba(0, 240, 255, 0.4);
-    }
-
-    .btn-danger {
-      background: rgba(255, 0, 85, 0.15);
-      border-color: var(--neon-magenta);
-      color: var(--neon-magenta);
+    .hw-btn:active {
+      transform: translateY(1px) scale(0.98);
     }
-    .btn-danger:hover {
-      background: var(--neon-magenta);
-      color: #fff;
-      box-shadow: 0 0 15px rgba(255, 0, 85, 0.4);
-    }
-
-    /* Meeting Planner Matrix Bar */
-    .overlap-timeline {
-      display: flex;
-      flex-direction: column;
-      gap: 1.25rem;
-      margin-top: 1rem;
-    }
-
-    .overlap-row {
-      display: flex;
-      flex-direction: column;
-      gap: 0.4rem;
-    }
-
-    .overlap-header {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.78rem;
-      color: var(--text-muted);
-    }
-
-    .timeline-bar {
-      display: grid;
-      grid-template-columns: repeat(24, 1fr);
-      height: 28px;
-      background: #07090e;
-      border: 1px solid var(--border-subtle);
-      border-radius: 6px;
-      overflow: hidden;
-      position: relative;
-    }
-
-    .hour-block {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.62rem;
-      color: #555;
-      border-right: 1px solid rgba(255, 255, 255, 0.05);
-      position: relative;
-      user-select: none;
-    }
-
-    .hour-block.work-hour {
-      background: rgba(0, 255, 136, 0.18);
-      color: var(--neon-emerald);
-      font-weight: 700;
-    }
-
-    .hour-block.current-pointer::after {
-      content: '';
-      position: absolute;
-      top: 0; bottom: 0; width: 3px;
-      background: var(--neon-magenta);
-      box-shadow: 0 0 8px var(--neon-magenta);
-      left: calc(var(--curr-pct, 0%) - 1.5px);
-      z-index: 10;
-    }
-
-    /* Stopwatch and Timer Displays */
-    .stopwatch-display {
-      font-family: var(--font-display);
-      font-size: clamp(2.2rem, 5vw, 3.4rem);
-      font-weight: 900;
-      text-align: center;
-      margin: 1.2rem 0;
-      color: var(--neon-emerald);
-      text-shadow: 0 0 18px rgba(0, 255, 136, 0.35);
-    }
 
-    .laps-container {
-      max-height: 180px;
-      overflow-y: auto;
-      border: 1px solid var(--border-subtle);
-      border-radius: 6px;
-      margin-top: 1rem;
-      font-size: 0.8rem;
-    }
-
-    .lap-row {
-      display: flex;
-      justify-content: space-between;
-      padding: 0.4rem 0.8rem;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-    }
-    .lap-row:nth-child(even) { background: rgba(255, 255, 255, 0.02); }
-
-    /* Astronomical / Exotic Systems */
-    .curious-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
-      gap: 1.25rem;
-    }
-
-    .curious-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      border-radius: 12px;
-      padding: 1.5rem;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    .curious-value {
-      font-family: var(--font-display);
-      font-size: 2.1rem;
-      font-weight: 800;
-      margin: 0.8rem 0;
-    }
+    /* Glow Utilities */
+    .glow-cyan { box-shadow: 0 0 18px rgba(0, 240, 255, 0.35); }
+    .glow-amber { box-shadow: 0 0 18px rgba(255, 158, 0, 0.35); }
+    .glow-magenta { box-shadow: 0 0 18px rgba(255, 42, 133, 0.35); }
+    .glow-emerald { box-shadow: 0 0 18px rgba(0, 230, 118, 0.35); }
 
-    .progress-bar-wrap {
-      width: 100%;
-      height: 12px;
-      background: #08080c;
-      border-radius: 6px;
-      overflow: hidden;
-      border: 1px solid var(--border-subtle);
-      margin: 0.8rem 0;
-    }
-
-    .progress-bar-fill {
-      height: 100%;
-      background: linear-gradient(90deg, var(--neon-cyan), var(--neon-magenta));
-      transition: width 0.3s ease;
-    }
-
-    /* Footer */
-    footer {
-      border-top: 1px solid var(--border-subtle);
-      padding: 2rem 1.25rem;
-      text-align: center;
-      font-size: 0.78rem;
-      color: var(--text-dim);
-      background: var(--bg-panel);
-    }
-
-    footer a {
-      color: var(--neon-cyan);
-      text-decoration: none;
-    }
-
-    footer a:hover {
-      text-decoration: underline;
-    }
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #0d0f16; }
+    ::-webkit-scrollbar-thumb { background: #2a2f42; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #3b425c; }
   </style>
 </head>
-<body>
+<body class="min-h-screen flex flex-col bg-obsidian text-slate-200 selection:bg-cyan-500/30">
 
-  <!-- Top Navigation Bar -->
-  <header>
-    <div class="nav-container">
-      <a href="#" class="brand" onclick="switchTab('chrono'); return false;">
-        <div class="brand-mark"></div>
-        <div>
-          <div class="brand-text">TIME // SARIMOKO</div>
+  <!-- TOP STUDIO TRANSPORT BAR -->
+  <header class="sticky top-0 z-40 bg-studio/95 backdrop-blur-md border-b border-panelBorder px-4 py-3">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
+      
+      <!-- Brand / Logo -->
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-cyan-400/20 to-fuchsia-500/20 border border-cyan-400/40 flex items-center justify-center relative overflow-hidden">
+          <svg class="w-5 h-5 text-cyan-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="9" stroke-opacity="0.4"/>
+            <polygon points="12,3 20,17 4,17" stroke="#00f0ff" stroke-width="1.75" fill="none"/>
+            <circle cx="12" cy="3" r="2" fill="#ff9e00" stroke="none"/>
+          </svg>
         </div>
-        <span class="brand-sub">CA OBS // PT</span>
-      </a>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="font-mono font-bold tracking-tight text-white text-base sm:text-lg">time<span class="text-cyan-400">.sarimoko</span>.com</span>
+            <span class="hidden sm:inline-block text-[10px] font-mono uppercase tracking-widest px-1.5 py-0.5 rounded bg-cyan-500/10 text-cyan-300 border border-cyan-500/20">Audio Clock v2.4</span>
+          </div>
+          <p class="text-[11px] text-slate-400 hidden md:block">Sample-Accurate Time Signature & Polyrhythm Workstation</p>
+        </div>
+      </div>
 
-      <nav class="tab-bar">
-        <button class="tab-btn active" onclick="switchTab('chrono')" id="tabBtn-chrono">
-          <span>◈</span> CHRONO
+      <!-- Mode Switcher Tabs -->
+      <nav class="flex items-center bg-obsidian p-1 rounded-xl border border-panelBorder order-3 sm:order-2 w-full sm:w-auto justify-center">
+        <button id="tabBtnMetronome" onclick="switchTab('metronome')" class="flex-1 sm:flex-initial px-4 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all bg-panel text-cyan-300 border border-cyan-500/30 shadow-sm flex items-center justify-center gap-2">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2L6 20h12L12 2z"/><path d="M12 14l4-7"/></svg>
+          <span>Metronome</span>
         </button>
-        <button class="tab-btn" onclick="switchTab('world')" id="tabBtn-world">
-          <span>⬡</span> WORLD & MATRIX
-        </button>
-        <button class="tab-btn" onclick="switchTab('lab')" id="tabBtn-lab">
-          <span>⚙</span> TIME LAB
-        </button>
-        <button class="tab-btn" onclick="switchTab('astro')" id="tabBtn-astro">
-          <span>☾</span> ASTRONOMICAL
+        <button id="tabBtnPolyrhythm" onclick="switchTab('polyrhythm')" class="flex-1 sm:flex-initial px-4 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all text-slate-400 hover:text-white flex items-center justify-center gap-2">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><line x1="12" y1="3" x2="12" y2="12"/></svg>
+          <span>Polyrhythm Lab</span>
         </button>
       </nav>
+
+      <!-- Master Transport Controls -->
+      <div class="flex items-center gap-2 sm:gap-3 order-2 sm:order-3">
+        <!-- Tap Tempo -->
+        <button id="btnTapTempo" onclick="handleTapTempo()" class="hw-btn px-3 py-2 rounded-lg bg-panel hover:bg-slate-800 border border-panelBorder text-xs font-mono font-semibold text-amber-300 flex items-center gap-1.5" title="Tap repeatedly to detect BPM">
+          <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+          TAP
+        </button>
+
+        <!-- Play / Stop Button -->
+        <button id="btnPlayStop" onclick="togglePlay()" class="hw-btn px-4 sm:px-5 py-2 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-obsidian font-bold text-xs sm:text-sm flex items-center gap-2 glow-cyan" title="Spacebar to Play/Stop">
+          <svg id="iconPlay" class="w-4 h-4 fill-current" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+          <svg id="iconStop" class="w-4 h-4 fill-current hidden" viewBox="0 0 24 24"><rect x="5" y="5" width="14" height="14" rx="2"/></svg>
+          <span id="lblPlayStop">START</span>
+        </button>
+
+        <!-- Master Volume -->
+        <div class="hidden lg:flex items-center gap-2 bg-panel px-3 py-1.5 rounded-lg border border-panelBorder">
+          <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+          <input id="masterVolume" type="range" min="0" max="1" step="0.01" value="0.85" class="w-20" oninput="updateMasterVolume(this.value)" title="Master Output Gain" />
+        </div>
+      </div>
+
     </div>
   </header>
 
-  <!-- Main Viewports -->
-  <main>
+  <!-- MAIN WORKSPACE -->
+  <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6">
 
-    <!-- TAB 1: CHRONO (Master California & Global Observational Clock) -->
-    <section id="pane-chrono" class="tab-pane active">
+    <!-- ===================================================================== -->
+    <!-- TAB 1: ADVANCED METRONOME VIEW                                        -->
+    <!-- ===================================================================== -->
+    <section id="viewMetronome" class="space-y-6">
       
-      <div class="chrono-hero">
-        <!-- Big Digital Cyber Chrono -->
-        <div class="digital-readout-box">
-          <div class="location-tag">
-            <div class="tz-headline">
-              <span id="displayLocationTitle">CALIFORNIA / PACIFIC</span>
-              <span class="tz-code" id="tzAbbr">PST</span>
+      <!-- Top Control Grid: BPM, Time Signature, Sound & Subdivision -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+        
+        <!-- BPM & Tempo Engine Card (5 cols) -->
+        <div class="lg:col-span-5 bg-panel border border-panelBorder rounded-2xl p-5 flex flex-col justify-between relative overflow-hidden">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-mono uppercase tracking-wider text-slate-400">Master Tempo</span>
+            <span id="tempoMarking" class="text-xs font-mono px-2 py-0.5 rounded bg-slate-800 text-cyan-300 border border-slate-700">Allegro</span>
+          </div>
+
+          <!-- Big Digital BPM Display & Stepper -->
+          <div class="flex items-center justify-between my-3 gap-2">
+            <div class="flex items-center gap-1.5">
+              <button onclick="adjustBpm(-5)" class="hw-btn w-9 h-10 rounded-lg bg-obsidian hover:bg-slate-800 border border-panelBorder font-mono text-xs text-slate-300">-5</button>
+              <button onclick="adjustBpm(-1)" class="hw-btn w-10 h-12 rounded-lg bg-obsidian hover:bg-slate-800 border border-panelBorder font-mono text-lg font-bold text-white">-</button>
             </div>
-            <div class="badge">
-              <span class="badge-dot"></span>
-              <span id="solarIndicator">DAYLIGHT</span>
+
+            <div class="flex flex-col items-center">
+              <input id="bpmInput" type="number" min="20" max="300" value="120" onchange="setBpm(this.value)" class="w-32 text-center bg-transparent font-mono text-5xl sm:text-6xl font-bold text-white focus:outline-none focus:text-cyan-300" />
+              <span class="text-[11px] font-mono uppercase tracking-widest text-slate-500 mt-1">Beats Per Minute</span>
+            </div>
+
+            <div class="flex items-center gap-1.5">
+              <button onclick="adjustBpm(1)" class="hw-btn w-10 h-12 rounded-lg bg-obsidian hover:bg-slate-800 border border-panelBorder font-mono text-lg font-bold text-white">+</button>
+              <button onclick="adjustBpm(5)" class="hw-btn w-9 h-10 rounded-lg bg-obsidian hover:bg-slate-800 border border-panelBorder font-mono text-xs text-slate-300">+5</button>
             </div>
           </div>
 
-          <div class="time-digits-container">
-            <span id="digitHours">12</span>
-            <span class="blink-colon">:</span>
-            <span id="digitMinutes">00</span>
-            <span class="blink-colon">:</span>
-            <span id="digitSeconds">00</span>
-            <span class="millisec" id="digitMillis">.000</span>
-            <span class="ampm" id="digitAmpm">PM</span>
-          </div>
-
-          <div class="date-readout">
-            <span class="date-highlight" id="dateFullFormatted">Tuesday, November 10, 2026</span>
-            <span>•</span>
-            <span id="dateOffsetFormatted">UTC-8 (Pacific Standard Time)</span>
-          </div>
-
-          <div class="controls-strip">
-            <button class="toggle-btn" id="btnToggle24h" onclick="toggle24HourMode()">24H MODE: OFF</button>
-            <button class="toggle-btn active" id="btnToggleMillis" onclick="toggleMilliseconds()">MILLIS: ON</button>
-            <button class="toggle-btn" onclick="setTimezoneDefault('America/Los_Angeles')">CALIFORNIA (DEFAULT)</button>
-            <button class="toggle-btn" onclick="setTimezoneDefault('UTC')">UTC</button>
-            <button class="toggle-btn" onclick="setLocalBrowserTz()">DEVICE LOCAL</button>
+          <!-- Slider -->
+          <div class="mt-2">
+            <input id="bpmSlider" type="range" min="20" max="300" value="120" oninput="setBpm(this.value)" class="w-full" />
+            <div class="flex justify-between text-[10px] font-mono text-slate-500 mt-1">
+              <span>20</span>
+              <span>80</span>
+              <span>120</span>
+              <span>180</span>
+              <span>240</span>
+              <span>300</span>
+            </div>
           </div>
         </div>
 
-        <!-- Sweeping SVG/Canvas Analog Chrono -->
-        <div class="analog-panel">
-          <canvas id="analogClockCanvas" width="500" height="500"></canvas>
-          <div class="analog-caption" id="analogSubtext">PACIFIC TIME SWEEP</div>
+        <!-- Time Signature & Subdivisions Card (4 cols) -->
+        <div class="lg:col-span-4 bg-panel border border-panelBorder rounded-2xl p-5 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-xs font-mono uppercase tracking-wider text-slate-400">Time Signature</span>
+              <!-- Quick Common Signatures -->
+              <div class="flex gap-1">
+                <button onclick="setTimeSignature(4,4)" class="px-2 py-0.5 text-[11px] font-mono rounded bg-obsidian hover:bg-slate-800 border border-panelBorder text-slate-300">4/4</button>
+                <button onclick="setTimeSignature(3,4)" class="px-2 py-0.5 text-[11px] font-mono rounded bg-obsidian hover:bg-slate-800 border border-panelBorder text-slate-300">3/4</button>
+                <button onclick="setTimeSignature(5,4)" class="px-2 py-0.5 text-[11px] font-mono rounded bg-obsidian hover:bg-slate-800 border border-panelBorder text-slate-300">5/4</button>
+                <button onclick="setTimeSignature(7,8)" class="px-2 py-0.5 text-[11px] font-mono rounded bg-obsidian hover:bg-slate-800 border border-panelBorder text-slate-300">7/8</button>
+              </div>
+            </div>
+
+            <!-- Numerator / Denominator Selectors -->
+            <div class="flex items-center justify-center gap-4 bg-obsidian/70 rounded-xl p-3 border border-panelBorder">
+              <div class="flex flex-col items-center">
+                <span class="text-[10px] font-mono text-slate-500 mb-1">BEATS</span>
+                <div class="flex items-center gap-2">
+                  <button onclick="changeNumerator(-1)" class="w-7 h-7 rounded bg-panel hover:bg-slate-700 text-white font-mono font-bold">-</button>
+                  <span id="displayNumerator" class="font-mono text-3xl font-bold text-cyan-300 w-10 text-center">4</span>
+                  <button onclick="changeNumerator(1)" class="w-7 h-7 rounded bg-panel hover:bg-slate-700 text-white font-mono font-bold">+</button>
+                </div>
+              </div>
+
+              <span class="text-3xl font-mono text-slate-600 font-light">/</span>
+
+              <div class="flex flex-col items-center">
+                <span class="text-[10px] font-mono text-slate-500 mb-1">NOTE VAL</span>
+                <select id="selectDenominator" onchange="setDenominator(parseInt(this.value))" class="bg-panel border border-panelBorder rounded-lg px-3 py-1.5 font-mono text-2xl font-bold text-amber-300 focus:outline-none">
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="4" selected>4</option>
+                  <option value="8">8</option>
+                  <option value="16">16</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Subdivisions -->
+          <div class="mt-4">
+            <div class="flex items-center justify-between mb-1.5">
+              <span class="text-xs font-mono uppercase tracking-wider text-slate-400">Subdivision</span>
+              <div class="flex items-center gap-2">
+                <span class="text-[10px] font-mono text-slate-400">Sub Vol</span>
+                <input id="subVolumeSlider" type="range" min="0" max="1" step="0.05" value="0.45" oninput="metronomeState.subVolume = parseFloat(this.value)" class="w-16" />
+              </div>
+            </div>
+            <div class="grid grid-cols-6 gap-1.5" id="subdivisionButtons">
+              <button data-sub="1" onclick="setSubdivision(1)" class="sub-btn py-1.5 rounded-lg bg-cyan-500/20 border border-cyan-400 text-cyan-300 font-mono text-xs font-bold" title="Quarter / Main Pulse">1x</button>
+              <button data-sub="2" onclick="setSubdivision(2)" class="sub-btn py-1.5 rounded-lg bg-obsidian border border-panelBorder text-slate-400 hover:text-white font-mono text-xs" title="Eighths">2x</button>
+              <button data-sub="3" onclick="setSubdivision(3)" class="sub-btn py-1.5 rounded-lg bg-obsidian border border-panelBorder text-slate-400 hover:text-white font-mono text-xs" title="Triplets">3x</button>
+              <button data-sub="4" onclick="setSubdivision(4)" class="sub-btn py-1.5 rounded-lg bg-obsidian border border-panelBorder text-slate-400 hover:text-white font-mono text-xs" title="Sixteenths">4x</button>
+              <button data-sub="5" onclick="setSubdivision(5)" class="sub-btn py-1.5 rounded-lg bg-obsidian border border-panelBorder text-slate-400 hover:text-white font-mono text-xs" title="Quintuplets">5x</button>
+              <button data-sub="7" onclick="setSubdivision(7)" class="sub-btn py-1.5 rounded-lg bg-obsidian border border-panelBorder text-slate-400 hover:text-white font-mono text-xs" title="Septuplets">7x</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sound Engine & Practice Trainer Card (3 cols) -->
+        <div class="lg:col-span-3 bg-panel border border-panelBorder rounded-2xl p-5 flex flex-col justify-between space-y-4">
+          <!-- Sound Preset -->
+          <div>
+            <label class="block text-xs font-mono uppercase tracking-wider text-slate-400 mb-2">Click Sound Engine</label>
+            <select id="soundPresetSelect" onchange="metronomeState.soundPreset = this.value" class="w-full bg-obsidian border border-panelBorder rounded-lg px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-cyan-400">
+              <option value="woodblock">Acoustic Woodblock</option>
+              <option value="digital">Precision Digital Click</option>
+              <option value="analog">Analog Synth Beep</option>
+              <option value="percussion">Studio Rim & Kick</option>
+            </select>
+          </div>
+
+          <!-- Practice Telemetry -->
+          <div class="grid grid-cols-2 gap-2 bg-obsidian/70 p-2.5 rounded-xl border border-panelBorder">
+            <div>
+              <div class="text-[10px] font-mono text-slate-500 uppercase">Bar Count</div>
+              <div id="barCounterDisplay" class="font-mono text-lg font-bold text-white">1</div>
+            </div>
+            <div>
+              <div class="text-[10px] font-mono text-slate-500 uppercase">Elapsed</div>
+              <div id="timerDisplay" class="font-mono text-lg font-bold text-slate-300">00:00</div>
+            </div>
+          </div>
+
+          <!-- Speed Trainer -->
+          <div class="border-t border-panelBorder pt-3">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-mono font-semibold text-amber-300 flex items-center gap-1.5">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+                Tempo Ramp Trainer
+              </span>
+              <input id="trainerEnabled" type="checkbox" onchange="metronomeState.trainer.enabled = this.checked" class="w-4 h-4 accent-amber-400 rounded cursor-pointer" />
+            </div>
+            <div class="flex items-center gap-1.5 text-[11px] font-mono text-slate-400">
+              <span>+</span>
+              <input id="trainerBpmStep" type="number" min="1" max="30" value="5" onchange="metronomeState.trainer.bpmStep = parseInt(this.value)||1" class="w-11 bg-obsidian border border-panelBorder rounded px-1.5 py-1 text-center text-white" />
+              <span>BPM every</span>
+              <input id="trainerBarStep" type="number" min="1" max="64" value="4" onchange="metronomeState.trainer.barStep = parseInt(this.value)||1" class="w-11 bg-obsidian border border-panelBorder rounded px-1.5 py-1 text-center text-white" />
+              <span>bars</span>
+            </div>
+          </div>
         </div>
       </div>
 
-      <!-- Live Temporal Metrics Matrix Grid -->
-      <div class="panel">
-        <div class="panel-header">
-          <div class="panel-title"><span>❖</span> High-Precision Temporal Telemetry</div>
-          <span class="badge" id="telemetryStatusBadge">ACTIVE INT-CLOCK</span>
+      <!-- Interactive Beat Accent Sequencer Stage -->
+      <div class="bg-panel border border-panelBorder rounded-2xl p-5 sm:p-6">
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+          <div>
+            <h2 class="text-sm font-mono uppercase tracking-wider text-white font-semibold">Interactive Beat Accent Matrix</h2>
+            <p class="text-xs text-slate-400">Click any beat column to cycle dynamic intensity: <span class="text-amber-300 font-semibold">Accent</span> &rarr; <span class="text-cyan-300 font-semibold">Normal</span> &rarr; <span class="text-slate-400 font-semibold">Ghost</span> &rarr; <span class="text-rose-400 font-semibold">Mute</span></p>
+          </div>
+          <!-- Subdivision Pulse Bar -->
+          <div class="flex items-center gap-2 bg-obsidian px-3 py-1.5 rounded-lg border border-panelBorder">
+            <span class="text-[10px] font-mono uppercase text-slate-500">Sub-Pulse:</span>
+            <div id="subPulseDots" class="flex items-center gap-1.5"></div>
+          </div>
         </div>
 
-        <div class="telemetry-grid">
-          <div class="telemetry-card">
-            <div class="telemetry-label">UNIX TIMESTAMP (S) <span class="accent-cyan">#EPOCH</span></div>
-            <div class="telemetry-value accent-cyan" id="metricUnixEpoch">0000000000</div>
-          </div>
-          <div class="telemetry-card">
-            <div class="telemetry-label">ISO 8601 EXTENDED <span class="accent-emerald">#STD</span></div>
-            <div class="telemetry-value" style="font-size:0.85rem;" id="metricIso">2026-11-10T00:00:00Z</div>
-          </div>
-          <div class="telemetry-card">
-            <div class="telemetry-label">DAY OF YEAR (DOY) <span class="accent-amber">#PROGRESS</span></div>
-            <div class="telemetry-value accent-amber" id="metricDoy">Day 314 / 365</div>
-          </div>
-          <div class="telemetry-card">
-            <div class="telemetry-label">ISO WEEK NUMBER <span class="accent-magenta">#CYCLE</span></div>
-            <div class="telemetry-value accent-magenta" id="metricIsoWeek">Week 46</div>
-          </div>
-          <div class="telemetry-card">
-            <div class="telemetry-label">JULIAN DAY NUMBER <span class="accent-cyan">#ASTRONOMICAL</span></div>
-            <div class="telemetry-value" id="metricJulianDay">2461355.12</div>
-          </div>
-          <div class="telemetry-card">
-            <div class="telemetry-label">LUNAR PHASE ESTIMATE <span class="accent-emerald">#SYNODIC</span></div>
-            <div class="telemetry-value" id="metricMoonPhase">Waxing Crescent (18%)</div>
-          </div>
+        <!-- Beat Pads Grid -->
+        <div id="beatSequencerGrid" class="grid grid-cols-4 sm:grid-cols-8 gap-3">
+          <!-- Dynamically populated beat pads -->
         </div>
       </div>
 
     </section>
 
-    <!-- TAB 2: WORLD MAP & GLOBAL MATRIX -->
-    <section id="pane-world" class="tab-pane">
-
-      <!-- Interactive Equirectangular World Map with Day/Night Terminator -->
-      <div class="map-container">
-        <svg id="worldMapSvg" viewBox="0 0 1000 500" preserveAspectRatio="xMidYMid meet">
-          <defs>
-            <pattern id="gridPattern" width="40" height="40" patternUnits="userSpaceOnUse">
-              <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255, 255, 255, 0.04)" stroke-width="0.5" />
-            </pattern>
-            <!-- Night gradient mask for smooth twilight terminator -->
-            <linearGradient id="twilightGrad" x1="0" y1="0" x2="1" y2="0">
-              <stop offset="0%" stop-color="#000" stop-opacity="0.82" />
-              <stop offset="50%" stop-color="#02040a" stop-opacity="0.75" />
-              <stop offset="100%" stop-color="#000" stop-opacity="0.82" />
-            </linearGradient>
-          </defs>
-
-          <!-- Background coordinate grid -->
-          <rect width="1000" height="500" fill="url(#gridPattern)" />
-
-          <!-- Prime Meridian and Equator markers -->
-          <line x1="500" y1="0" x2="500" y2="500" stroke="rgba(0, 240, 255, 0.2)" stroke-dasharray="4,4" stroke-width="1" />
-          <line x1="0" y1="250" x2="1000" y2="250" stroke="rgba(255, 255, 255, 0.1)" stroke-width="0.8" />
-
-          <!-- Simplified Continent Outlines in Vector Geo Paths -->
-          <g id="worldContinents" fill="#181e2b" stroke="#2a354b" stroke-width="0.9">
-            <!-- North America -->
-            <path d="M 120 70 L 190 60 L 260 85 L 290 120 L 250 160 L 230 190 L 190 230 L 170 270 L 145 230 L 130 170 L 80 140 L 70 95 Z" />
-            <!-- South America -->
-            <path d="M 270 270 L 330 280 L 370 330 L 350 400 L 320 460 L 290 440 L 270 360 L 250 300 Z" />
-            <!-- Europe -->
-            <path d="M 460 90 L 530 80 L 560 130 L 520 170 L 470 160 L 450 120 Z" />
-            <!-- Africa -->
-            <path d="M 460 180 L 540 180 L 570 240 L 560 330 L 520 390 L 480 340 L 460 260 Z" />
-            <!-- Asia & Siberia -->
-            <path d="M 550 70 L 830 70 L 870 130 L 830 190 L 760 210 L 700 240 L 640 220 L 580 180 Z" />
-            <!-- Australia & Oceania -->
-            <path d="M 760 320 L 850 310 L 880 370 L 840 420 L 770 410 L 750 360 Z" />
-            <!-- Greenland & Arctic -->
-            <path d="M 310 40 L 380 40 L 350 90 L 300 80 Z" />
-          </g>
-
-          <!-- Day/Night Solar Terminator Polygon Curve -->
-          <path id="terminatorPolygon" fill="url(#twilightGrad)" stroke="rgba(255, 183, 0, 0.4)" stroke-width="1.2" />
-
-          <!-- Interactive City Pins -->
-          <g id="mapPinsGroup"></g>
-        </svg>
-
-        <div id="mapTooltip" class="map-tooltip"></div>
-
-        <div class="map-legend">
-          <div class="legend-item">
-            <div class="legend-chip" style="background: rgba(0, 240, 255, 0.8);"></div>
-            <span>Hub Markers (Hover to Inspect)</span>
+    <!-- ===================================================================== -->
+    <!-- TAB 2: POLYRHYTHM & POLYMETER VISUAL LAB                              -->
+    <!-- ===================================================================== -->
+    <section id="viewPolyrhythm" class="hidden space-y-6">
+      
+      <!-- Top Polyrhythm Control & Preset Bar -->
+      <div class="bg-panel border border-panelBorder rounded-2xl p-4 sm:p-5 flex flex-wrap items-center justify-between gap-4">
+        
+        <!-- Mode Toggle: Polyrhythm (Sync Cycle) vs Polymeter (Sync Pulse) -->
+        <div class="flex flex-wrap items-center gap-3">
+          <div class="bg-obsidian p-1 rounded-xl border border-panelBorder flex items-center">
+            <button id="btnModePolyrhythm" onclick="setPolyMode('polyrhythm')" class="px-3 py-1.5 rounded-lg text-xs font-mono font-bold bg-magentaGlow/20 text-pink-300 border border-pink-500/40 transition-all">
+              Polyrhythm (Sync Cycle)
+            </button>
+            <button id="btnModePolymeter" onclick="setPolyMode('polymeter')" class="px-3 py-1.5 rounded-lg text-xs font-mono font-bold text-slate-400 hover:text-white transition-all">
+              Polymeter (Sync Pulse)
+            </button>
           </div>
-          <div class="legend-item">
-            <div class="legend-chip" style="background: rgba(2, 4, 10, 0.75); border:1px solid #ffb700;"></div>
-            <span>Night Terminator Shadow (Real-time Solar Equation)</span>
-          </div>
-          <div class="legend-item">
-            <span class="accent-cyan">◎ California: Hub Anchor</span>
+
+          <!-- Base BPM Control inside Polyrhythm Tab -->
+          <div class="flex items-center gap-2 bg-obsidian px-3 py-1.5 rounded-xl border border-panelBorder">
+            <span class="text-[11px] font-mono text-slate-400">CYCLE/BASE BPM:</span>
+            <button onclick="adjustBpm(-5)" class="text-slate-400 hover:text-white font-mono px-1">-</button>
+            <input id="polyBpmInput" type="number" min="20" max="300" value="100" onchange="setBpm(this.value)" class="w-14 bg-transparent text-center font-mono font-bold text-cyan-300 focus:outline-none" />
+            <button onclick="adjustBpm(5)" class="text-slate-400 hover:text-white font-mono px-1">+</button>
           </div>
         </div>
+
+        <!-- Instant Presets -->
+        <div class="flex flex-wrap items-center gap-1.5">
+          <span class="text-[11px] font-mono text-slate-500 mr-1">PRESETS:</span>
+          <button onclick="loadPolyPreset('3:2')" class="hw-btn px-2.5 py-1.5 rounded-lg bg-obsidian hover:bg-slate-800 border border-panelBorder text-xs font-mono text-cyan-300">3:2 Hemiola</button>
+          <button onclick="loadPolyPreset('4:3')" class="hw-btn px-2.5 py-1.5 rounded-lg bg-obsidian hover:bg-slate-800 border border-panelBorder text-xs font-mono text-amber-300">4:3 Classic</button>
+          <button onclick="loadPolyPreset('5:4')" class="hw-btn px-2.5 py-1.5 rounded-lg bg-obsidian hover:bg-slate-800 border border-panelBorder text-xs font-mono text-pink-300">5:4 Groove</button>
+          <button onclick="loadPolyPreset('7:4')" class="hw-btn px-2.5 py-1.5 rounded-lg bg-obsidian hover:bg-slate-800 border border-panelBorder text-xs font-mono text-emerald-300">7:4 Odd</button>
+          <button onclick="loadPolyPreset('3:4:5')" class="hw-btn px-2.5 py-1.5 rounded-lg bg-obsidian hover:bg-slate-800 border border-panelBorder text-xs font-mono text-purple-300">3:4:5 Stack</button>
+        </div>
+
       </div>
 
-      <!-- City Matrix / Searchable Global Grid -->
-      <div class="panel">
-        <div class="panel-header">
-          <div class="panel-title"><span>❖</span> Global Metros Temporal Matrix</div>
-          <span class="badge" id="matrixCityCountBadge">16 CITIES MONITORED</span>
-        </div>
-
-        <div class="search-bar-row">
-          <input type="text" id="citySearchInput" class="search-input" placeholder="Search metro by city name, country, or timezone abbreviation (e.g. Tokyo, London, UTC)..." oninput="filterCities()">
-        </div>
-
-        <div class="city-matrix-grid" id="cityMatrixContainer">
-          <!-- Dynamically generated live city cards -->
-        </div>
-      </div>
-
-    </section>
-
-    <!-- TAB 3: TIME LAB & PRODUCTIVITY UTILITIES -->
-    <section id="pane-lab" class="tab-pane">
-
-      <!-- Meeting Overlap Visualizer Bar -->
-      <div class="panel">
-        <div class="panel-header">
-          <div class="panel-title"><span>❖</span> Global Synchronizer // 24-Hour Overlap Planner</div>
-          <span class="badge">GREEN = 09:00 - 18:00 LOCAL WORK HOURS</span>
-        </div>
-        <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:1rem;">
-          Compare working hour overlaps between California (PT) and major transatlantic & transpacific partners.
-        </p>
-
-        <div class="overlap-timeline" id="overlapTimelineBox">
-          <!-- Dynamically rendered timeline bars -->
-        </div>
-      </div>
-
-      <div class="tools-grid">
-
-        <!-- Precision Stopwatch & Laps -->
-        <div class="panel">
-          <div class="panel-header">
-            <div class="panel-title"><span>⏱</span> Precision Chronograph</div>
-            <span class="badge" id="stopwatchStateBadge">IDLE</span>
-          </div>
-
-          <div class="stopwatch-display" id="stopwatchDisplay">00:00:00.000</div>
-
-          <div style="display:flex; gap:0.6rem; justify-content:center; flex-wrap:wrap;">
-            <button class="btn-action" id="btnSwStart" onclick="startStopwatch()">START</button>
-            <button class="btn-action" id="btnSwLap" onclick="recordLapStopwatch()" style="display:none;">LAP</button>
-            <button class="btn-action" id="btnSwStop" onclick="pauseStopwatch()" style="display:none;">STOP</button>
-            <button class="btn-action btn-danger" id="btnSwReset" onclick="resetStopwatch()">RESET</button>
-          </div>
-
-          <div class="laps-container" id="lapsContainer" style="display:none;">
-            <div id="lapsList"></div>
-          </div>
-        </div>
-
-        <!-- Synthesized Countdown Timer -->
-        <div class="panel">
-          <div class="panel-header">
-            <div class="panel-title"><span>⏳</span> Audio Synthesized Timer</div>
-            <span class="badge" id="timerStateBadge">READY</span>
-          </div>
-
-          <div class="stopwatch-display" style="color:var(--neon-amber);" id="timerDisplay">25:00</div>
-
-          <div style="display:flex; gap:0.5rem; justify-content:center; margin-bottom:1rem; flex-wrap:wrap;">
-            <button class="toggle-btn" onclick="setTimerPreset(300)">5 MIN</button>
-            <button class="toggle-btn" onclick="setTimerPreset(600)">10 MIN</button>
-            <button class="toggle-btn" onclick="setTimerPreset(1500)">POMODORO (25M)</button>
-            <button class="toggle-btn" onclick="setTimerPreset(3600)">60 MIN</button>
-          </div>
-
-          <div style="display:flex; gap:0.6rem; justify-content:center;">
-            <button class="btn-action" id="btnTimerStart" onclick="startTimer()">START</button>
-            <button class="btn-action" id="btnTimerPause" onclick="pauseTimer()" style="display:none;">PAUSE</button>
-            <button class="btn-action btn-danger" onclick="resetTimer()">RESET</button>
-          </div>
-        </div>
-
-        <!-- Unix Epoch Timestamp Studio -->
-        <div class="panel">
-          <div class="panel-header">
-            <div class="panel-title"><span>⚡</span> Unix Timestamp Converter</div>
-          </div>
-
-          <div class="input-group">
-            <label class="input-label">Unix Epoch (Seconds or Milliseconds)</label>
-            <div style="display:flex; gap:0.5rem;">
-              <input type="number" id="inputEpochVal" class="cyber-input" placeholder="e.g. 1770000000">
-              <button class="btn-action" onclick="convertEpochToHuman()">CONVERT</button>
-              <button class="toggle-btn" onclick="fillCurrentEpoch()">NOW</button>
+      <!-- Main Split Workspace: Visualizers (Left/Top) & Stacked Rhythm Layers (Right/Bottom) -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- VISUALIZATION STAGE (6 Columns) -->
+        <div class="lg:col-span-6 bg-panel border border-panelBorder rounded-2xl p-4 sm:p-5 flex flex-col">
+          <div class="flex items-center justify-between mb-3">
+            <div>
+              <h3 class="text-xs font-mono uppercase tracking-wider text-slate-300 font-bold">Geometric & Phase Visualizer</h3>
+              <p id="polyModeDescription" class="text-[11px] text-slate-400">All polygons complete 1 full rotation per master cycle.</p>
+            </div>
+            <!-- View Toggle -->
+            <div class="flex bg-obsidian p-1 rounded-lg border border-panelBorder text-[11px] font-mono">
+              <button id="visBtnBoth" onclick="setVisLayout('both')" class="px-2 py-1 rounded bg-slate-800 text-white">Split</button>
+              <button id="visBtnOrbit" onclick="setVisLayout('orbit')" class="px-2 py-1 rounded text-slate-400 hover:text-white">Orbit</button>
+              <button id="visBtnLinear" onclick="setVisLayout('linear')" class="px-2 py-1 rounded text-slate-400 hover:text-white">Grid</button>
             </div>
           </div>
 
-          <div class="input-group">
-            <label class="input-label">Resulting Calendar Datetime (PT & UTC)</label>
-            <div class="telemetry-value" style="font-size:0.85rem;" id="epochConvertResult">—</div>
-          </div>
-
-          <div style="margin-top:1.25rem; padding-top:1rem; border-top:1px solid rgba(255,255,255,0.06);">
-            <label class="input-label">Human Date to Unix Epoch</label>
-            <div style="display:flex; gap:0.5rem;">
-              <input type="datetime-local" id="inputHumanDate" class="cyber-input">
-              <button class="btn-action" onclick="convertHumanToEpoch()">GET EPOCH</button>
+          <!-- Canvas Container -->
+          <div class="flex-1 flex flex-col gap-4 min-h-[380px]">
+            <!-- Circular Orbit Canvas -->
+            <div id="orbitCanvasWrap" class="relative flex-1 min-h-[260px] bg-obsidian rounded-xl border border-panelBorder overflow-hidden flex items-center justify-center">
+              <canvas id="orbitCanvas" class="w-full h-full block"></canvas>
+              <div class="absolute top-2.5 left-3 text-[10px] font-mono text-slate-500 pointer-events-none">12 O'CLOCK = TRIGGER PHASE</div>
+              <div id="ratioReadout" class="absolute bottom-2.5 right-3 text-xs font-mono font-bold text-cyan-400/80 bg-panel/80 px-2 py-0.5 rounded border border-panelBorder pointer-events-none">4 : 3</div>
             </div>
-            <div class="telemetry-value accent-cyan" style="font-size:0.85rem; margin-top:0.5rem;" id="humanToEpochResult">—</div>
+
+            <!-- Linear Timeline Canvas -->
+            <div id="linearCanvasWrap" class="relative h-44 bg-obsidian rounded-xl border border-panelBorder overflow-hidden">
+              <canvas id="linearCanvas" class="w-full h-full block"></canvas>
+              <div class="absolute top-2 left-3 text-[10px] font-mono text-slate-500 pointer-events-none">COINCIDENCE & STEP PHASE GRID</div>
+            </div>
           </div>
         </div>
 
-        <!-- Date Delta & Duration Calculator -->
-        <div class="panel">
-          <div class="panel-header">
-            <div class="panel-title"><span>🧮</span> Temporal Duration Calculator</div>
+        <!-- STACKED RHYTHM LAYERS RACK (6 Columns) -->
+        <div class="lg:col-span-6 flex flex-col gap-4">
+          <div class="flex items-center justify-between">
+            <div>
+              <h3 class="text-sm font-mono uppercase tracking-wider text-white font-bold">Stacked Rhythm Voices</h3>
+              <p class="text-xs text-slate-400">Layer up to 6 independent time signatures / subdivisions</p>
+            </div>
+            <button id="btnAddLayer" onclick="addPolyLayer()" class="hw-btn px-3 py-2 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-500/40 text-cyan-300 font-mono text-xs font-bold flex items-center gap-1.5">
+              <span>+ ADD LAYER</span>
+            </button>
           </div>
 
-          <div class="input-group">
-            <label class="input-label">Start Point</label>
-            <input type="date" id="calcStartDate" class="cyber-input">
-          </div>
-          <div class="input-group">
-            <label class="input-label">End Point</label>
-            <input type="date" id="calcEndDate" class="cyber-input">
-          </div>
-
-          <button class="btn-action" style="width:100%;" onclick="calculateDateDelta()">CALCULATE DELTA</button>
-
-          <div style="margin-top:1rem;" id="deltaResultsWrap">
-            <div class="telemetry-value accent-emerald" id="calcDeltaOutput" style="font-size:0.95rem;">Select dates to compute difference.</div>
-          </div>
-        </div>
-
-      </div>
-
-    </section>
-
-    <!-- TAB 4: ASTRONOMICAL & CURIOUS TIME SYSTEMS -->
-    <section id="pane-astro" class="tab-pane">
-
-      <div class="panel">
-        <div class="panel-header">
-          <div class="panel-title"><span>♁</span> Annual Orbital Completion</div>
-          <span class="badge accent-cyan" id="earthProgressLabel">00.000000%</span>
-        </div>
-        <p style="font-size:0.8rem; color:var(--text-muted);">
-          Calculated precision progress of Earth through its current 365/366-day solar revolution around the Sun.
-        </p>
-        <div class="progress-bar-wrap">
-          <div class="progress-bar-fill" id="orbitProgressFill" style="width: 0%;"></div>
-        </div>
-      </div>
-
-      <div class="curious-grid">
-
-        <!-- Swatch Internet Time -->
-        <div class="curious-card">
-          <div>
-            <div class="telemetry-label">SWATCH INTERNET TIME <span class="accent-cyan">@BEATS</span></div>
-            <div class="curious-value accent-cyan" id="curiousSwatchBeats">@000.00</div>
-            <p style="font-size:0.75rem; color:var(--text-muted);">
-              Divides the solar day into 1000 equal ".beats" (1 beat = 1 min, 26.4 sec) synchronized to Biel Mean Time (UTC+1) without daylight savings.
-            </p>
-          </div>
-        </div>
-
-        <!-- Coordinated Mars Time (MTC) -->
-        <div class="curious-card">
-          <div>
-            <div class="telemetry-label">COORDINATED MARS TIME <span class="accent-magenta">MTC (AIRY-0)</span></div>
-            <div class="curious-value accent-magenta" id="curiousMarsTime">00:00:00</div>
-            <p style="font-size:0.75rem; color:var(--text-muted);">
-              Mean solar time at the Martian prime meridian (Airy-0 crater). 1 Martian Sol ≈ 24h 39m 35.244s Earth standard.
-            </p>
-          </div>
-        </div>
-
-        <!-- French Revolutionary Decimal Time -->
-        <div class="curious-card">
-          <div>
-            <div class="telemetry-label">METRIC / DECIMAL TIME <span class="accent-amber">FRENCH REV</span></div>
-            <div class="curious-value accent-amber" id="curiousDecimalTime">0h 00m 00s</div>
-            <p style="font-size:0.75rem; color:var(--text-muted);">
-              10 decimal hours per day, 100 decimal minutes per hour, 100 decimal seconds per minute.
-            </p>
-          </div>
-        </div>
-
-        <!-- Sidereal Time -->
-        <div class="curious-card">
-          <div>
-            <div class="telemetry-label">GREENWICH MEAN SIDEREAL <span class="accent-emerald">GMST</span></div>
-            <div class="curious-value accent-emerald" id="curiousGmst">00:00:00</div>
-            <p style="font-size:0.75rem; color:var(--text-muted);">
-              Time measured by the rotation of the Earth relative to the distant fixed stars rather than the Sun (approximated for astronomers).
-            </p>
+          <!-- Layer Cards Container -->
+          <div id="polyLayersContainer" class="space-y-3 max-h-[540px] overflow-y-auto pr-1">
+            <!-- Dynamically generated layer strips -->
           </div>
         </div>
 
       </div>
-
     </section>
 
   </main>
 
-  <!-- Footprint -->
-  <footer>
-    <div style="max-width: 1400px; margin: 0 auto; display:flex; justify-content:space-between; flex-wrap:wrap; gap:1rem; align-items:center;">
-      <div>
-        <strong>TIME BY SARIMOKO</strong> // Continuous High-Precision Chronometry
-      </div>
-      <div>
-        Primary Standard: <span class="accent-cyan">America/Los_Angeles (Pacific Time)</span> • Ready for <a href="https://time.sarimoko.com" target="_blank" rel="noopener">time.sarimoko.com</a>
-      </div>
+  <!-- FOOTER -->
+  <footer class="border-t border-panelBorder bg-studio/60 py-3 px-4 mt-8">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between text-[11px] font-mono text-slate-500 gap-2">
+      <div>time.sarimoko.com &bull; Precision Web Audio Lookahead Engine</div>
+      <div>Shortcut: <kbd class="px-1.5 py-0.5 bg-panel border border-panelBorder rounded text-slate-300">SPACE</kbd> Play/Stop</div>
     </div>
   </footer>
 
-  <!-- Single-File Core Application Logic -->
+  <!-- ======================================================================= -->
+  <!-- APPLICATION LOGIC & WEB AUDIO SYNTHESIS ENGINE                          -->
+  <!-- ======================================================================= -->
   <script>
     /**
-     * TIME BY SARIMOKO — Core Engine
-     * Zero-dependency vanilla ES6+ with zero clock drift.
+     * COLOR PALETTE FOR POLYRHYTHM LAYERS
      */
+    const LAYER_COLORS = [
+      { name: 'Cyan', hex: '#00f0ff', bg: 'rgba(0, 240, 255, 0.15)', border: 'rgba(0, 240, 255, 0.45)' },
+      { name: 'Amber', hex: '#ff9e00', bg: 'rgba(255, 158, 0, 0.15)', border: 'rgba(255, 158, 0, 0.45)' },
+      { name: 'Magenta', hex: '#ff2a85', bg: 'rgba(255, 42, 133, 0.15)', border: 'rgba(255, 42, 133, 0.45)' },
+      { name: 'Emerald', hex: '#00e676', bg: 'rgba(0, 230, 118, 0.15)', border: 'rgba(0, 230, 118, 0.45)' },
+      { name: 'Violet', hex: '#a855f7', bg: 'rgba(168, 85, 247, 0.15)', border: 'rgba(168, 85, 247, 0.45)' },
+      { name: 'Coral', hex: '#ff5252', bg: 'rgba(255, 82, 82, 0.15)', border: 'rgba(255, 82, 82, 0.45)' }
+    ];
 
-    // --- State Management ---
-    const STATE = {
-      selectedTimezone: 'America/Los_Angeles',
-      display24Hour: false,
-      showMilliseconds: true,
-      stopwatch: {
-        running: false,
-        startTime: 0,
-        elapsedBefore: 0,
-        timerId: null,
-        laps: []
-      },
-      countdown: {
-        running: false,
-        totalDuration: 1500, // 25 mins
-        remaining: 1500,
-        timerId: null
+    /**
+     * GLOBAL APPLICATION STATE
+     */
+    const appState = {
+      activeTab: 'metronome', // 'metronome' | 'polyrhythm'
+      isPlaying: false,
+      bpm: 120,
+      masterVolume: 0.85,
+      startTimeAudio: 0,
+      startTimePerf: 0,
+      tapTimes: []
+    };
+
+    const metronomeState = {
+      numerator: 4,
+      denominator: 4,
+      subdivision: 1,
+      subVolume: 0.45,
+      soundPreset: 'woodblock', // 'woodblock' | 'digital' | 'analog' | 'percussion'
+      // Accent levels: 3 = High/Accent, 2 = Medium/Normal, 1 = Low/Ghost, 0 = Mute
+      accents: [3, 2, 2, 2],
+      currentBeat: 0,
+      currentSub: 0,
+      barCount: 1,
+      trainer: {
+        enabled: false,
+        bpmStep: 5,
+        barStep: 4,
+        barsElapsedInCycle: 0
       }
     };
 
-    // Major Global Financial & Tech Hubs
-    const WORLD_METROS = [
-      { name: "Los Angeles / SF", country: "USA (California)", tz: "America/Los_Angeles", x: 165, y: 185, isBase: true },
-      { name: "New York", country: "USA", tz: "America/New_York", x: 265, y: 165 },
-      { name: "London", country: "United Kingdom", tz: "Europe/London", x: 475, y: 120 },
-      { name: "Paris", country: "France", tz: "Europe/Paris", x: 495, y: 135 },
-      { name: "Berlin", country: "Germany", tz: "Europe/Berlin", x: 515, y: 120 },
-      { name: "Dubai", country: "UAE", tz: "Asia/Dubai", x: 625, y: 205 },
-      { name: "Singapore", country: "Singapore", tz: "Asia/Singapore", x: 745, y: 275 },
-      { name: "Tokyo", country: "Japan", tz: "Asia/Tokyo", x: 840, y: 175 },
-      { name: "Sydney", country: "Australia", tz: "Australia/Sydney", x: 865, y: 390 },
-      { name: "Auckland", country: "New Zealand", tz: "Pacific/Auckland", x: 940, y: 420 },
-      { name: "São Paulo", country: "Brazil", tz: "America/Sao_Paulo", x: 345, y: 370 },
-      { name: "Reykjavik", country: "Iceland", tz: "Atlantic/Reykjavik", x: 440, y: 80 },
-      { name: "Hong Kong", country: "China", tz: "Asia/Hong_Kong", x: 775, y: 215 },
-      { name: "Mumbai", country: "India", tz: "Asia/Kolkata", x: 675, y: 220 },
-      { name: "Honolulu", country: "USA (Hawaii)", tz: "Pacific/Honolulu", x: 60, y: 215 },
-      { name: "UTC Standard", country: "Universal Time", tz: "UTC", x: 475, y: 20 }
-    ];
+    const polyState = {
+      mode: 'polyrhythm', // 'polyrhythm' (Sync Cycle) | 'polymeter' (Sync Pulse)
+      visLayout: 'both',  // 'both' | 'orbit' | 'linear'
+      nextLayerId: 3,
+      layers: [
+        {
+          id: 1,
+          name: 'Voice A',
+          beats: 4,
+          denominator: 4,
+          multiplier: 1,
+          sound: 'kick', // 'kick' | 'rim' | 'hihat' | 'marimba' | 'bell'
+          volume: 0.85,
+          muted: false,
+          solo: false,
+          colorIdx: 0,
+          accents: [3, 2, 2, 2],
+          nextNoteTime: 0,
+          currentStep: 0,
+          pulseFlash: 0
+        },
+        {
+          id: 2,
+          name: 'Voice B',
+          beats: 3,
+          denominator: 4,
+          multiplier: 1,
+          sound: 'marimba',
+          volume: 0.8,
+          muted: false,
+          solo: false,
+          colorIdx: 1,
+          accents: [3, 2, 2],
+          nextNoteTime: 0,
+          currentStep: 0,
+          pulseFlash: 0
+        }
+      ],
+      // Visual pulse ring bursts
+      ripples: []
+    };
 
-    // --- Audio Synthesis via Web Audio API (No External Audio Files) ---
+    /**
+     * WEB AUDIO API ENGINE (Lookahead Scheduler + Procedural Synthesis)
+     */
     let audioCtx = null;
-    function playBeep(freq = 880, duration = 0.15, type = 'sine') {
-      try {
-        if (!audioCtx) {
-          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        }
-        if (audioCtx.state === 'suspended') {
-          audioCtx.resume();
-        }
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.type = type;
-        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.start();
-        osc.stop(audioCtx.currentTime + duration);
-      } catch (e) {
-        // Audio might be blocked until user gesture
+    let masterGainNode = null;
+    let schedulerTimer = null;
+    const LOOKAHEAD_MS = 25.0;      // How frequently to call scheduling function (in milliseconds)
+    const SCHEDULE_AHEAD_SEC = 0.1; // How far ahead to schedule audio (in seconds)
+
+    // Metronome scheduler tracking
+    let nextMetroNoteTime = 0.0;
+    let metroStepIndex = 0; // counts total subdivisions
+
+    function initAudio() {
+      if (!audioCtx) {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        audioCtx = new AudioContextClass();
+        masterGainNode = audioCtx.createGain();
+        masterGainNode.gain.value = appState.masterVolume;
+        masterGainNode.connect(audioCtx.destination);
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
       }
     }
 
-    // --- Navigation Tabs ---
-    function switchTab(tabId) {
-      document.querySelectorAll('.tab-pane').forEach(el => el.classList.remove('active'));
-      document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
-      const pane = document.getElementById(`pane-${tabId}`);
-      const btn = document.getElementById(`tabBtn-${tabId}`);
-      if (pane) pane.classList.add('active');
-      if (btn) btn.classList.add('active');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+    function updateMasterVolume(val) {
+      appState.masterVolume = parseFloat(val);
+      if (masterGainNode && audioCtx) {
+        masterGainNode.gain.setTargetAtTime(appState.masterVolume, audioCtx.currentTime, 0.015);
+      }
     }
 
-    // --- Core Master Clock Engine ---
-    function updateMasterClock() {
-      const now = new Date();
+    /**
+     * PROCEDURAL SOUND SYNTHESIZER
+     * Zero external dependencies; ultra-crisp transients.
+     */
+    function triggerSynthSound(time, preset, accentLevel, isSubdivision = false, layerVolume = 1.0) {
+      if (!audioCtx || accentLevel === 0 || layerVolume <= 0.001) return;
 
-      // Formatter options according to state
-      const timeOpts = {
-        timeZone: STATE.selectedTimezone,
-        hour12: !STATE.display24Hour,
-        hour: 'numeric',
-        minute: '2-digit',
-        second: '2-digit'
-      };
+      // Dynamic velocity scaling
+      let vel = 1.0;
+      if (accentLevel === 3) vel = 1.0;
+      else if (accentLevel === 2) vel = 0.65;
+      else if (accentLevel === 1) vel = 0.3;
 
-      const parts = new Intl.DateTimeFormat('en-US', timeOpts).formatToParts(now);
-      let h = '', m = '', s = '', dayPeriod = '';
+      if (isSubdivision) {
+        vel *= metronomeState.subVolume;
+      }
+      vel *= layerVolume;
+      if (vel <= 0.005) return;
 
-      parts.forEach(p => {
-        if (p.type === 'hour') h = p.value.padStart(2, '0');
-        if (p.type === 'minute') m = p.value;
-        if (p.type === 'second') s = p.value;
-        if (p.type === 'dayPeriod') dayPeriod = p.value.toUpperCase();
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(masterGainNode);
+
+      if (preset === 'woodblock') {
+        // Resonant pitched wood transient
+        const freq = accentLevel === 3 ? 1180 : (isSubdivision ? 680 : 880);
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, time);
+        osc.frequency.exponentialRampToValueAtTime(freq * 0.65, time + 0.045);
+
+        gain.gain.setValueAtTime(0.001, time);
+        gain.gain.linearRampToValueAtTime(vel * 0.9, time + 0.003);
+        gain.gain.exponentialRampToValueAtTime(0.001, time + 0.055);
+
+        osc.start(time);
+        osc.stop(time + 0.06);
+      } 
+      else if (preset === 'digital') {
+        // Crisp high-tech digital impulse
+        const freq = accentLevel === 3 ? 1760 : (isSubdivision ? 920 : 1200);
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(freq, time);
+
+        gain.gain.setValueAtTime(0.001, time);
+        gain.gain.linearRampToValueAtTime(vel * 0.75, time + 0.001);
+        gain.gain.exponentialRampToValueAtTime(0.001, time + 0.03);
+
+        osc.start(time);
+        osc.stop(time + 0.035);
+      }
+      else if (preset === 'analog') {
+        // Classic modular synth blip
+        const freq = accentLevel === 3 ? 880 : (isSubdivision ? 330 : 440);
+        osc.type = 'square';
+        osc.frequency.setValueAtTime(freq, time);
+        osc.frequency.exponentialRampToValueAtTime(freq * 0.5, time + 0.06);
+
+        // Lowpass filter for warmth
+        const filter = audioCtx.createBiquadFilter();
+        filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(2400, time);
+        osc.disconnect();
+        osc.connect(filter);
+        filter.connect(gain);
+
+        gain.gain.setValueAtTime(0.001, time);
+        gain.gain.linearRampToValueAtTime(vel * 0.45, time + 0.004);
+        gain.gain.exponentialRampToValueAtTime(0.001, time + 0.07);
+
+        osc.start(time);
+        osc.stop(time + 0.075);
+      }
+      else if (preset === 'percussion' || preset === 'kick') {
+        // Punchy studio kick drum / low perc
+        const startFreq = accentLevel === 3 ? 155 : 130;
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(startFreq, time);
+        osc.frequency.exponentialRampToValueAtTime(42, time + 0.11);
+
+        gain.gain.setValueAtTime(0.001, time);
+        gain.gain.linearRampToValueAtTime(vel * 1.1, time + 0.004);
+        gain.gain.exponentialRampToValueAtTime(0.001, time + 0.14);
+
+        osc.start(time);
+        osc.stop(time + 0.15);
+      }
+      else if (preset === 'rim') {
+        // Sharp rimshot / snare snap
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(accentLevel === 3 ? 520 : 420, time);
+        osc.frequency.exponentialRampToValueAtTime(160, time + 0.045);
+
+        gain.gain.setValueAtTime(0.001, time);
+        gain.gain.linearRampToValueAtTime(vel * 0.85, time + 0.002);
+        gain.gain.exponentialRampToValueAtTime(0.001, time + 0.06);
+
+        osc.start(time);
+        osc.stop(time + 0.065);
+      }
+      else if (preset === 'hihat') {
+        // Metallic high-frequency tick
+        osc.type = 'square';
+        osc.frequency.setValueAtTime(accentLevel === 3 ? 4200 : 3400, time);
+
+        const hp = audioCtx.createBiquadFilter();
+        hp.type = 'highpass';
+        hp.frequency.setValueAtTime(2800, time);
+        osc.disconnect();
+        osc.connect(hp);
+        hp.connect(gain);
+
+        gain.gain.setValueAtTime(0.001, time);
+        gain.gain.linearRampToValueAtTime(vel * 0.4, time + 0.001);
+        gain.gain.exponentialRampToValueAtTime(0.001, time + 0.032);
+
+        osc.start(time);
+        osc.stop(time + 0.035);
+      }
+      else if (preset === 'marimba') {
+        // Warm melodic marimba bar
+        const freq = accentLevel === 3 ? 587.33 : 440; // D5 / A4
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, time);
+
+        gain.gain.setValueAtTime(0.001, time);
+        gain.gain.linearRampToValueAtTime(vel * 0.85, time + 0.005);
+        gain.gain.exponentialRampToValueAtTime(0.001, time + 0.16);
+
+        osc.start(time);
+        osc.stop(time + 0.17);
+      }
+      else if (preset === 'bell') {
+        // Shimmering harmonic bell
+        const freq = accentLevel === 3 ? 1318.5 : 987.77; // E6 / B5
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, time);
+
+        gain.gain.setValueAtTime(0.001, time);
+        gain.gain.linearRampToValueAtTime(vel * 0.65, time + 0.003);
+        gain.gain.exponentialRampToValueAtTime(0.001, time + 0.24);
+
+        osc.start(time);
+        osc.stop(time + 0.25);
+      }
+    }
+
+    /**
+     * SCHEDULER LOOP
+     */
+    function scheduler() {
+      if (!appState.isPlaying) return;
+
+      if (appState.activeTab === 'metronome') {
+        scheduleMetronomeNotes();
+      } else {
+        schedulePolyrhythmNotes();
+      }
+
+      schedulerTimer = setTimeout(scheduler, LOOKAHEAD_MS);
+    }
+
+    function scheduleMetronomeNotes() {
+      // Adjust beat duration based on denominator (4 = quarter note gets the beat)
+      const beatDuration = (60.0 / appState.bpm) * (4.0 / metronomeState.denominator);
+      const subDuration = beatDuration / metronomeState.subdivision;
+
+      while (nextMetroNoteTime < audioCtx.currentTime + SCHEDULE_AHEAD_SEC) {
+        const totalSubsPerBar = metronomeState.numerator * metronomeState.subdivision;
+        const posInBar = metroStepIndex % totalSubsPerBar;
+        const beatIdx = Math.floor(posInBar / metronomeState.subdivision);
+        const subIdx = posInBar % metronomeState.subdivision;
+        const isMainBeat = (subIdx === 0);
+
+        const accentVal = metronomeState.accents[beatIdx] ?? 2;
+
+        // Play sound
+        if (isMainBeat) {
+          triggerSynthSound(nextMetroNoteTime, metronomeState.soundPreset, accentVal, false, 1.0);
+        } else if (accentVal > 0) {
+          // Subdivision click (respects if parent beat is muted)
+          triggerSynthSound(nextMetroNoteTime, metronomeState.soundPreset, 2, true, 1.0);
+        }
+
+        // Handle Bar Progression & Tempo Ramp Trainer at start of new bar
+        if (posInBar === 0 && metroStepIndex > 0) {
+          metronomeState.barCount++;
+          if (metronomeState.trainer.enabled) {
+            metronomeState.trainer.barsElapsedInCycle++;
+            if (metronomeState.trainer.barsElapsedInCycle >= metronomeState.trainer.barStep) {
+              metronomeState.trainer.barsElapsedInCycle = 0;
+              const newBpm = Math.min(300, appState.bpm + metronomeState.trainer.bpmStep);
+              setBpm(newBpm, true);
+            }
+          }
+        }
+
+        // Schedule exact UI flash callback aligned with audio time
+        const delayMs = Math.max(0, (nextMetroNoteTime - audioCtx.currentTime) * 1000);
+        const capturedBar = metronomeState.barCount;
+        setTimeout(() => {
+          if (!appState.isPlaying) return;
+          highlightMetronomeBeat(beatIdx, subIdx, capturedBar);
+        }, delayMs);
+
+        nextMetroNoteTime += subDuration;
+        metroStepIndex++;
+      }
+    }
+
+    function schedulePolyrhythmNotes() {
+      const anySolo = polyState.layers.some(l => l.solo);
+
+      // Master cycle duration: 4 beats at current BPM
+      const masterCycleSec = (60.0 / appState.bpm) * 4.0;
+      // Base pulse duration for polymeter mode (quarter note)
+      const basePulseSec = 60.0 / appState.bpm;
+
+      polyState.layers.forEach(layer => {
+        // Compute step duration depending on Polyrhythm vs Polymeter mode
+        let stepDurationSec;
+        if (polyState.mode === 'polyrhythm') {
+          // All layers fit their beat count evenly inside 1 master cycle (divided by multiplier)
+          stepDurationSec = (masterCycleSec / layer.beats) / layer.multiplier;
+        } else {
+          // Polymeter: shared pulse grid, independent measure length
+          stepDurationSec = (basePulseSec * (4.0 / layer.denominator)) / layer.multiplier;
+        }
+
+        while (layer.nextNoteTime < audioCtx.currentTime + SCHEDULE_AHEAD_SEC) {
+          const stepIdx = layer.currentStep % layer.beats;
+          const accentVal = layer.accents[stepIdx] ?? 2;
+          const isAudible = anySolo ? layer.solo : !layer.muted;
+
+          if (isAudible && accentVal > 0) {
+            triggerSynthSound(layer.nextNoteTime, layer.sound, accentVal, false, layer.volume);
+          }
+
+          // Schedule visual pulse trigger
+          const delayMs = Math.max(0, (layer.nextNoteTime - audioCtx.currentTime) * 1000);
+          const colorHex = LAYER_COLORS[layer.colorIdx].hex;
+          setTimeout(() => {
+            if (!appState.isPlaying) return;
+            layer.pulseFlash = 1.0;
+            if (isAudible && accentVal > 0) {
+              polyState.ripples.push({
+                color: colorHex,
+                radius: 12,
+                alpha: 0.9,
+                isAccent: accentVal === 3
+              });
+            }
+          }, delayMs);
+
+          layer.nextNoteTime += stepDurationSec;
+          layer.currentStep++;
+        }
       });
-
-      // Milliseconds calculation
-      const ms = String(now.getMilliseconds()).padStart(3, '0');
-
-      // Update DOM
-      document.getElementById('digitHours').textContent = h;
-      document.getElementById('digitMinutes').textContent = m;
-      document.getElementById('digitSeconds').textContent = s;
-
-      const msElem = document.getElementById('digitMillis');
-      if (STATE.showMilliseconds) {
-        msElem.style.display = 'inline';
-        msElem.textContent = `.${ms}`;
-      } else {
-        msElem.style.display = 'none';
-      }
-
-      const ampmElem = document.getElementById('digitAmpm');
-      if (!STATE.display24Hour) {
-        ampmElem.style.display = 'inline';
-        ampmElem.textContent = dayPeriod || '';
-      } else {
-        ampmElem.style.display = 'none';
-      }
-
-      // Date Format in Selected TZ
-      const dateOpts = {
-        timeZone: STATE.selectedTimezone,
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-      };
-      document.getElementById('dateFullFormatted').textContent = new Intl.DateTimeFormat('en-US', dateOpts).format(now);
-
-      // Timezone Offset Calculation
-      const tzOffsetStr = getTimezoneOffsetString(now, STATE.selectedTimezone);
-      document.getElementById('dateOffsetFormatted').textContent = `${tzOffsetStr} (${STATE.selectedTimezone})`;
-
-      // Day / Night state for California / current focus
-      const hourInTz = parseInt(new Intl.DateTimeFormat('en-US', { timeZone: STATE.selectedTimezone, hour: 'numeric', hour12: false }).format(now), 10);
-      const isDay = hourInTz >= 6 && hourInTz < 18;
-      const solarBadge = document.getElementById('solarIndicator');
-      solarBadge.textContent = isDay ? 'SOLAR DAY' : 'NOCTURNAL';
-      solarBadge.style.color = isDay ? 'var(--neon-amber)' : 'var(--neon-cyan)';
-
-      // Update Telemetry Metrics
-      updateTelemetry(now);
-
-      // Draw Analog Canvas Clock
-      drawAnalogClock(now);
-
-      // Update Exotic time representations
-      updateExoticTimes(now);
     }
 
-    // Helper: Formatted Timezone Offset e.g. "UTC-8"
-    function getTimezoneOffsetString(date, tz) {
-      try {
-        const parts = new Intl.DateTimeFormat('en-US', {
-          timeZone: tz,
-          timeZoneName: 'shortOffset'
-        }).formatToParts(date);
-        const tzNamePart = parts.find(p => p.type === 'timeZoneName');
-        return tzNamePart ? tzNamePart.value : 'UTC';
-      } catch (e) {
-        return 'UTC';
-      }
-    }
+    /**
+     * TRANSPORT CONTROLS (Play / Stop / Tap Tempo)
+     */
+    function togglePlay() {
+      initAudio();
+      appState.isPlaying = !appState.isPlaying;
 
-    // Toggle Handlers
-    function toggle24HourMode() {
-      STATE.display24Hour = !STATE.display24Hour;
-      document.getElementById('btnToggle24h').textContent = `24H MODE: ${STATE.display24Hour ? 'ON' : 'OFF'}`;
-      document.getElementById('btnToggle24h').classList.toggle('active', STATE.display24Hour);
-    }
+      const btn = document.getElementById('btnPlayStop');
+      const iconPlay = document.getElementById('iconPlay');
+      const iconStop = document.getElementById('iconStop');
+      const lbl = document.getElementById('lblPlayStop');
 
-    function toggleMilliseconds() {
-      STATE.showMilliseconds = !STATE.showMilliseconds;
-      document.getElementById('btnToggleMillis').textContent = `MILLIS: ${STATE.showMilliseconds ? 'ON' : 'OFF'}`;
-      document.getElementById('btnToggleMillis').classList.toggle('active', STATE.showMilliseconds);
-    }
+      if (appState.isPlaying) {
+        const now = audioCtx.currentTime + 0.04;
+        appState.startTimeAudio = now;
+        appState.startTimePerf = performance.now();
 
-    function setTimezoneDefault(tz) {
-      STATE.selectedTimezone = tz;
-      const title = tz === 'America/Los_Angeles' ? 'CALIFORNIA / PACIFIC' : (tz === 'UTC' ? 'UNIVERSAL TIME' : tz);
-      document.getElementById('displayLocationTitle').textContent = title;
-      document.getElementById('analogSubtext').textContent = `${title} SWEEP`;
-      updateTzBadge();
-    }
+        // Reset Metronome counters
+        nextMetroNoteTime = now;
+        metroStepIndex = 0;
+        metronomeState.barCount = 1;
+        metronomeState.trainer.barsElapsedInCycle = 0;
 
-    function setLocalBrowserTz() {
-      const detected = Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
-      setTimezoneDefault(detected);
-    }
-
-    function updateTzBadge() {
-      const now = new Date();
-      try {
-        const parts = new Intl.DateTimeFormat('en-US', { timeZone: STATE.selectedTimezone, timeZoneName: 'short' }).formatToParts(now);
-        const code = parts.find(p => p.type === 'timeZoneName')?.value || 'TZ';
-        document.getElementById('tzAbbr').textContent = code;
-      } catch (e) {
-        document.getElementById('tzAbbr').textContent = 'TZ';
-      }
-    }
-
-    // --- Telemetry Computation ---
-    function updateTelemetry(now) {
-      // Unix Timestamp
-      const epochSec = Math.floor(now.getTime() / 1000);
-      document.getElementById('metricUnixEpoch').textContent = epochSec.toString();
-
-      // ISO 8601
-      document.getElementById('metricIso').textContent = now.toISOString();
-
-      // Day of the Year
-      const startOfYear = new Date(Date.UTC(now.getUTCFullYear(), 0, 1));
-      const diffTime = now - startOfYear;
-      const doy = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
-      const isLeap = (now.getUTCFullYear() % 4 === 0 && now.getUTCFullYear() % 100 !== 0) || (now.getUTCFullYear() % 400 === 0);
-      const totalDaysInYear = isLeap ? 366 : 365;
-      document.getElementById('metricDoy').textContent = `Day ${doy} / ${totalDaysInYear}`;
-
-      // ISO Week
-      const d = new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()));
-      const dayNum = d.getUTCDay() || 7;
-      d.setUTCDate(d.getUTCDate() + 4 - dayNum);
-      const yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1));
-      const weekNo = Math.ceil((((d - yearStart) / 86400000) + 1)/7);
-      document.getElementById('metricIsoWeek').textContent = `Week ${weekNo} of ${d.getUTCFullYear()}`;
-
-      // Julian Day Number
-      const timeMs = now.getTime();
-      const julian = (timeMs / 86400000) + 2440587.5;
-      document.getElementById('metricJulianDay').textContent = julian.toFixed(4);
-
-      // Lunar Phase approximation
-      const moon = getMoonPhaseEstimate(now);
-      document.getElementById('metricMoonPhase').textContent = `${moon.name} (~${moon.pct}%)`;
-    }
-
-    function getMoonPhaseEstimate(date) {
-      // Approximate synodic month formula
-      const synodic = 29.53058867;
-      const knownNewMoon = new Date('2000-01-06T18:14:00Z').getTime();
-      const diff = (date.getTime() - knownNewMoon) / 86400000;
-      const phase = (diff % synodic + synodic) % synodic;
-      const pct = Math.round((phase / synodic) * 100);
-
-      let name = "New Moon";
-      if (phase < 1.84) name = "New Moon";
-      else if (phase < 5.53) name = "Waxing Crescent";
-      else if (phase < 9.22) name = "First Quarter";
-      else if (phase < 12.91) name = "Waxing Gibbous";
-      else if (phase < 16.61) name = "Full Moon";
-      else if (phase < 20.30) name = "Waning Gibbous";
-      else if (phase < 23.99) name = "Last Quarter";
-      else if (phase < 27.68) name = "Waning Crescent";
-      else name = "New Moon";
-
-      return { name, pct };
-    }
-
-    // --- Analog Clock Canvas Drawing ---
-    function drawAnalogClock(now) {
-      const canvas = document.getElementById('analogClockCanvas');
-      if (!canvas) return;
-      const ctx = canvas.getContext('2d');
-      const width = canvas.width;
-      const height = canvas.height;
-      const radius = width / 2;
-
-      ctx.clearRect(0, 0, width, height);
-
-      // Extract time in selected Timezone
-      const parts = new Intl.DateTimeFormat('en-US', {
-        timeZone: STATE.selectedTimezone,
-        hour12: false,
-        hour: 'numeric',
-        minute: 'numeric',
-        second: 'numeric'
-      }).formatToParts(now);
-
-      let hr = 0, min = 0, sec = 0;
-      parts.forEach(p => {
-        if (p.type === 'hour') hr = parseInt(p.value, 10);
-        if (p.type === 'minute') min = parseInt(p.value, 10);
-        if (p.type === 'second') sec = parseInt(p.value, 10);
-      });
-      const ms = now.getMilliseconds();
-      const smoothSec = sec + (ms / 1000);
-      const smoothMin = min + (smoothSec / 60);
-      const smoothHr = (hr % 12) + (smoothMin / 60);
-
-      ctx.save();
-      ctx.translate(radius, radius);
-
-      // Outer bezel ring
-      ctx.beginPath();
-      ctx.arc(0, 0, radius - 10, 0, 2 * Math.PI);
-      ctx.fillStyle = '#0b0c10';
-      ctx.fill();
-      ctx.lineWidth = 3;
-      ctx.strokeStyle = '#232332';
-      ctx.stroke();
-
-      // Subtle cyan glow ring
-      ctx.beginPath();
-      ctx.arc(0, 0, radius - 14, 0, 2 * Math.PI);
-      ctx.strokeStyle = 'rgba(0, 240, 255, 0.2)';
-      ctx.lineWidth = 1.5;
-      ctx.stroke();
-
-      // Dial Markers
-      for (let i = 0; i < 60; i++) {
-        const angle = (i * Math.PI) / 30;
-        const isHour = i % 5 === 0;
-        const outerR = radius - 18;
-        const innerR = isHour ? radius - 34 : radius - 24;
-
-        ctx.beginPath();
-        ctx.moveTo(Math.sin(angle) * innerR, -Math.cos(angle) * innerR);
-        ctx.lineTo(Math.sin(angle) * outerR, -Math.cos(angle) * outerR);
-        ctx.strokeStyle = isHour ? '#00f0ff' : 'rgba(255, 255, 255, 0.2)';
-        ctx.lineWidth = isHour ? 3 : 1;
-        ctx.stroke();
-      }
-
-      // Hour Hand
-      const hrAngle = (smoothHr * Math.PI) / 6;
-      ctx.beginPath();
-      ctx.moveTo(0, 0);
-      ctx.lineTo(Math.sin(hrAngle) * (radius * 0.5), -Math.cos(hrAngle) * (radius * 0.5));
-      ctx.strokeStyle = '#ffffff';
-      ctx.lineWidth = 5;
-      ctx.lineCap = 'round';
-      ctx.stroke();
-
-      // Minute Hand
-      const minAngle = (smoothMin * Math.PI) / 30;
-      ctx.beginPath();
-      ctx.moveTo(0, 0);
-      ctx.lineTo(Math.sin(minAngle) * (radius * 0.72), -Math.cos(minAngle) * (radius * 0.72));
-      ctx.strokeStyle = '#00f0ff';
-      ctx.lineWidth = 3.5;
-      ctx.lineCap = 'round';
-      ctx.stroke();
-
-      // Second Hand (Sweeping Neon Magenta)
-      const secAngle = (smoothSec * Math.PI) / 30;
-      ctx.beginPath();
-      ctx.moveTo(-Math.sin(secAngle) * 20, Math.cos(secAngle) * 20);
-      ctx.lineTo(Math.sin(secAngle) * (radius * 0.82), -Math.cos(secAngle) * (radius * 0.82));
-      ctx.strokeStyle = '#ff0055';
-      ctx.lineWidth = 2;
-      ctx.stroke();
-
-      // Center Pin Cap
-      ctx.beginPath();
-      ctx.arc(0, 0, 5, 0, 2 * Math.PI);
-      ctx.fillStyle = '#00f0ff';
-      ctx.fill();
-
-      ctx.restore();
-    }
-
-    // --- Astronomical & Curious Time Computations ---
-    function updateExoticTimes(now) {
-      // 1. Swatch Internet Time (@beats)
-      // BMT is UTC+1. 1 beat = 86.4 seconds.
-      const utcSec = (now.getUTCHours() * 3600) + (now.getUTCMinutes() * 60) + now.getUTCSeconds() + (now.getUTCMilliseconds() / 1000);
-      const bmtSec = (utcSec + 3600) % 86400;
-      const beats = bmtSec / 86.4;
-      document.getElementById('curiousSwatchBeats').textContent = `@${beats.toFixed(2).padStart(6, '0')}`;
-
-      // 2. Coordinated Mars Time (MTC)
-      // Airy-0 mean solar time: MTC = (Julian Date - 2451549.5) / 1.0274912517...
-      const jd = (now.getTime() / 86400000) + 2440587.5;
-      const marsSolDate = (jd - 2451549.5) / 1.0274912517 + 44796.0 - 0.0009626;
-      const marsFraction = (marsSolDate % 1 + 1) % 1;
-      const marsHours = Math.floor(marsFraction * 24);
-      const marsMins = Math.floor((marsFraction * 24 - marsHours) * 60);
-      const marsSecs = Math.floor(((marsFraction * 24 - marsHours) * 60 - marsMins) * 60);
-      document.getElementById('curiousMarsTime').textContent = 
-        `${String(marsHours).padStart(2,'0')}:${String(marsMins).padStart(2,'0')}:${String(marsSecs).padStart(2,'0')} MTC`;
-
-      // 3. Metric / Decimal Time
-      // 10 metric hours in a standard day.
-      const dayFraction = (now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds() + now.getMilliseconds() / 1000) / 86400;
-      const decHours = Math.floor(dayFraction * 10);
-      const decMins = Math.floor((dayFraction * 10 - decHours) * 100);
-      const decSecs = Math.floor(((dayFraction * 10 - decHours) * 100 - decMins) * 100);
-      document.getElementById('curiousDecimalTime').textContent = `${decHours}h ${String(decMins).padStart(2,'0')}m ${String(decSecs).padStart(2,'0')}s`;
-
-      // 4. Greenwich Mean Sidereal Time (GMST) approximation
-      const d = (now.getTime() / 86400000) - 10957.5; // days from J2000.0
-      let gmstHours = (18.697374558 + 24.06570982441908 * d) % 24;
-      if (gmstHours < 0) gmstHours += 24;
-      const gmstH = Math.floor(gmstHours);
-      const gmstM = Math.floor((gmstHours - gmstH) * 60);
-      const gmstS = Math.floor(((gmstHours - gmstH) * 60 - gmstM) * 60);
-      document.getElementById('curiousGmst').textContent = 
-        `${String(gmstH).padStart(2,'0')}:${String(gmstM).padStart(2,'0')}:${String(gmstS).padStart(2,'0')}`;
-
-      // 5. Earth Orbit Completion Progress
-      const yr = now.getFullYear();
-      const yrStart = new Date(yr, 0, 1).getTime();
-      const yrEnd = new Date(yr + 1, 0, 1).getTime();
-      const progress = ((now.getTime() - yrStart) / (yrEnd - yrStart)) * 100;
-      const pctFormatted = `${progress.toFixed(6)}%`;
-      document.getElementById('earthProgressLabel').textContent = pctFormatted;
-      document.getElementById('orbitProgressFill').style.width = pctFormatted;
-    }
-
-    // --- World Map & Day/Night Terminator Calculation ---
-    function updateWorldMapTerminator() {
-      const now = new Date();
-      // Calculate Subsolar Point (approximate declination and Greenwich hour angle)
-      const startOfYear = new Date(Date.UTC(now.getUTCFullYear(), 0, 1));
-      const dayOfYear = (now - startOfYear) / 86400000;
-      // Solar declination formula: delta ≈ -23.44 * cos(360/365 * (DOY + 10))
-      const declinationDeg = -23.44 * Math.cos(((dayOfYear + 10) / 365.25) * 2 * Math.PI);
-      const declinationRad = (declinationDeg * Math.PI) / 180;
-
-      // Sun's longitude in Equirectangular coordinates (0 at lon -180, 1000 at lon +180)
-      const utcHours = now.getUTCHours() + now.getUTCMinutes() / 60 + now.getUTCSeconds() / 3600;
-      const sunLonDeg = (12 - utcHours) * 15; // Sun is over Greenwich at 12:00 UTC
-
-      // Construct Terminator curve path points (1000x500 coordinates)
-      // lon maps [-180, 180] -> [0, 1000], lat maps [90, -90] -> [0, 500]
-      const points = [];
-      const steps = 100;
-      for (let i = 0; i <= steps; i++) {
-        const x = (i / steps) * 1000;
-        const lon = ((x / 1000) * 360) - 180;
-        const deltaLonRad = ((lon - sunLonDeg) * Math.PI) / 180;
-
-        // Terminator condition: sin(lat)*sin(dec) + cos(lat)*cos(dec)*cos(deltaLon) = 0
-        // => tan(lat) = - cos(deltaLon) / tan(dec)
-        let latDeg = 0;
-        if (Math.abs(Math.tan(declinationRad)) > 0.001) {
-          const latRad = Math.atan(-Math.cos(deltaLonRad) / Math.tan(declinationRad));
-          latDeg = (latRad * 180) / Math.PI;
-        }
-
-        // Clamp latitude to [-85, 85]
-        latDeg = Math.max(-85, Math.min(85, latDeg));
-        const y = ((90 - latDeg) / 180) * 500;
-        points.push({ x, y });
-      }
-
-      // Close polygon over the dark hemisphere based on solar declination
-      let pathD = `M 0 500 `;
-      if (declinationDeg >= 0) {
-        // Northern summer: darkness at bottom (South pole)
-        pathD = `M ${points[0].x} ${points[0].y} `;
-        for (let p of points) pathD += `L ${p.x.toFixed(1)} ${p.y.toFixed(1)} `;
-        pathD += `L 1000 500 L 0 500 Z`;
-      } else {
-        // Northern winter: darkness at top (North pole)
-        pathD = `M ${points[0].x} ${points[0].y} `;
-        for (let p of points) pathD += `L ${p.x.toFixed(1)} ${p.y.toFixed(1)} `;
-        pathD += `L 1000 0 L 0 0 Z`;
-      }
-
-      const termElem = document.getElementById('terminatorPolygon');
-      if (termElem) termElem.setAttribute('d', pathD);
-    }
-
-    // Render Pins on Equirectangular Map
-    function renderMapPins() {
-      const g = document.getElementById('mapPinsGroup');
-      if (!g) return;
-      g.innerHTML = '';
-
-      WORLD_METROS.forEach((metro, idx) => {
-        const isAnchor = metro.tz === 'America/Los_Angeles';
-        const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-        circle.setAttribute('cx', metro.x);
-        circle.setAttribute('cy', metro.y);
-        circle.setAttribute('r', isAnchor ? '7' : '4.5');
-        circle.setAttribute('fill', isAnchor ? '#00f0ff' : '#00ff88');
-        circle.setAttribute('stroke', '#070709');
-        circle.setAttribute('stroke-width', '1.5');
-        circle.setAttribute('cursor', 'pointer');
-        circle.classList.add('map-pin');
-
-        // Hover events
-        circle.addEventListener('mouseenter', (e) => showMapPinTooltip(e, metro));
-        circle.addEventListener('mouseleave', hideMapPinTooltip);
-        circle.addEventListener('click', () => {
-          setTimezoneDefault(metro.tz);
-          switchTab('chrono');
+        // Reset Polyrhythm layer clocks
+        polyState.layers.forEach(l => {
+          l.nextNoteTime = now;
+          l.currentStep = 0;
+          l.pulseFlash = 0;
         });
+        polyState.ripples = [];
 
-        g.appendChild(circle);
+        btn.classList.remove('bg-cyan-500', 'hover:bg-cyan-400', 'glow-cyan');
+        btn.classList.add('bg-rose-500', 'hover:bg-rose-400', 'shadow-lg');
+        iconPlay.classList.add('hidden');
+        iconStop.classList.remove('hidden');
+        lbl.textContent = 'STOP';
 
-        // Text label for major hub
-        if (isAnchor || metro.name === 'London' || metro.name === 'Tokyo') {
-          const txt = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-          txt.setAttribute('x', metro.x + 8);
-          txt.setAttribute('y', metro.y + 4);
-          txt.setAttribute('fill', isAnchor ? '#00f0ff' : '#8b92a5');
-          txt.setAttribute('font-size', '10px');
-          txt.setAttribute('font-family', 'monospace');
-          txt.setAttribute('font-weight', 'bold');
-          txt.textContent = metro.name.split('/')[0].trim();
-          g.appendChild(txt);
+        scheduler();
+      } else {
+        clearTimeout(schedulerTimer);
+        btn.classList.remove('bg-rose-500', 'hover:bg-rose-400', 'shadow-lg');
+        btn.classList.add('bg-cyan-500', 'hover:bg-cyan-400', 'glow-cyan');
+        iconPlay.classList.remove('hidden');
+        iconStop.classList.add('hidden');
+        lbl.textContent = 'START';
+
+        clearBeatHighlights();
+      }
+    }
+
+    function handleTapTempo() {
+      const now = performance.now();
+      if (appState.tapTimes.length > 0 && now - appState.tapTimes[appState.tapTimes.length - 1] > 2000) {
+        appState.tapTimes = [];
+      }
+      appState.tapTimes.push(now);
+      if (appState.tapTimes.length > 5) appState.tapTimes.shift();
+
+      if (appState.tapTimes.length >= 2) {
+        let intervals = [];
+        for (let i = 1; i < appState.tapTimes.length; i++) {
+          intervals.push(appState.tapTimes[i] - appState.tapTimes[i - 1]);
+        }
+        const avgMs = intervals.reduce((a, b) => a + b, 0) / intervals.length;
+        const detectedBpm = Math.round(60000 / avgMs);
+        setBpm(detectedBpm);
+      }
+    }
+
+    /**
+     * TEMPO & METRONOME STATE UPDATES
+     */
+    function setBpm(val, fromTrainer = false) {
+      let bpm = parseInt(val, 10);
+      if (isNaN(bpm)) bpm = 120;
+      bpm = Math.max(20, Math.min(300, bpm));
+      appState.bpm = bpm;
+
+      document.getElementById('bpmInput').value = bpm;
+      document.getElementById('bpmSlider').value = bpm;
+      document.getElementById('polyBpmInput').value = bpm;
+
+      // Classical Italian Tempo Marking
+      let marking = 'Moderato';
+      if (bpm < 45) marking = 'Grave / Largo';
+      else if (bpm < 66) marking = 'Adagio';
+      else if (bpm < 84) marking = 'Andante';
+      else if (bpm < 112) marking = 'Moderato';
+      else if (bpm < 136) marking = 'Allegro';
+      else if (bpm < 172) marking = 'Vivace';
+      else marking = 'Presto';
+      document.getElementById('tempoMarking').textContent = marking;
+    }
+
+    function adjustBpm(delta) {
+      setBpm(appState.bpm + delta);
+    }
+
+    function setTimeSignature(num, den) {
+      num = Math.max(1, Math.min(32, num));
+      metronomeState.numerator = num;
+      metronomeState.denominator = den;
+
+      document.getElementById('displayNumerator').textContent = num;
+      document.getElementById('selectDenominator').value = den;
+
+      // Resize accents array preserving existing beats
+      const newAccents = [];
+      for (let i = 0; i < num; i++) {
+        if (i < metronomeState.accents.length) {
+          newAccents.push(metronomeState.accents[i]);
+        } else {
+          newAccents.push(i === 0 ? 3 : 2);
+        }
+      }
+      metronomeState.accents = newAccents;
+      renderMetronomeBeatGrid();
+    }
+
+    function changeNumerator(delta) {
+      setTimeSignature(metronomeState.numerator + delta, metronomeState.denominator);
+    }
+
+    function setDenominator(den) {
+      setTimeSignature(metronomeState.numerator, den);
+    }
+
+    function setSubdivision(sub) {
+      metronomeState.subdivision = sub;
+      document.querySelectorAll('.sub-btn').forEach(btn => {
+        const bSub = parseInt(btn.dataset.sub, 10);
+        if (bSub === sub) {
+          btn.className = 'sub-btn py-1.5 rounded-lg bg-cyan-500/20 border border-cyan-400 text-cyan-300 font-mono text-xs font-bold';
+        } else {
+          btn.className = 'sub-btn py-1.5 rounded-lg bg-obsidian border border-panelBorder text-slate-400 hover:text-white font-mono text-xs';
+        }
+      });
+      renderSubPulseDots();
+    }
+
+    function cycleBeatAccent(beatIndex) {
+      // Cycle: 3 (Accent) -> 2 (Normal) -> 1 (Ghost) -> 0 (Mute) -> 3
+      const curr = metronomeState.accents[beatIndex];
+      metronomeState.accents[beatIndex] = curr === 0 ? 3 : curr - 1;
+      renderMetronomeBeatGrid();
+    }
+
+    function renderSubPulseDots() {
+      const container = document.getElementById('subPulseDots');
+      container.innerHTML = '';
+      for (let i = 0; i < metronomeState.subdivision; i++) {
+        const dot = document.createElement('span');
+        dot.id = `subDot-${i}`;
+        dot.className = 'w-2 h-2 rounded-full bg-slate-700 transition-transform duration-75';
+        container.appendChild(dot);
+      }
+    }
+
+    function renderMetronomeBeatGrid() {
+      const grid = document.getElementById('beatSequencerGrid');
+      grid.innerHTML = '';
+
+      // Adapt column count cleanly for odd/large time signatures
+      if (metronomeState.numerator <= 4) {
+        grid.className = 'grid grid-cols-2 sm:grid-cols-4 gap-3';
+      } else if (metronomeState.numerator <= 8) {
+        grid.className = 'grid grid-cols-4 sm:grid-cols-8 gap-2.5';
+      } else {
+        grid.className = 'grid grid-cols-4 sm:grid-cols-8 lg:grid-cols-12 gap-2';
+      }
+
+      metronomeState.accents.forEach((level, idx) => {
+        const pad = document.createElement('button');
+        pad.id = `beatPad-${idx}`;
+        pad.onclick = () => cycleBeatAccent(idx);
+
+        let levelLabel = 'NORMAL';
+        let barHeight = 'h-10';
+        let colorClasses = 'border-cyan-500/40 bg-cyan-500/10 text-cyan-300';
+
+        if (level === 3) {
+          levelLabel = 'ACCENT';
+          barHeight = 'h-16';
+          colorClasses = 'border-amber-400/60 bg-amber-500/15 text-amber-300';
+        } else if (level === 1) {
+          levelLabel = 'GHOST';
+          barHeight = 'h-5';
+          colorClasses = 'border-slate-600 bg-slate-800/40 text-slate-400';
+        } else if (level === 0) {
+          levelLabel = 'MUTE';
+          barHeight = 'h-1.5';
+          colorClasses = 'border-rose-500/30 bg-rose-950/20 text-rose-400/70 opacity-60';
+        }
+
+        pad.className = `hw-btn relative rounded-xl border ${colorClasses} p-3 flex flex-col items-center justify-between h-28 transition-all duration-75 select-none`;
+        pad.innerHTML = `
+          <div class="w-full flex items-center justify-between text-[11px] font-mono">
+            <span class="font-bold">${idx + 1}</span>
+            <span class="text-[9px] tracking-wider opacity-80">${levelLabel}</span>
+          </div>
+          <div class="w-full flex items-end justify-center flex-1 py-1">
+            <div class="w-full max-w-[36px] ${barHeight} rounded-md bg-current opacity-75 transition-all"></div>
+          </div>
+        `;
+        grid.appendChild(pad);
+      });
+    }
+
+    function highlightMetronomeBeat(beatIdx, subIdx, barNum) {
+      document.getElementById('barCounterDisplay').textContent = barNum;
+
+      // Update sub-pulse dots
+      for (let s = 0; s < metronomeState.subdivision; s++) {
+        const dot = document.getElementById(`subDot-${s}`);
+        if (dot) {
+          if (s === subIdx) {
+            dot.className = 'w-2.5 h-2.5 rounded-full bg-cyan-400 scale-125 shadow-[0_0_8px_#00f0ff]';
+          } else {
+            dot.className = 'w-2 h-2 rounded-full bg-slate-700';
+          }
+        }
+      }
+
+      // Highlight active beat pad
+      metronomeState.accents.forEach((level, idx) => {
+        const pad = document.getElementById(`beatPad-${idx}`);
+        if (!pad) return;
+        if (idx === beatIdx) {
+          pad.classList.add('ring-2', 'ring-white', 'scale-[1.03]', 'brightness-125');
+        } else {
+          pad.classList.remove('ring-2', 'ring-white', 'scale-[1.03]', 'brightness-125');
         }
       });
     }
 
-    const mapTooltip = document.getElementById('mapTooltip');
-    function showMapPinTooltip(evt, metro) {
-      const now = new Date();
-      const timeStr = new Intl.DateTimeFormat('en-US', {
-        timeZone: metro.tz,
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-        hour12: !STATE.display24Hour
-      }).format(now);
-
-      const offsetStr = getTimezoneOffsetString(now, metro.tz);
-      mapTooltip.innerHTML = `
-        <div style="font-weight:bold; color:var(--neon-cyan);">${metro.name}</div>
-        <div style="font-size:0.75rem; color:#aaa;">${metro.country} (${offsetStr})</div>
-        <div style="font-size:1.1rem; font-weight:700; color:#fff; margin-top:2px;">${timeStr}</div>
-        <div style="font-size:0.7rem; color:var(--neon-emerald); margin-top:3px;">Click to set as primary chronometer</div>
-      `;
-      mapTooltip.style.display = 'block';
-
-      const rect = evt.target.getBoundingClientRect();
-      const containerRect = document.querySelector('.map-container').getBoundingClientRect();
-      mapTooltip.style.left = `${rect.left - containerRect.left + (rect.width / 2)}px`;
-      mapTooltip.style.top = `${rect.top - containerRect.top - 8}px`;
+    function clearBeatHighlights() {
+      document.querySelectorAll('[id^="beatPad-"]').forEach(pad => {
+        pad.classList.remove('ring-2', 'ring-white', 'scale-[1.03]', 'brightness-125');
+      });
+      document.querySelectorAll('[id^="subDot-"]').forEach(dot => {
+        dot.className = 'w-2 h-2 rounded-full bg-slate-700';
+      });
     }
 
-    function hideMapPinTooltip() {
-      mapTooltip.style.display = 'none';
+    /**
+     * POLYRHYTHM & POLYMETER LAB MANAGEMENT
+     */
+    function setPolyMode(mode) {
+      polyState.mode = mode;
+      const btnPoly = document.getElementById('btnModePolyrhythm');
+      const btnMeter = document.getElementById('btnModePolymeter');
+      const desc = document.getElementById('polyModeDescription');
+
+      if (mode === 'polyrhythm') {
+        btnPoly.className = 'px-3 py-1.5 rounded-lg text-xs font-mono font-bold bg-magentaGlow/20 text-pink-300 border border-pink-500/40 transition-all';
+        btnMeter.className = 'px-3 py-1.5 rounded-lg text-xs font-mono font-bold text-slate-400 hover:text-white transition-all';
+        desc.textContent = 'Polyrhythm Mode: All layers complete 1 cycle simultaneously.';
+      } else {
+        btnMeter.className = 'px-3 py-1.5 rounded-lg text-xs font-mono font-bold bg-amberGlow/20 text-amber-300 border border-amber-500/40 transition-all';
+        btnPoly.className = 'px-3 py-1.5 rounded-lg text-xs font-mono font-bold text-slate-400 hover:text-white transition-all';
+        desc.textContent = 'Polymeter Mode: Shared pulse speed; measures wrap independently.';
+      }
+
+      // Re-sync timing cleanly if playing
+      if (appState.isPlaying && audioCtx) {
+        const now = audioCtx.currentTime + 0.03;
+        appState.startTimeAudio = now;
+        polyState.layers.forEach(l => {
+          l.nextNoteTime = now;
+          l.currentStep = 0;
+        });
+      }
+      renderPolyLayers();
     }
 
-    // --- City Matrix & Grid Management ---
-    function renderCityMatrix(filteredList = WORLD_METROS) {
-      const container = document.getElementById('cityMatrixContainer');
-      if (!container) return;
+    function setVisLayout(layout) {
+      polyState.visLayout = layout;
+      const orbitWrap = document.getElementById('orbitCanvasWrap');
+      const linearWrap = document.getElementById('linearCanvasWrap');
+
+      ['both', 'orbit', 'linear'].forEach(key => {
+        const btn = document.getElementById(`visBtn${key.charAt(0).toUpperCase() + key.slice(1)}`);
+        btn.className = (key === layout)
+          ? 'px-2 py-1 rounded bg-slate-800 text-white'
+          : 'px-2 py-1 rounded text-slate-400 hover:text-white';
+      });
+
+      if (layout === 'both') {
+        orbitWrap.classList.remove('hidden');
+        linearWrap.classList.remove('hidden');
+      } else if (layout === 'orbit') {
+        orbitWrap.classList.remove('hidden');
+        linearWrap.classList.add('hidden');
+      } else {
+        orbitWrap.classList.add('hidden');
+        linearWrap.classList.remove('hidden');
+      }
+      resizeCanvases();
+    }
+
+    function addPolyLayer(customConfig = null) {
+      if (polyState.layers.length >= 6) return;
+      const usedColors = polyState.layers.map(l => l.colorIdx);
+      let colorIdx = 0;
+      for (let i = 0; i < LAYER_COLORS.length; i++) {
+        if (!usedColors.includes(i)) { colorIdx = i; break; }
+      }
+
+      const beats = customConfig?.beats || 5;
+      const accents = Array.from({ length: beats }, (_, i) => (i === 0 ? 3 : 2));
+      const now = audioCtx ? audioCtx.currentTime + 0.05 : 0;
+
+      polyState.layers.push({
+        id: polyState.nextLayerId++,
+        name: customConfig?.name || `Voice ${String.fromCharCode(64 + polyState.layers.length + 1)}`,
+        beats: beats,
+        denominator: customConfig?.denominator || 4,
+        multiplier: customConfig?.multiplier || 1,
+        sound: customConfig?.sound || 'bell',
+        volume: 0.8,
+        muted: false,
+        solo: false,
+        colorIdx: customConfig?.colorIdx ?? colorIdx,
+        accents: accents,
+        nextNoteTime: now,
+        currentStep: 0,
+        pulseFlash: 0
+      });
+
+      renderPolyLayers();
+    }
+
+    function removePolyLayer(id) {
+      if (polyState.layers.length <= 1) return;
+      polyState.layers = polyState.layers.filter(l => l.id !== id);
+      renderPolyLayers();
+    }
+
+    function updatePolyLayerBeats(id, delta) {
+      const layer = polyState.layers.find(l => l.id === id);
+      if (!layer) return;
+      const newBeats = Math.max(1, Math.min(24, layer.beats + delta));
+      layer.beats = newBeats;
+
+      const updatedAccents = [];
+      for (let i = 0; i < newBeats; i++) {
+        updatedAccents.push(i < layer.accents.length ? layer.accents[i] : (i === 0 ? 3 : 2));
+      }
+      layer.accents = updatedAccents;
+      renderPolyLayers();
+    }
+
+    function toggleLayerStepAccent(layerId, stepIdx) {
+      const layer = polyState.layers.find(l => l.id === layerId);
+      if (!layer) return;
+      const cur = layer.accents[stepIdx];
+      // Cycle: 3 (Accent) -> 2 (Normal) -> 0 (Mute) -> 3
+      layer.accents[stepIdx] = cur === 3 ? 2 : (cur === 2 ? 0 : 3);
+      renderPolyLayers();
+    }
+
+    function loadPolyPreset(presetKey) {
+      const presets = {
+        '3:2': [
+          { name: '3-Beat Hemiola', beats: 3, sound: 'marimba', colorIdx: 0 },
+          { name: '2-Beat Pulse', beats: 2, sound: 'kick', colorIdx: 1 }
+        ],
+        '4:3': [
+          { name: '4-Beat Frame', beats: 4, sound: 'kick', colorIdx: 0 },
+          { name: '3-Beat Cross', beats: 3, sound: 'rim', colorIdx: 1 }
+        ],
+        '5:4': [
+          { name: '5-Beat Quintuplet', beats: 5, sound: 'bell', colorIdx: 2 },
+          { name: '4-Beat Anchor', beats: 4, sound: 'kick', colorIdx: 0 }
+        ],
+        '7:4': [
+          { name: '7-Beat Septuplet', beats: 7, sound: 'marimba', colorIdx: 3 },
+          { name: '4-Beat Ground', beats: 4, sound: 'kick', colorIdx: 0 }
+        ],
+        '3:4:5': [
+          { name: '5-Layer High', beats: 5, sound: 'bell', colorIdx: 2 },
+          { name: '4-Layer Mid', beats: 4, sound: 'rim', colorIdx: 0 },
+          { name: '3-Layer Low', beats: 3, sound: 'kick', colorIdx: 1 }
+        ]
+      };
+
+      const chosen = presets[presetKey];
+      if (!chosen) return;
+
+      const now = audioCtx ? audioCtx.currentTime + 0.04 : 0;
+      if (audioCtx) appState.startTimeAudio = now;
+
+      polyState.layers = chosen.map((cfg, idx) => ({
+        id: idx + 1,
+        name: cfg.name,
+        beats: cfg.beats,
+        denominator: 4,
+        multiplier: 1,
+        sound: cfg.sound,
+        volume: 0.85,
+        muted: false,
+        solo: false,
+        colorIdx: cfg.colorIdx,
+        accents: Array.from({ length: cfg.beats }, (_, i) => (i === 0 ? 3 : 2)),
+        nextNoteTime: now,
+        currentStep: 0,
+        pulseFlash: 0
+      }));
+      polyState.nextLayerId = polyState.layers.length + 1;
+      renderPolyLayers();
+    }
+
+    function renderPolyLayers() {
+      const container = document.getElementById('polyLayersContainer');
       container.innerHTML = '';
-      const now = new Date();
 
-      // California base time for hour-differential
-      const caHour = parseInt(new Intl.DateTimeFormat('en-US', { timeZone: 'America/Los_Angeles', hour: 'numeric', hour12: false }).format(now), 10);
+      // Update Ratio Readout Badge
+      const ratioStr = polyState.layers.map(l => l.beats).join(' : ');
+      document.getElementById('ratioReadout').textContent = ratioStr;
 
-      filteredList.forEach(item => {
-        const isCa = item.tz === 'America/Los_Angeles';
-        const timeFormatted = new Intl.DateTimeFormat('en-US', {
-          timeZone: item.tz,
-          hour: '2-digit',
-          minute: '2-digit',
-          second: '2-digit',
-          hour12: !STATE.display24Hour
-        }).format(now);
+      // Enable/Disable Add Layer button
+      const addBtn = document.getElementById('btnAddLayer');
+      addBtn.disabled = polyState.layers.length >= 6;
+      addBtn.classList.toggle('opacity-40', polyState.layers.length >= 6);
 
-        const dateFormatted = new Intl.DateTimeFormat('en-US', {
-          timeZone: item.tz,
-          month: 'short',
-          day: 'numeric',
-          weekday: 'short'
-        }).format(now);
-
-        // Delta from California
-        const cityHour = parseInt(new Intl.DateTimeFormat('en-US', { timeZone: item.tz, hour: 'numeric', hour12: false }).format(now), 10);
-        let delta = cityHour - caHour;
-        let deltaText = delta === 0 ? "CALIFORNIA REF" : (delta > 0 ? `+${delta}h vs CA` : `${delta}h vs CA`);
-
-        // Day/night indicator
-        const isDaytime = cityHour >= 6 && cityHour < 18;
-
+      polyState.layers.forEach(layer => {
+        const color = LAYER_COLORS[layer.colorIdx];
         const card = document.createElement('div');
-        card.className = `city-card ${isCa ? 'california-highlight' : ''}`;
-        card.onclick = () => {
-          setTimezoneDefault(item.tz);
-          switchTab('chrono');
-        };
+        card.className = 'bg-panel border rounded-xl p-3.5 transition-all';
+        card.style.borderColor = layer.muted ? '#252938' : color.border;
+
+        // Build mini beat step toggles
+        const stepsHtml = layer.accents.map((acc, idx) => {
+          let bg = 'bg-slate-800 text-slate-500 border-slate-700';
+          if (acc === 3) bg = 'text-obsidian font-bold border-white/50';
+          else if (acc === 2) bg = 'text-white border-white/20';
+
+          const inlineBg = acc === 3 ? `background-color: ${color.hex};` : (acc === 2 ? `background-color: ${color.bg};` : '');
+          return `<button onclick="toggleLayerStepAccent(${layer.id}, ${idx})" style="${inlineBg}" class="h-7 min-w-[26px] px-1.5 rounded border ${bg} font-mono text-[11px] transition-transform active:scale-95" title="Click to toggle Accent / Normal / Mute">${idx + 1}</button>`;
+        }).join('');
 
         card.innerHTML = `
-          <div class="city-card-header">
-            <div>
-              <div class="city-name">${item.name}</div>
-              <div class="city-region">${item.country}</div>
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-2.5">
+            <div class="flex items-center gap-2">
+              <span class="w-3 h-3 rounded-full" style="background-color: ${color.hex}; box-shadow: 0 0 8px ${color.hex};"></span>
+              <input type="text" value="${layer.name}" onchange="polyState.layers.find(l=>l.id===${layer.id}).name = this.value" class="bg-transparent font-mono text-xs font-bold text-white w-28 focus:outline-none focus:border-b border-slate-500" />
             </div>
-            <span class="delta-badge" style="color:${isCa ? 'var(--neon-cyan)' : 'inherit'};">${deltaText}</span>
+
+            <div class="flex items-center gap-1.5">
+              <!-- Mute / Solo -->
+              <button onclick="polyState.layers.find(l=>l.id===${layer.id}).muted = !polyState.layers.find(l=>l.id===${layer.id}).muted; renderPolyLayers();" class="px-2 py-0.5 rounded text-[10px] font-mono font-bold border ${layer.muted ? 'bg-rose-500/20 border-rose-500 text-rose-300' : 'bg-obsidian border-panelBorder text-slate-400 hover:text-white'}">M</button>
+              <button onclick="polyState.layers.find(l=>l.id===${layer.id}).solo = !polyState.layers.find(l=>l.id===${layer.id}).solo; renderPolyLayers();" class="px-2 py-0.5 rounded text-[10px] font-mono font-bold border ${layer.solo ? 'bg-amber-500/20 border-amber-400 text-amber-300' : 'bg-obsidian border-panelBorder text-slate-400 hover:text-white'}">S</button>
+              ${polyState.layers.length > 1 ? `<button onclick="removePolyLayer(${layer.id})" class="px-2 py-0.5 rounded text-[10px] font-mono bg-obsidian hover:bg-rose-950 border border-panelBorder text-slate-400 hover:text-rose-400" title="Remove Layer">&times;</button>` : ''}
+            </div>
           </div>
-          <div class="city-time-huge">${timeFormatted}</div>
-          <div class="city-date-sub">
-            <span>${dateFormatted}</span>
-            <span style="color:${isDaytime ? 'var(--neon-amber)' : 'var(--neon-cyan)'};">
-              ${isDaytime ? '☀ DAY' : '☾ NIGHT'}
-            </span>
+
+          <!-- Controls Row: Beat Count, Multiplier, Sound, Volume -->
+          <div class="flex flex-wrap items-center justify-between gap-2 bg-obsidian/70 p-2 rounded-lg border border-panelBorder mb-2.5">
+            <!-- Beats Stepper -->
+            <div class="flex items-center gap-1.5">
+              <span class="text-[10px] font-mono text-slate-500">BEATS:</span>
+              <button onclick="updatePolyLayerBeats(${layer.id}, -1)" class="w-6 h-6 rounded bg-panel hover:bg-slate-700 font-mono text-xs text-white">-</button>
+              <span class="font-mono text-sm font-bold w-6 text-center" style="color: ${color.hex}">${layer.beats}</span>
+              <button onclick="updatePolyLayerBeats(${layer.id}, 1)" class="w-6 h-6 rounded bg-panel hover:bg-slate-700 font-mono text-xs text-white">+</button>
+            </div>
+
+            <!-- Speed Multiplier -->
+            <div class="flex items-center gap-1">
+              <span class="text-[10px] font-mono text-slate-500">RATE:</span>
+              <select onchange="polyState.layers.find(l=>l.id===${layer.id}).multiplier = parseFloat(this.value)" class="bg-panel border border-panelBorder rounded px-1.5 py-0.5 text-[11px] font-mono text-slate-200 focus:outline-none">
+                <option value="0.5" ${layer.multiplier === 0.5 ? 'selected' : ''}>0.5x</option>
+                <option value="1" ${layer.multiplier === 1 ? 'selected' : ''}>1x</option>
+                <option value="1.5" ${layer.multiplier === 1.5 ? 'selected' : ''}>1.5x</option>
+                <option value="2" ${layer.multiplier === 2 ? 'selected' : ''}>2x</option>
+              </select>
+            </div>
+
+            <!-- Sound Voice -->
+            <select onchange="polyState.layers.find(l=>l.id===${layer.id}).sound = this.value" class="bg-panel border border-panelBorder rounded px-2 py-0.5 text-[11px] font-mono text-slate-200 focus:outline-none">
+              <option value="kick" ${layer.sound === 'kick' ? 'selected' : ''}>Bass Kick</option>
+              <option value="rim" ${layer.sound === 'rim' ? 'selected' : ''}>Rimshot</option>
+              <option value="hihat" ${layer.sound === 'hihat' ? 'selected' : ''}>Hi-Hat</option>
+              <option value="marimba" ${layer.sound === 'marimba' ? 'selected' : ''}>Marimba</option>
+              <option value="bell" ${layer.sound === 'bell' ? 'selected' : ''}>Synth Bell</option>
+            </select>
+
+            <!-- Layer Volume -->
+            <input type="range" min="0" max="1" step="0.05" value="${layer.volume}" oninput="polyState.layers.find(l=>l.id===${layer.id}).volume = parseFloat(this.value)" class="w-16" title="Layer Volume" />
+          </div>
+
+          <!-- Step Accent Pads -->
+          <div class="flex flex-wrap gap-1">
+            ${stepsHtml}
           </div>
         `;
         container.appendChild(card);
       });
-
-      document.getElementById('matrixCityCountBadge').textContent = `${filteredList.length} CITIES MONITORED`;
     }
 
-    function filterCities() {
-      const q = document.getElementById('citySearchInput').value.toLowerCase().trim();
-      const filtered = WORLD_METROS.filter(m => 
-        m.name.toLowerCase().includes(q) || 
-        m.country.toLowerCase().includes(q) || 
-        m.tz.toLowerCase().includes(q)
-      );
-      renderCityMatrix(filtered);
+    /**
+     * TAB NAVIGATION
+     */
+    function switchTab(tab) {
+      appState.activeTab = tab;
+      const viewMetro = document.getElementById('viewMetronome');
+      const viewPoly = document.getElementById('viewPolyrhythm');
+      const btnMetro = document.getElementById('tabBtnMetronome');
+      const btnPoly = document.getElementById('tabBtnPolyrhythm');
+
+      if (tab === 'metronome') {
+        viewMetro.classList.remove('hidden');
+        viewPoly.classList.add('hidden');
+        btnMetro.className = 'flex-1 sm:flex-initial px-4 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all bg-panel text-cyan-300 border border-cyan-500/30 shadow-sm flex items-center justify-center gap-2';
+        btnPoly.className = 'flex-1 sm:flex-initial px-4 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all text-slate-400 hover:text-white flex items-center justify-center gap-2';
+      } else {
+        viewMetro.classList.add('hidden');
+        viewPoly.classList.remove('hidden');
+        btnPoly.className = 'flex-1 sm:flex-initial px-4 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all bg-panel text-pink-300 border border-pink-500/30 shadow-sm flex items-center justify-center gap-2';
+        btnMetro.className = 'flex-1 sm:flex-initial px-4 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all text-slate-400 hover:text-white flex items-center justify-center gap-2';
+        resizeCanvases();
+      }
+
+      // Reset clocks cleanly if switching mid-playback
+      if (appState.isPlaying && audioCtx) {
+        const now = audioCtx.currentTime + 0.04;
+        appState.startTimeAudio = now;
+        nextMetroNoteTime = now;
+        metroStepIndex = 0;
+        polyState.layers.forEach(l => {
+          l.nextNoteTime = now;
+          l.currentStep = 0;
+        });
+      }
     }
 
-    // --- Meeting Planner Overlap Matrix ---
-    function renderMeetingPlanner() {
-      const container = document.getElementById('overlapTimelineBox');
-      if (!container) return;
-      container.innerHTML = '';
+    /**
+     * 60FPS VISUAL RENDER LOOP (Orbit Polygons + Linear Phase Grid + Timer)
+     */
+    const orbitCanvas = document.getElementById('orbitCanvas');
+    const orbitCtx = orbitCanvas.getContext('2d');
+    const linearCanvas = document.getElementById('linearCanvas');
+    const linearCtx = linearCanvas.getContext('2d');
 
-      const keyCities = [
-        { name: 'California (Pacific)', tz: 'America/Los_Angeles' },
-        { name: 'New York (Eastern)', tz: 'America/New_York' },
-        { name: 'London (GMT/BST)', tz: 'Europe/London' },
-        { name: 'Tokyo (JST)', tz: 'Asia/Tokyo' }
-      ];
-
-      const now = new Date();
-
-      keyCities.forEach(city => {
-        const row = document.createElement('div');
-        row.className = 'overlap-row';
-
-        // Current hour and minute in this zone
-        const currentHr = parseInt(new Intl.DateTimeFormat('en-US', { timeZone: city.tz, hour: 'numeric', hour12: false }).format(now), 10);
-        const currentMin = now.getMinutes();
-        const currPct = ((currentMin / 60) * 100);
-
-        let blocksHtml = '';
-        for (let h = 0; h < 24; h++) {
-          const isWork = h >= 9 && h < 18;
-          const isCurr = h === currentHr;
-          blocksHtml += `
-            <div class="hour-block ${isWork ? 'work-hour' : ''} ${isCurr ? 'current-pointer' : ''}" 
-                 style="${isCurr ? `--curr-pct:${currPct}%;` : ''}" title="${h}:00 in ${city.name}">
-              ${h}
-            </div>
-          `;
-        }
-
-        row.innerHTML = `
-          <div class="overlap-header">
-            <span style="font-weight:700; color:#fff;">${city.name}</span>
-            <span class="accent-cyan">Current: ${currentHr.toString().padStart(2,'0')}:${currentMin.toString().padStart(2,'0')}</span>
-          </div>
-          <div class="timeline-bar">${blocksHtml}</div>
-        `;
-        container.appendChild(row);
+    function resizeCanvases() {
+      [orbitCanvas, linearCanvas].forEach(canvas => {
+        if (!canvas || canvas.offsetParent === null) return;
+        const dpr = window.devicePixelRatio || 1;
+        const rect = canvas.getBoundingClientRect();
+        canvas.width = rect.width * dpr;
+        canvas.height = rect.height * dpr;
+        const ctx = canvas.getContext('2d');
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       });
     }
 
-    // --- Time Lab: Precision Stopwatch ---
-    function formatStopwatchTime(ms) {
-      const m = Math.floor(ms / 60000);
-      const s = Math.floor((ms % 60000) / 1000);
-      const millis = Math.floor(ms % 1000);
-      return `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}.${String(millis).padStart(3,'0')}`;
+    function renderLoop() {
+      // Update elapsed practice timer
+      if (appState.isPlaying) {
+        const elapsedSec = Math.floor((performance.now() - appState.startTimePerf) / 1000);
+        const mins = String(Math.floor(elapsedSec / 60)).padStart(2, '0');
+        const secs = String(elapsedSec % 60).padStart(2, '0');
+        document.getElementById('timerDisplay').textContent = `${mins}:${secs}`;
+      }
+
+      if (appState.activeTab === 'polyrhythm') {
+        drawOrbitVisualizer();
+        drawLinearGridVisualizer();
+      }
+
+      requestAnimationFrame(renderLoop);
     }
 
-    function startStopwatch() {
-      if (STATE.stopwatch.running) return;
-      playBeep(600, 0.08);
-      STATE.stopwatch.running = true;
-      STATE.stopwatch.startTime = performance.now() - STATE.stopwatch.elapsedBefore;
-      document.getElementById('stopwatchStateBadge').textContent = 'RUNNING';
-      document.getElementById('btnSwStart').style.display = 'none';
-      document.getElementById('btnSwStop').style.display = 'inline-block';
-      document.getElementById('btnSwLap').style.display = 'inline-block';
+    function drawOrbitVisualizer() {
+      if (orbitCanvas.offsetParent === null) return;
+      const rect = orbitCanvas.getBoundingClientRect();
+      const w = rect.width;
+      const h = rect.height;
+      const cx = w / 2;
+      const cy = h / 2;
+      const maxR = Math.min(w, h) * 0.41;
 
-      STATE.stopwatch.timerId = requestAnimationFrame(stepStopwatch);
-    }
+      orbitCtx.clearRect(0, 0, w, h);
 
-    function stepStopwatch(timestamp) {
-      if (!STATE.stopwatch.running) return;
-      const elapsed = timestamp - STATE.stopwatch.startTime;
-      document.getElementById('stopwatchDisplay').textContent = formatStopwatchTime(elapsed);
-      STATE.stopwatch.timerId = requestAnimationFrame(stepStopwatch);
-    }
+      // Subtle radial guide rings
+      orbitCtx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
+      orbitCtx.lineWidth = 1;
+      [0.4, 0.7, 1.0].forEach(scale => {
+        orbitCtx.beginPath();
+        orbitCtx.arc(cx, cy, maxR * scale, 0, Math.PI * 2);
+        orbitCtx.stroke();
+      });
 
-    function pauseStopwatch() {
-      if (!STATE.stopwatch.running) return;
-      playBeep(400, 0.08);
-      STATE.stopwatch.running = false;
-      cancelAnimationFrame(STATE.stopwatch.timerId);
-      STATE.stopwatch.elapsedBefore = performance.now() - STATE.stopwatch.startTime;
-      document.getElementById('stopwatchStateBadge').textContent = 'PAUSED';
-      document.getElementById('btnSwStart').style.display = 'inline-block';
-      document.getElementById('btnSwStop').style.display = 'none';
-      document.getElementById('btnSwLap').style.display = 'none';
-    }
+      // Top 12 o'clock trigger strike line
+      orbitCtx.strokeStyle = 'rgba(0, 240, 255, 0.35)';
+      orbitCtx.lineWidth = 2;
+      orbitCtx.beginPath();
+      orbitCtx.moveTo(cx, cy - maxR - 14);
+      orbitCtx.lineTo(cx, cy - 12);
+      orbitCtx.stroke();
 
-    function resetStopwatch() {
-      playBeep(300, 0.08);
-      STATE.stopwatch.running = false;
-      cancelAnimationFrame(STATE.stopwatch.timerId);
-      STATE.stopwatch.elapsedBefore = 0;
-      STATE.stopwatch.laps = [];
-      document.getElementById('stopwatchDisplay').textContent = '00:00:00.000';
-      document.getElementById('stopwatchStateBadge').textContent = 'IDLE';
-      document.getElementById('btnSwStart').style.display = 'inline-block';
-      document.getElementById('btnSwStop').style.display = 'none';
-      document.getElementById('btnSwLap').style.display = 'none';
-      document.getElementById('lapsContainer').style.display = 'none';
-      document.getElementById('lapsList').innerHTML = '';
-    }
+      // Calculate exact phase from audio clock
+      const elapsedAudio = (appState.isPlaying && audioCtx)
+        ? Math.max(0, audioCtx.currentTime - appState.startTimeAudio)
+        : 0;
+      const masterCycleSec = (60.0 / appState.bpm) * 4.0;
+      const basePulseSec = 60.0 / appState.bpm;
 
-    function recordLapStopwatch() {
-      if (!STATE.stopwatch.running) return;
-      playBeep(800, 0.05);
-      const currentElapsed = performance.now() - STATE.stopwatch.startTime;
-      const lapIndex = STATE.stopwatch.laps.length + 1;
-      STATE.stopwatch.laps.unshift({ idx: lapIndex, time: currentElapsed });
+      // Draw expanding trigger ripples at 12 o'clock
+      for (let i = polyState.ripples.length - 1; i >= 0; i--) {
+        const rip = polyState.ripples[i];
+        orbitCtx.strokeStyle = rip.color;
+        orbitCtx.globalAlpha = rip.alpha;
+        orbitCtx.lineWidth = rip.isAccent ? 2.5 : 1.5;
+        orbitCtx.beginPath();
+        orbitCtx.arc(cx, cy - maxR, rip.radius, 0, Math.PI * 2);
+        orbitCtx.stroke();
+        rip.radius += 1.4;
+        rip.alpha -= 0.03;
+        if (rip.alpha <= 0) polyState.ripples.splice(i, 1);
+      }
+      orbitCtx.globalAlpha = 1.0;
 
-      const container = document.getElementById('lapsContainer');
-      const list = document.getElementById('lapsList');
-      container.style.display = 'block';
+      // Draw each rhythm layer's rotating geometric polygon
+      const layerCount = polyState.layers.length;
+      polyState.layers.forEach((layer, lIdx) => {
+        if (layer.muted) return;
+        const color = LAYER_COLORS[layer.colorIdx].hex;
+        const radius = maxR * (1 - lIdx * (0.55 / Math.max(1, layerCount)));
 
-      list.innerHTML = STATE.stopwatch.laps.map(lap => `
-        <div class="lap-row">
-          <span style="color:var(--text-muted);">LAP ${String(lap.idx).padStart(2,'0')}</span>
-          <span style="font-weight:700; color:var(--neon-emerald);">${formatStopwatchTime(lap.time)}</span>
-        </div>
-      `).join('');
-    }
+        // Determine cycle progress (0..1)
+        let cycleSec = (polyState.mode === 'polyrhythm')
+          ? (masterCycleSec / layer.multiplier)
+          : ((basePulseSec * layer.beats) / layer.multiplier);
 
-    // --- Time Lab: Audio Synthesized Countdown Timer ---
-    function formatTimerDisplay(totalSeconds) {
-      const m = Math.floor(totalSeconds / 60);
-      const s = totalSeconds % 60;
-      return `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
-    }
+        const phase = (elapsedAudio % cycleSec) / cycleSec;
+        const rotationOffset = -phase * Math.PI * 2; // Counter-clockwise rotation so vertices hit 12 o'clock in order
 
-    function setTimerPreset(seconds) {
-      pauseTimer();
-      STATE.countdown.totalDuration = seconds;
-      STATE.countdown.remaining = seconds;
-      document.getElementById('timerDisplay').textContent = formatTimerDisplay(seconds);
-      document.getElementById('timerStateBadge').textContent = 'PRESET READY';
-    }
+        // Decay flash
+        layer.pulseFlash = Math.max(0, layer.pulseFlash - 0.06);
 
-    function startTimer() {
-      if (STATE.countdown.running) return;
-      playBeep(520, 0.1);
-      STATE.countdown.running = true;
-      document.getElementById('timerStateBadge').textContent = 'COUNTING';
-      document.getElementById('btnTimerStart').style.display = 'none';
-      document.getElementById('btnTimerPause').style.display = 'inline-block';
+        // Draw Polygon Edges
+        orbitCtx.strokeStyle = color;
+        orbitCtx.lineWidth = 1.8 + layer.pulseFlash * 2;
+        orbitCtx.globalAlpha = 0.55 + layer.pulseFlash * 0.45;
 
-      STATE.countdown.timerId = setInterval(() => {
-        if (STATE.countdown.remaining > 0) {
-          STATE.countdown.remaining--;
-          document.getElementById('timerDisplay').textContent = formatTimerDisplay(STATE.countdown.remaining);
-          if (STATE.countdown.remaining <= 3 && STATE.countdown.remaining > 0) {
-            playBeep(700, 0.05);
-          }
-        } else {
-          // Timer finished
-          clearInterval(STATE.countdown.timerId);
-          STATE.countdown.running = false;
-          document.getElementById('timerStateBadge').textContent = 'COMPLETE';
-          document.getElementById('btnTimerStart').style.display = 'inline-block';
-          document.getElementById('btnTimerPause').style.display = 'none';
-          // Synthesize distinct alarm sequence
-          playBeep(880, 0.2, 'square');
-          setTimeout(() => playBeep(880, 0.2, 'square'), 250);
-          setTimeout(() => playBeep(1100, 0.4, 'square'), 500);
+        orbitCtx.beginPath();
+        for (let b = 0; b <= layer.beats; b++) {
+          const angle = -Math.PI / 2 + (b / layer.beats) * Math.PI * 2 + rotationOffset;
+          const vx = cx + Math.cos(angle) * radius;
+          const vy = cy + Math.sin(angle) * radius;
+          if (b === 0) orbitCtx.moveTo(vx, vy);
+          else orbitCtx.lineTo(vx, vy);
         }
-      }, 1000);
+        orbitCtx.stroke();
+
+        // Draw Vertex Nodes
+        for (let b = 0; b < layer.beats; b++) {
+          const acc = layer.accents[b] ?? 2;
+          if (acc === 0) continue;
+          const angle = -Math.PI / 2 + (b / layer.beats) * Math.PI * 2 + rotationOffset;
+          const vx = cx + Math.cos(angle) * radius;
+          const vy = cy + Math.sin(angle) * radius;
+
+          orbitCtx.fillStyle = acc === 3 ? '#ffffff' : color;
+          orbitCtx.beginPath();
+          orbitCtx.arc(vx, vy, acc === 3 ? 5.5 : 4, 0, Math.PI * 2);
+          orbitCtx.fill();
+        }
+        orbitCtx.globalAlpha = 1.0;
+      });
+
+      // Center Hub
+      orbitCtx.fillStyle = '#171a24';
+      orbitCtx.strokeStyle = '#334155';
+      orbitCtx.lineWidth = 2;
+      orbitCtx.beginPath();
+      orbitCtx.arc(cx, cy, 10, 0, Math.PI * 2);
+      orbitCtx.fill();
+      orbitCtx.stroke();
     }
 
-    function pauseTimer() {
-      if (!STATE.countdown.running) return;
-      clearInterval(STATE.countdown.timerId);
-      STATE.countdown.running = false;
-      document.getElementById('timerStateBadge').textContent = 'PAUSED';
-      document.getElementById('btnTimerStart').style.display = 'inline-block';
-      document.getElementById('btnTimerPause').style.display = 'none';
-    }
+    function drawLinearGridVisualizer() {
+      if (linearCanvas.offsetParent === null) return;
+      const rect = linearCanvas.getBoundingClientRect();
+      const w = rect.width;
+      const h = rect.height;
 
-    function resetTimer() {
-      pauseTimer();
-      STATE.countdown.remaining = STATE.countdown.totalDuration;
-      document.getElementById('timerDisplay').textContent = formatTimerDisplay(STATE.countdown.remaining);
-      document.getElementById('timerStateBadge').textContent = 'READY';
-    }
+      linearCtx.clearRect(0, 0, w, h);
 
-    // --- Time Lab: Epoch Converter & Date Delta Tools ---
-    function fillCurrentEpoch() {
-      document.getElementById('inputEpochVal').value = Math.floor(Date.now() / 1000);
-      convertEpochToHuman();
-    }
+      const padX = 24;
+      const padY = 24;
+      const drawW = w - padX * 2;
+      const drawH = h - padY * 1.5;
 
-    function convertEpochToHuman() {
-      const raw = document.getElementById('inputEpochVal').value.trim();
-      if (!raw) return;
-      let val = Number(raw);
-      // Auto detect seconds vs milliseconds
-      if (val < 10000000000) val = val * 1000;
-      const date = new Date(val);
+      const elapsedAudio = (appState.isPlaying && audioCtx)
+        ? Math.max(0, audioCtx.currentTime - appState.startTimeAudio)
+        : 0;
+      const masterCycleSec = (60.0 / appState.bpm) * 4.0;
+      const masterPhase = (elapsedAudio % masterCycleSec) / masterCycleSec;
 
-      if (isNaN(date.getTime())) {
-        document.getElementById('epochConvertResult').textContent = "Invalid Epoch Value";
-        return;
+      const layers = polyState.layers;
+      const laneH = drawH / Math.max(1, layers.length);
+
+      layers.forEach((layer, idx) => {
+        const y = padY + laneH * idx + laneH / 2;
+        const color = LAYER_COLORS[layer.colorIdx].hex;
+
+        // Horizontal lane track
+        linearCtx.strokeStyle = 'rgba(255,255,255,0.08)';
+        linearCtx.lineWidth = 1;
+        linearCtx.beginPath();
+        linearCtx.moveTo(padX, y);
+        linearCtx.lineTo(padX + drawW, y);
+        linearCtx.stroke();
+
+        // Beat markers along the lane
+        const totalMarkers = polyState.mode === 'polyrhythm'
+          ? Math.max(1, Math.round(layer.beats * layer.multiplier))
+          : layer.beats;
+
+        for (let b = 0; b <= totalMarkers; b++) {
+          const x = padX + (b / totalMarkers) * drawW;
+          const acc = layer.accents[b % layer.beats] ?? 2;
+
+          // Subtle vertical coincidence guide on beat 0
+          if (b === 0) {
+            linearCtx.strokeStyle = 'rgba(255,255,255,0.15)';
+            linearCtx.beginPath();
+            linearCtx.moveTo(x, padY - 6);
+            linearCtx.lineTo(x, h - 10);
+            linearCtx.stroke();
+          }
+
+          if (acc > 0 || b === totalMarkers) {
+            linearCtx.fillStyle = layer.muted ? '#475569' : color;
+            const r = (b % layer.beats === 0) ? 5 : 3.5;
+            linearCtx.beginPath();
+            linearCtx.arc(x, y, r, 0, Math.PI * 2);
+            linearCtx.fill();
+          }
+        }
+      });
+
+      // Sweeping Playhead
+      if (appState.isPlaying) {
+        const playheadX = padX + masterPhase * drawW;
+        linearCtx.strokeStyle = '#00f0ff';
+        linearCtx.lineWidth = 2;
+        linearCtx.beginPath();
+        linearCtx.moveTo(playheadX, padY - 8);
+        linearCtx.lineTo(playheadX, h - 8);
+        linearCtx.stroke();
       }
-
-      const caTime = new Intl.DateTimeFormat('en-US', {
-        timeZone: 'America/Los_Angeles',
-        dateStyle: 'full',
-        timeStyle: 'long'
-      }).format(date);
-
-      const utcTime = date.toUTCString();
-      document.getElementById('epochConvertResult').innerHTML = `
-        <div style="color:var(--neon-cyan);">CA (PT): ${caTime}</div>
-        <div style="color:var(--text-muted); margin-top:3px;">UTC: ${utcTime}</div>
-      `;
     }
 
-    function convertHumanToEpoch() {
-      const val = document.getElementById('inputHumanDate').value;
-      if (!val) return;
-      const date = new Date(val);
-      if (isNaN(date.getTime())) {
-        document.getElementById('humanToEpochResult').textContent = "Invalid date format.";
-        return;
+    /**
+     * KEYBOARD SHORTCUTS & INITIALIZATION
+     */
+    window.addEventListener('keydown', (e) => {
+      if (e.code === 'Space' && document.activeElement.tagName !== 'INPUT') {
+        e.preventDefault();
+        togglePlay();
       }
-      const epochSec = Math.floor(date.getTime() / 1000);
-      const epochMs = date.getTime();
-      document.getElementById('humanToEpochResult').innerHTML = `
-        <strong>${epochSec}</strong> seconds &nbsp;|&nbsp; <strong>${epochMs}</strong> ms
-      `;
-    }
+    });
 
-    function calculateDateDelta() {
-      const start = document.getElementById('calcStartDate').value;
-      const end = document.getElementById('calcEndDate').value;
-      if (!start || !end) {
-        document.getElementById('calcDeltaOutput').textContent = "Please pick both dates.";
-        return;
-      }
+    window.addEventListener('resize', resizeCanvases);
 
-      const d1 = new Date(start);
-      const d2 = new Date(end);
-      const diffMs = Math.abs(d2 - d1);
-      const diffDays = Math.round(diffMs / (1000 * 60 * 60 * 24));
-      const hours = diffDays * 24;
-      const weeks = (diffDays / 7).toFixed(1);
-
-      // Business days computation
-      let cur = new Date(Math.min(d1, d2));
-      const finish = new Date(Math.max(d1, d2));
-      let workdays = 0;
-      while (cur < finish) {
-        cur.setDate(cur.getDate() + 1);
-        const day = cur.getDay();
-        if (day !== 0 && day !== 6) workdays++;
-      }
-
-      document.getElementById('calcDeltaOutput').innerHTML = `
-        Difference: <strong>${diffDays} days</strong> (${weeks} weeks)<br>
-        • Working Days: <strong>${workdays} days</strong><br>
-        • Total Hours: <strong>${hours.toLocaleString()} hours</strong>
-      `;
-    }
-
-    // --- Initialization & Master RequestAnimationFrame Loop ---
-    window.onload = function() {
-      // Set current datetime for inputs
-      const todayIso = new Date().toISOString().split('T')[0];
-      document.getElementById('calcStartDate').value = todayIso;
-      document.getElementById('calcEndDate').value = todayIso;
-
-      // Populate pins and city matrix
-      renderMapPins();
-      renderCityMatrix();
-      renderMeetingPlanner();
-      updateWorldMapTerminator();
-
-      // Start high-refresh loop for smooth swept clock and real-time milliseconds
-      function loop() {
-        updateMasterClock();
-        requestAnimationFrame(loop);
-      }
-      requestAnimationFrame(loop);
-
-      // Secondary cadence for map terminator shadow and matrix ticks
-      setInterval(() => {
-        updateWorldMapTerminator();
-        renderCityMatrix(WORLD_METROS);
-        renderMeetingPlanner();
-      }, 10000);
+    window.onload = function () {
+      setBpm(120);
+      renderMetronomeBeatGrid();
+      renderSubPulseDots();
+      renderPolyLayers();
+      resizeCanvases();
+      requestAnimationFrame(renderLoop);
     };
   </script>
 </body>
