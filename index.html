@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>time.sarimoko.com — Advanced Metronome & Polyrhythm Studio</title>
+  <title>time.sarimoko.com — Advanced Metronome, Polyrhythm & Dr. Drum Studio</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -112,26 +112,30 @@
         <div>
           <div class="flex items-center gap-2">
             <span class="font-mono font-bold tracking-tight text-white text-base sm:text-lg">time<span class="text-cyan-400">.sarimoko</span>.com</span>
-            <span class="hidden sm:inline-block text-[10px] font-mono uppercase tracking-widest px-1.5 py-0.5 rounded bg-cyan-500/10 text-cyan-300 border border-cyan-500/20">Audio Clock v2.4</span>
+            <span class="hidden sm:inline-block text-[10px] font-mono uppercase tracking-widest px-1.5 py-0.5 rounded bg-cyan-500/10 text-cyan-300 border border-cyan-500/20">Audio Clock v3.1</span>
           </div>
-          <p class="text-[11px] text-slate-400 hidden md:block">Sample-Accurate Time Signature & Polyrhythm Workstation</p>
+          <p class="text-[11px] text-slate-400 hidden md:block">Sample-Accurate Time Signature, Polyrhythm & Groove Workstation</p>
         </div>
       </div>
 
       <!-- Mode Switcher Tabs -->
-      <nav class="flex items-center bg-obsidian p-1 rounded-xl border border-panelBorder order-3 sm:order-2 w-full sm:w-auto justify-center">
-        <button id="tabBtnMetronome" onclick="switchTab('metronome')" class="flex-1 sm:flex-initial px-4 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all bg-panel text-cyan-300 border border-cyan-500/30 shadow-sm flex items-center justify-center gap-2">
+      <nav class="flex items-center bg-obsidian p-1 rounded-xl border border-panelBorder order-3 lg:order-2 w-full lg:w-auto justify-center">
+        <button id="tabBtnMetronome" onclick="switchTab('metronome')" class="flex-1 lg:flex-initial px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all bg-panel text-cyan-300 border border-cyan-500/30 shadow-sm flex items-center justify-center gap-1.5">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2L6 20h12L12 2z"/><path d="M12 14l4-7"/></svg>
           <span>Metronome</span>
         </button>
-        <button id="tabBtnPolyrhythm" onclick="switchTab('polyrhythm')" class="flex-1 sm:flex-initial px-4 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all text-slate-400 hover:text-white flex items-center justify-center gap-2">
+        <button id="tabBtnPolyrhythm" onclick="switchTab('polyrhythm')" class="flex-1 lg:flex-initial px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all text-slate-400 hover:text-white flex items-center justify-center gap-1.5">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><line x1="12" y1="3" x2="12" y2="12"/></svg>
           <span>Polyrhythm Lab</span>
+        </button>
+        <button id="tabBtnDrDrum" onclick="switchTab('drdrum')" class="flex-1 lg:flex-initial px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all text-slate-400 hover:text-white flex items-center justify-center gap-1.5">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8" cy="10" r="1.5"/><circle cx="12" cy="10" r="1.5"/><circle cx="16" cy="10" r="1.5"/><line x1="7" y1="15" x2="17" y2="15"/></svg>
+          <span>Dr. Drum</span>
         </button>
       </nav>
 
       <!-- Master Transport Controls -->
-      <div class="flex items-center gap-2 sm:gap-3 order-2 sm:order-3">
+      <div class="flex items-center gap-2 sm:gap-3 order-2 lg:order-3">
         <!-- Tap Tempo -->
         <button id="btnTapTempo" onclick="handleTapTempo()" class="hw-btn px-3 py-2 rounded-lg bg-panel hover:bg-slate-800 border border-panelBorder text-xs font-mono font-semibold text-amber-300 flex items-center gap-1.5" title="Tap repeatedly to detect BPM">
           <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
@@ -146,7 +150,7 @@
         </button>
 
         <!-- Master Volume -->
-        <div class="hidden lg:flex items-center gap-2 bg-panel px-3 py-1.5 rounded-lg border border-panelBorder">
+        <div class="hidden xl:flex items-center gap-2 bg-panel px-3 py-1.5 rounded-lg border border-panelBorder">
           <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
           <input id="masterVolume" type="range" min="0" max="1" step="0.01" value="0.85" class="w-20" oninput="updateMasterVolume(this.value)" title="Master Output Gain" />
         </div>
@@ -428,13 +432,106 @@
       </div>
     </section>
 
+    <!-- ===================================================================== -->
+    <!-- TAB 3: DR. DRUM RHYTHM PARTNER GROOVE ENGINE                          -->
+    <!-- ===================================================================== -->
+    <section id="viewDrDrum" class="hidden space-y-6">
+
+      <!-- Top Console: Groove Presets, Meter, Tempo, Swing, Humanize & Fill Controls -->
+      <div class="bg-panel border border-panelBorder rounded-2xl p-4 sm:p-5 flex flex-col xl:flex-row xl:items-center justify-between gap-4">
+        
+        <!-- Left: Brand Badge & Groove Style Presets -->
+        <div class="space-y-2">
+          <div class="flex items-center gap-2">
+            <span class="px-2 py-0.5 rounded bg-amber-500/15 border border-amber-500/40 text-amber-300 font-mono text-[11px] font-bold tracking-wider">DR. DRUM</span>
+            <span class="text-xs font-mono text-slate-400">Acoustic & Electronic Rhythm Partner</span>
+          </div>
+          <div class="flex flex-wrap items-center gap-1.5">
+            <span class="text-[11px] font-mono text-slate-500 mr-1">STYLE:</span>
+            <button onclick="loadDrDrumPreset('unplugged')" class="hw-btn px-2.5 py-1 rounded-lg bg-obsidian hover:bg-slate-800 border border-panelBorder text-xs font-mono text-amber-300">Unplugged Jam</button>
+            <button onclick="loadDrDrumPreset('popRock')" class="hw-btn px-2.5 py-1 rounded-lg bg-obsidian hover:bg-slate-800 border border-panelBorder text-xs font-mono text-cyan-300">Pop / Rock</button>
+            <button onclick="loadDrDrumPreset('funk')" class="hw-btn px-2.5 py-1 rounded-lg bg-obsidian hover:bg-slate-800 border border-panelBorder text-xs font-mono text-pink-300">16th Funk</button>
+            <button onclick="loadDrDrumPreset('bossa')" class="hw-btn px-2.5 py-1 rounded-lg bg-obsidian hover:bg-slate-800 border border-panelBorder text-xs font-mono text-emerald-300">Latin / Bossa</button>
+            <button onclick="loadDrDrumPreset('halfTime')" class="hw-btn px-2.5 py-1 rounded-lg bg-obsidian hover:bg-slate-800 border border-panelBorder text-xs font-mono text-purple-300">Half-Time Shuffle</button>
+          </div>
+        </div>
+
+        <!-- Center: Meter, Tempo, Swing & Humanize -->
+        <div class="flex flex-wrap items-center gap-3 bg-obsidian/80 p-3 rounded-xl border border-panelBorder">
+          <!-- Time Signature Selector -->
+          <div class="flex items-center gap-1.5 pr-3 border-r border-panelBorder">
+            <span class="text-[10px] font-mono text-slate-500">METER:</span>
+            <select id="drDrumMeterSelect" onchange="setDrDrumMeter(this.value)" class="bg-panel border border-panelBorder rounded-lg px-2 py-1 text-xs font-mono font-bold text-amber-300 focus:outline-none">
+              <option value="4/4" selected>4/4 (16-Step)</option>
+              <option value="3/4">3/4 (12-Step)</option>
+              <option value="5/4">5/4 (20-Step)</option>
+              <option value="6/8">6/8 (12-Step)</option>
+              <option value="7/8">7/8 (14-Step)</option>
+            </select>
+          </div>
+
+          <!-- BPM -->
+          <div class="flex items-center gap-1.5 pr-3 border-r border-panelBorder">
+            <span class="text-[10px] font-mono text-slate-500">BPM:</span>
+            <button onclick="adjustBpm(-2)" class="w-6 h-6 rounded bg-panel hover:bg-slate-700 font-mono text-xs text-white">-</button>
+            <input id="drDrumBpmInput" type="number" min="20" max="300" value="120" onchange="setBpm(this.value)" class="w-12 bg-transparent text-center font-mono font-bold text-cyan-300 focus:outline-none" />
+            <button onclick="adjustBpm(2)" class="w-6 h-6 rounded bg-panel hover:bg-slate-700 font-mono text-xs text-white">+</button>
+          </div>
+
+          <!-- Swing -->
+          <div class="flex items-center gap-2 pr-3 border-r border-panelBorder">
+            <span class="text-[10px] font-mono text-slate-400">SWING:</span>
+            <input id="drDrumSwingSlider" type="range" min="0" max="0.45" step="0.01" value="0" oninput="drDrumState.swing = parseFloat(this.value); document.getElementById('drDrumSwingVal').textContent = Math.round((this.value/0.45)*100) + '%'" class="w-16" />
+            <span id="drDrumSwingVal" class="text-[11px] font-mono text-amber-300 w-8">0%</span>
+          </div>
+
+          <!-- Humanize -->
+          <div class="flex items-center gap-2">
+            <span class="text-[10px] font-mono text-slate-400">FEEL:</span>
+            <input id="drDrumHumanizeSlider" type="range" min="0" max="1" step="0.05" value="0.25" oninput="drDrumState.humanize = parseFloat(this.value)" class="w-14" title="Micro-timing & velocity humanization" />
+          </div>
+        </div>
+
+        <!-- Right: Live Fill Controls -->
+        <div class="flex items-center gap-2">
+          <button id="btnDrDrumFill" onclick="triggerDrDrumFill()" class="hw-btn px-4 py-2.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-400/60 text-amber-300 font-mono text-xs font-bold flex items-center gap-2">
+            <span id="fillIndicatorDot" class="w-2 h-2 rounded-full bg-amber-400"></span>
+            <span>FILL NOW</span>
+          </button>
+
+          <label class="flex items-center gap-1.5 bg-obsidian px-3 py-2.5 rounded-xl border border-panelBorder cursor-pointer text-[11px] font-mono text-slate-300">
+            <input id="drDrumAutoFill" type="checkbox" onchange="drDrumState.autoFill = this.checked" class="accent-amber-400 rounded" />
+            <span>Auto-Fill (4 Bar)</span>
+          </label>
+        </div>
+
+      </div>
+
+      <!-- Pattern Matrix & Mixer Rack -->
+      <div class="bg-panel border border-panelBorder rounded-2xl p-4 sm:p-5">
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+          <div class="flex items-center gap-3">
+            <span class="text-xs font-mono uppercase tracking-wider text-slate-300 font-bold">Instrument Mixer & Pattern Variants</span>
+            <span id="drDrumBarBadge" class="text-[11px] font-mono px-2 py-0.5 rounded bg-obsidian border border-panelBorder text-cyan-300">BAR 1 / 4 • 4/4</span>
+          </div>
+          <span class="text-[11px] font-mono text-slate-400 hidden sm:inline">Click any step cell to customize pattern &bull; F = Fill Trigger</span>
+        </div>
+
+        <!-- Channel Strips Container -->
+        <div id="drDrumChannelsContainer" class="space-y-3">
+          <!-- Dynamically populated Dr. Drum instrument rows -->
+        </div>
+      </div>
+
+    </section>
+
   </main>
 
   <!-- FOOTER -->
   <footer class="border-t border-panelBorder bg-studio/60 py-3 px-4 mt-8">
     <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between text-[11px] font-mono text-slate-500 gap-2">
       <div>time.sarimoko.com &bull; Precision Web Audio Lookahead Engine</div>
-      <div>Shortcut: <kbd class="px-1.5 py-0.5 bg-panel border border-panelBorder rounded text-slate-300">SPACE</kbd> Play/Stop</div>
+      <div>Shortcuts: <kbd class="px-1.5 py-0.5 bg-panel border border-panelBorder rounded text-slate-300">SPACE</kbd> Play/Stop &bull; <kbd class="px-1.5 py-0.5 bg-panel border border-panelBorder rounded text-slate-300">F</kbd> Trigger Fill</div>
     </div>
   </footer>
 
@@ -458,7 +555,7 @@
      * GLOBAL APPLICATION STATE
      */
     const appState = {
-      activeTab: 'metronome', // 'metronome' | 'polyrhythm'
+      activeTab: 'metronome', // 'metronome' | 'polyrhythm' | 'drdrum'
       isPlaying: false,
       bpm: 120,
       masterVolume: 0.85,
@@ -472,8 +569,7 @@
       denominator: 4,
       subdivision: 1,
       subVolume: 0.45,
-      soundPreset: 'woodblock', // 'woodblock' | 'digital' | 'analog' | 'percussion'
-      // Accent levels: 3 = High/Accent, 2 = Medium/Normal, 1 = Low/Ghost, 0 = Mute
+      soundPreset: 'woodblock',
       accents: [3, 2, 2, 2],
       currentBeat: 0,
       currentSub: 0,
@@ -487,8 +583,8 @@
     };
 
     const polyState = {
-      mode: 'polyrhythm', // 'polyrhythm' (Sync Cycle) | 'polymeter' (Sync Pulse)
-      visLayout: 'both',  // 'both' | 'orbit' | 'linear'
+      mode: 'polyrhythm',
+      visLayout: 'both',
       nextLayerId: 3,
       layers: [
         {
@@ -497,7 +593,7 @@
           beats: 4,
           denominator: 4,
           multiplier: 1,
-          sound: 'kick', // 'kick' | 'rim' | 'hihat' | 'marimba' | 'bell'
+          sound: 'kick',
           volume: 0.85,
           muted: false,
           solo: false,
@@ -524,22 +620,220 @@
           pulseFlash: 0
         }
       ],
-      // Visual pulse ring bursts
       ripples: []
     };
 
     /**
-     * WEB AUDIO API ENGINE (Lookahead Scheduler + Procedural Synthesis)
+     * DR. DRUM METER CONFIGURATIONS & PATTERN BANK
+     * Values: 3 = Accent, 2 = Normal, 1 = Ghost, 0 = Off
+     */
+    const DR_DRUM_METERS = {
+      '4/4': { label: '4/4', stepsPerBar: 16, groupSize: 4, stepNoteSub: 4 }, // 16th notes
+      '3/4': { label: '3/4', stepsPerBar: 12, groupSize: 4, stepNoteSub: 4 }, // 16th notes
+      '5/4': { label: '5/4', stepsPerBar: 20, groupSize: 4, stepNoteSub: 4 }, // 16th notes
+      '6/8': { label: '6/8', stepsPerBar: 12, groupSize: 3, stepNoteSub: 4 }, // 16th subdivisions of 6 eighths (2 groups of 6)
+      '7/8': { label: '7/8', stepsPerBar: 14, groupSize: 4, stepNoteSub: 4 }  // 16th subdivisions of 7 eighths (2+2+3 grouping)
+    };
+
+    const DR_DRUM_PATTERNS = {
+      kick: {
+        'Four-on-Floor': [3,0,0,0, 2,0,0,0, 3,0,0,0, 2,0,0,0],
+        'Rock Backbeat': [3,0,0,0, 0,0,0,2, 3,0,2,0, 0,0,0,0],
+        'Syncopated':    [3,0,0,2, 0,0,2,0, 0,0,3,0, 0,2,0,0],
+        'Half-Time':     [3,0,0,0, 0,0,0,0, 0,0,2,0, 0,0,0,1],
+        'Bossa Bass':    [3,0,0,2, 2,0,0,2, 3,0,0,2, 2,0,0,2],
+        fill:            [3,0,2,0, 3,0,2,0, 3,2,3,2, 3,3,0,0]
+      },
+      snare: {
+        'Backbeat 2&4':  [0,0,0,0, 3,0,0,0, 0,0,0,0, 3,0,0,0],
+        'Ghost Groove':  [0,0,0,1, 3,0,0,1, 0,1,0,0, 3,0,1,0],
+        'Half-Time':     [0,0,0,0, 0,0,0,0, 3,0,0,0, 0,0,0,1],
+        'Bossa Rim':     [2,0,0,2, 0,0,2,0, 0,0,2,0, 0,2,0,0],
+        'Train Beat':    [1,0,2,0, 3,0,2,0, 1,0,2,0, 3,0,2,1],
+        fill:            [0,0,2,2, 3,1,2,2, 3,2,3,2, 3,3,3,3]
+      },
+      hihat: {
+        '8th Pulse':     [3,0,2,0, 3,0,2,0, 3,0,2,0, 3,0,2,0],
+        '16th Drive':    [3,1,2,1, 3,1,2,1, 3,1,2,1, 3,1,2,1],
+        'Off-Beat':      [0,0,3,0, 0,0,3,0, 0,0,3,0, 0,0,3,0],
+        'Shuffle / Tri': [3,0,0,2, 3,0,0,2, 3,0,0,2, 3,0,0,2],
+        'Sparse':        [2,0,0,0, 2,0,0,0, 2,0,0,0, 2,0,0,0],
+        fill:            [2,2,2,2, 2,2,2,2, 0,0,0,0, 3,0,0,0]
+      },
+      clap: {
+        '2 & 4 Layer':   [0,0,0,0, 3,0,0,0, 0,0,0,0, 3,0,0,0],
+        'Beat 4 Accent': [0,0,0,0, 0,0,0,0, 0,0,0,0, 3,0,0,0],
+        '3-2 Clave':     [3,0,0,3, 0,0,3,0, 0,0,2,0, 2,0,0,0],
+        'Off-Beat Pop':  [0,0,2,0, 0,0,2,0, 0,0,2,0, 0,0,2,0],
+        'Off / Silent':  [0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0],
+        fill:            [0,0,0,0, 2,0,2,0, 3,0,3,0, 3,3,0,0]
+      },
+      shaker: {
+        '16th Groove':   [3,1,2,1, 3,1,2,1, 3,1,2,1, 3,1,2,1],
+        '8th Light':     [2,0,2,0, 2,0,2,0, 2,0,2,0, 2,0,2,0],
+        'Upbeat Push':   [1,0,3,0, 1,0,3,0, 1,0,3,0, 1,0,3,0],
+        'Latin Salsa':   [3,0,2,2, 3,0,2,2, 3,0,2,2, 3,0,2,2],
+        'Off / Silent':  [0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0],
+        fill:            [3,2,3,2, 3,2,3,2, 3,3,3,3, 0,0,0,0]
+      }
+    };
+
+    /**
+     * Adapts any 16-step pattern or fill cleanly into alternate meters (3/4, 5/4, 6/8, 7/8)
+     */
+    function adaptPatternToMeter(channelId, base16, meterKey, isFill = false) {
+      const targetLen = DR_DRUM_METERS[meterKey].stepsPerBar;
+      if (meterKey === '4/4') return [...base16];
+
+      // Musical meter-aware overrides for compound/odd grooves
+      if (!isFill) {
+        if (meterKey === '6/8') {
+          if (channelId === 'kick' && base16.some(v => v > 0)) return [3,0,0,0,0,0, 2,0,0,0,2,0];
+          if (channelId === 'snare' && base16.some(v => v > 0)) return [0,0,0,0,0,0, 3,0,0,0,0,1];
+          if (channelId === 'hihat' && base16.some(v => v > 0)) return [3,0,2,0,2,0, 3,0,2,0,2,0];
+          if (channelId === 'clap' && base16.some(v => v > 0)) return [0,0,0,0,0,0, 3,0,0,0,0,0];
+          if (channelId === 'shaker' && base16.some(v => v > 0)) return [3,1,2,1,2,1, 3,1,2,1,2,1];
+        }
+        if (meterKey === '7/8') {
+          // Grouped 2 + 2 + 3 (steps 0..3, 4..7, 8..13)
+          if (channelId === 'kick' && base16.some(v => v > 0)) return [3,0,0,0, 2,0,0,0, 3,0,0,0,2,0];
+          if (channelId === 'snare' && base16.some(v => v > 0)) return [0,0,0,0, 3,0,0,0, 0,0,3,0,0,0];
+          if (channelId === 'hihat' && base16.some(v => v > 0)) return [3,0,2,0, 3,0,2,0, 3,0,2,0,2,0];
+          if (channelId === 'clap' && base16.some(v => v > 0)) return [0,0,0,0, 0,0,0,0, 3,0,0,0,0,0];
+          if (channelId === 'shaker' && base16.some(v => v > 0)) return [3,1,2,1, 3,1,2,1, 3,1,2,1,2,1];
+        }
+        if (meterKey === '3/4') {
+          if (channelId === 'snare' && base16.some(v => v > 0)) return [0,0,0,0, 3,0,0,1, 2,0,0,0];
+          if (channelId === 'clap' && base16.some(v => v > 0)) return [0,0,0,0, 3,0,0,0, 0,0,0,0];
+        }
+        if (meterKey === '5/4') {
+          // Grouped 3 + 2 (beats 1,2,3 + beats 4,5)
+          if (channelId === 'kick' && base16.some(v => v > 0)) return [3,0,0,0, 0,0,2,0, 0,0,0,0, 3,0,0,0, 0,0,2,0];
+          if (channelId === 'snare' && base16.some(v => v > 0)) return [0,0,0,0, 3,0,0,1, 0,0,0,0, 0,0,0,0, 3,0,0,0];
+          if (channelId === 'clap' && base16.some(v => v > 0)) return [0,0,0,0, 0,0,0,0, 0,0,0,0, 3,0,0,0, 0,0,0,0];
+        }
+      }
+
+      // Generic step resizing + dynamic turnaround fill on final beat
+      const out = Array.from({ length: targetLen }, (_, i) => base16[i % base16.length]);
+      if (isFill) {
+        const tailStart = Math.max(0, targetLen - 4);
+        for (let i = tailStart; i < targetLen; i++) {
+          if (channelId === 'snare') out[i] = 3;
+          else if (channelId === 'kick') out[i] = (i % 2 === 0) ? 3 : 0;
+          else if (channelId === 'hihat') out[i] = 0;
+        }
+      }
+      return out;
+    }
+
+    const drDrumState = {
+      meter: '4/4',
+      swing: 0,
+      humanize: 0.25,
+      autoFill: false,
+      fillActive: false,
+      fillQueued: false,
+      barInPhrase: 0,
+      currentStep: -1,
+      nextStepTime: 0,
+      stepIndex: 0,
+      channels: [
+        {
+          id: 'kick',
+          name: 'Kick',
+          color: '#00f0ff',
+          variant: 'Rock Backbeat',
+          voice: 'kick_acoustic',
+          voices: [
+            { id: 'kick_acoustic', label: 'Acoustic Punch' },
+            { id: 'kick_808', label: 'Deep 808 Sub' },
+            { id: 'kick_cajon', label: 'Cajón Bass' }
+          ],
+          volume: 0.9,
+          muted: false,
+          solo: false,
+          steps: [...DR_DRUM_PATTERNS.kick['Rock Backbeat']]
+        },
+        {
+          id: 'snare',
+          name: 'Snare / Rim',
+          color: '#ff9e00',
+          variant: 'Backbeat 2&4',
+          voice: 'snare_crisp',
+          voices: [
+            { id: 'snare_crisp', label: 'Crisp Snare' },
+            { id: 'snare_rim', label: 'Cross-Stick Rim' },
+            { id: 'snare_cajon', label: 'Cajón Slap' }
+          ],
+          volume: 0.85,
+          muted: false,
+          solo: false,
+          steps: [...DR_DRUM_PATTERNS.snare['Backbeat 2&4']]
+        },
+        {
+          id: 'hihat',
+          name: 'Hi-Hat',
+          color: '#00e676',
+          variant: '8th Pulse',
+          voice: 'hat_closed',
+          voices: [
+            { id: 'hat_closed', label: 'Tight Closed Hat' },
+            { id: 'hat_open', label: 'Sizzle Open Hat' },
+            { id: 'hat_ride', label: 'Acoustic Ride' }
+          ],
+          volume: 0.75,
+          muted: false,
+          solo: false,
+          steps: [...DR_DRUM_PATTERNS.hihat['8th Pulse']]
+        },
+        {
+          id: 'clap',
+          name: 'Hand Claps',
+          color: '#ff2a85',
+          variant: '2 & 4 Layer',
+          voice: 'clap_studio',
+          voices: [
+            { id: 'clap_studio', label: 'Studio Group Clap' },
+            { id: 'clap_808', label: 'Analog 808 Clap' },
+            { id: 'clap_snap', label: 'Finger Snap' }
+          ],
+          volume: 0.7,
+          muted: false,
+          solo: false,
+          steps: [...DR_DRUM_PATTERNS.clap['2 & 4 Layer']]
+        },
+        {
+          id: 'shaker',
+          name: 'Shaker / Tamb',
+          color: '#a855f7',
+          variant: '16th Groove',
+          voice: 'perc_shaker',
+          voices: [
+            { id: 'perc_shaker', label: 'Egg Shaker' },
+            { id: 'perc_tamb', label: 'Tambourine' },
+            { id: 'perc_cowbell', label: 'Studio Cowbell' }
+          ],
+          volume: 0.65,
+          muted: false,
+          solo: false,
+          steps: [...DR_DRUM_PATTERNS.shaker['16th Groove']]
+        }
+      ]
+    };
+
+    /**
+     * WEB AUDIO API ENGINE (Lookahead Scheduler + Procedural Drum & Click Synthesis)
      */
     let audioCtx = null;
     let masterGainNode = null;
+    let noiseBuffer = null;
     let schedulerTimer = null;
-    const LOOKAHEAD_MS = 25.0;      // How frequently to call scheduling function (in milliseconds)
-    const SCHEDULE_AHEAD_SEC = 0.1; // How far ahead to schedule audio (in seconds)
+    const LOOKAHEAD_MS = 25.0;
+    const SCHEDULE_AHEAD_SEC = 0.1;
 
-    // Metronome scheduler tracking
     let nextMetroNoteTime = 0.0;
-    let metroStepIndex = 0; // counts total subdivisions
+    let metroStepIndex = 0;
 
     function initAudio() {
       if (!audioCtx) {
@@ -548,6 +842,13 @@
         masterGainNode = audioCtx.createGain();
         masterGainNode.gain.value = appState.masterVolume;
         masterGainNode.connect(audioCtx.destination);
+
+        const bufferSize = audioCtx.sampleRate * 1.5;
+        noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+        const data = noiseBuffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i++) {
+          data[i] = Math.random() * 2 - 1;
+        }
       }
       if (audioCtx.state === 'suspended') {
         audioCtx.resume();
@@ -562,21 +863,222 @@
     }
 
     /**
-     * PROCEDURAL SOUND SYNTHESIZER
-     * Zero external dependencies; ultra-crisp transients.
+     * DR. DRUM ACOUSTIC & ELECTRONIC PERCUSSION SYNTHESIZER
+     */
+    function triggerDrDrumVoice(time, voiceId, accentLevel, channelVolume) {
+      if (!audioCtx || accentLevel === 0 || channelVolume <= 0.001) return;
+
+      let vel = accentLevel === 3 ? 1.0 : (accentLevel === 2 ? 0.68 : 0.32);
+      if (drDrumState.humanize > 0) {
+        vel *= (1 - drDrumState.humanize * 0.15 * Math.random());
+      }
+      vel *= channelVolume;
+      if (vel <= 0.005) return;
+
+      if (voiceId === 'kick_acoustic' || voiceId === 'kick_808' || voiceId === 'kick_cajon') {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(masterGainNode);
+
+        if (voiceId === 'kick_acoustic') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(145, time);
+          osc.frequency.exponentialRampToValueAtTime(44, time + 0.09);
+          gain.gain.setValueAtTime(0.001, time);
+          gain.gain.linearRampToValueAtTime(vel * 1.15, time + 0.004);
+          gain.gain.exponentialRampToValueAtTime(0.001, time + 0.16);
+          osc.start(time);
+          osc.stop(time + 0.17);
+        } else if (voiceId === 'kick_808') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(115, time);
+          osc.frequency.exponentialRampToValueAtTime(34, time + 0.18);
+          gain.gain.setValueAtTime(0.001, time);
+          gain.gain.linearRampToValueAtTime(vel * 1.2, time + 0.006);
+          gain.gain.exponentialRampToValueAtTime(0.001, time + 0.38);
+          osc.start(time);
+          osc.stop(time + 0.4);
+        } else {
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(170, time);
+          osc.frequency.exponentialRampToValueAtTime(68, time + 0.07);
+          gain.gain.setValueAtTime(0.001, time);
+          gain.gain.linearRampToValueAtTime(vel * 1.05, time + 0.003);
+          gain.gain.exponentialRampToValueAtTime(0.001, time + 0.13);
+          osc.start(time);
+          osc.stop(time + 0.14);
+        }
+      } else if (voiceId === 'snare_crisp' || voiceId === 'snare_rim' || voiceId === 'snare_cajon') {
+        if (voiceId === 'snare_crisp') {
+          const noise = audioCtx.createBufferSource();
+          noise.buffer = noiseBuffer;
+          const hp = audioCtx.createBiquadFilter();
+          hp.type = 'highpass';
+          hp.frequency.setValueAtTime(1100, time);
+          const nGain = audioCtx.createGain();
+          nGain.gain.setValueAtTime(0.001, time);
+          nGain.gain.linearRampToValueAtTime(vel * 0.75, time + 0.003);
+          nGain.gain.exponentialRampToValueAtTime(0.001, time + 0.15);
+          noise.connect(hp);
+          hp.connect(nGain);
+          nGain.connect(masterGainNode);
+          noise.start(time);
+          noise.stop(time + 0.16);
+
+          const osc = audioCtx.createOscillator();
+          const oGain = audioCtx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(210, time);
+          osc.frequency.exponentialRampToValueAtTime(115, time + 0.07);
+          oGain.gain.setValueAtTime(0.001, time);
+          oGain.gain.linearRampToValueAtTime(vel * 0.7, time + 0.002);
+          oGain.gain.exponentialRampToValueAtTime(0.001, time + 0.09);
+          osc.connect(oGain);
+          oGain.connect(masterGainNode);
+          osc.start(time);
+          osc.stop(time + 0.1);
+        } else if (voiceId === 'snare_rim') {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(840, time);
+          osc.frequency.exponentialRampToValueAtTime(380, time + 0.035);
+          gain.gain.setValueAtTime(0.001, time);
+          gain.gain.linearRampToValueAtTime(vel * 0.9, time + 0.002);
+          gain.gain.exponentialRampToValueAtTime(0.001, time + 0.045);
+          osc.connect(gain);
+          gain.connect(masterGainNode);
+          osc.start(time);
+          osc.stop(time + 0.05);
+        } else {
+          const noise = audioCtx.createBufferSource();
+          noise.buffer = noiseBuffer;
+          const bp = audioCtx.createBiquadFilter();
+          bp.type = 'bandpass';
+          bp.frequency.setValueAtTime(1850, time);
+          bp.Q.value = 1.8;
+          const gain = audioCtx.createGain();
+          gain.gain.setValueAtTime(0.001, time);
+          gain.gain.linearRampToValueAtTime(vel * 0.95, time + 0.002);
+          gain.gain.exponentialRampToValueAtTime(0.001, time + 0.085);
+          noise.connect(bp);
+          bp.connect(gain);
+          gain.connect(masterGainNode);
+          noise.start(time);
+          noise.stop(time + 0.09);
+        }
+      } else if (voiceId === 'hat_closed' || voiceId === 'hat_open' || voiceId === 'hat_ride') {
+        const noise = audioCtx.createBufferSource();
+        noise.buffer = noiseBuffer;
+        const hp = audioCtx.createBiquadFilter();
+        hp.type = 'highpass';
+        hp.frequency.setValueAtTime(voiceId === 'hat_ride' ? 5200 : 6800, time);
+
+        const decay = voiceId === 'hat_closed' ? 0.045 : (voiceId === 'hat_open' ? 0.24 : 0.32);
+        const gain = audioCtx.createGain();
+        gain.gain.setValueAtTime(0.001, time);
+        gain.gain.linearRampToValueAtTime(vel * 0.55, time + 0.002);
+        gain.gain.exponentialRampToValueAtTime(0.001, time + decay);
+
+        noise.connect(hp);
+        hp.connect(gain);
+        gain.connect(masterGainNode);
+        noise.start(time);
+        noise.stop(time + decay + 0.02);
+      } else if (voiceId === 'clap_studio' || voiceId === 'clap_808' || voiceId === 'clap_snap') {
+        if (voiceId === 'clap_snap') {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(1950, time);
+          osc.frequency.exponentialRampToValueAtTime(920, time + 0.028);
+          gain.gain.setValueAtTime(0.001, time);
+          gain.gain.linearRampToValueAtTime(vel * 0.7, time + 0.002);
+          gain.gain.exponentialRampToValueAtTime(0.001, time + 0.035);
+          osc.connect(gain);
+          gain.connect(masterGainNode);
+          osc.start(time);
+          osc.stop(time + 0.04);
+        } else {
+          const offsets = [0, 0.009, 0.018, 0.027];
+          offsets.forEach((off, idx) => {
+            const noise = audioCtx.createBufferSource();
+            noise.buffer = noiseBuffer;
+            const bp = audioCtx.createBiquadFilter();
+            bp.type = 'bandpass';
+            bp.frequency.setValueAtTime(voiceId === 'clap_808' ? 1350 : 1650, time + off);
+            bp.Q.value = voiceId === 'clap_808' ? 2.4 : 1.3;
+
+            const isTail = idx === offsets.length - 1;
+            const dur = isTail ? 0.14 : 0.022;
+            const gain = audioCtx.createGain();
+            gain.gain.setValueAtTime(0.001, time + off);
+            gain.gain.linearRampToValueAtTime(vel * (isTail ? 0.75 : 0.55), time + off + 0.002);
+            gain.gain.exponentialRampToValueAtTime(0.001, time + off + dur);
+
+            noise.connect(bp);
+            bp.connect(gain);
+            gain.connect(masterGainNode);
+            noise.start(time + off);
+            noise.stop(time + off + dur + 0.01);
+          });
+        }
+      } else if (voiceId === 'perc_shaker' || voiceId === 'perc_tamb' || voiceId === 'perc_cowbell') {
+        if (voiceId === 'perc_cowbell') {
+          [540, 800].forEach(freq => {
+            const osc = audioCtx.createOscillator();
+            const bp = audioCtx.createBiquadFilter();
+            const gain = audioCtx.createGain();
+            osc.type = 'square';
+            osc.frequency.setValueAtTime(freq, time);
+            bp.type = 'bandpass';
+            bp.frequency.setValueAtTime(720, time);
+            gain.gain.setValueAtTime(0.001, time);
+            gain.gain.linearRampToValueAtTime(vel * 0.35, time + 0.003);
+            gain.gain.exponentialRampToValueAtTime(0.001, time + 0.16);
+            osc.connect(bp);
+            bp.connect(gain);
+            gain.connect(masterGainNode);
+            osc.start(time);
+            osc.stop(time + 0.17);
+          });
+        } else {
+          const noise = audioCtx.createBufferSource();
+          noise.buffer = noiseBuffer;
+          const bp = audioCtx.createBiquadFilter();
+          bp.type = 'bandpass';
+          bp.frequency.setValueAtTime(voiceId === 'perc_tamb' ? 7600 : 5400, time);
+          bp.Q.value = voiceId === 'perc_tamb' ? 3.2 : 1.8;
+
+          const attack = voiceId === 'perc_tamb' ? 0.004 : 0.016;
+          const decay = voiceId === 'perc_tamb' ? 0.14 : 0.065;
+          const gain = audioCtx.createGain();
+          gain.gain.setValueAtTime(0.001, time);
+          gain.gain.linearRampToValueAtTime(vel * 0.65, time + attack);
+          gain.gain.exponentialRampToValueAtTime(0.001, time + decay);
+
+          noise.connect(bp);
+          bp.connect(gain);
+          gain.connect(masterGainNode);
+          noise.start(time);
+          noise.stop(time + decay + 0.01);
+        }
+      }
+    }
+
+    /**
+     * PROCEDURAL CLICK & POLYRHYTHM SYNTHESIZER
      */
     function triggerSynthSound(time, preset, accentLevel, isSubdivision = false, layerVolume = 1.0) {
       if (!audioCtx || accentLevel === 0 || layerVolume <= 0.001) return;
 
-      // Dynamic velocity scaling
       let vel = 1.0;
       if (accentLevel === 3) vel = 1.0;
       else if (accentLevel === 2) vel = 0.65;
       else if (accentLevel === 1) vel = 0.3;
 
-      if (isSubdivision) {
-        vel *= metronomeState.subVolume;
-      }
+      if (isSubdivision) vel *= metronomeState.subVolume;
       vel *= layerVolume;
       if (vel <= 0.005) return;
 
@@ -586,145 +1088,112 @@
       gain.connect(masterGainNode);
 
       if (preset === 'woodblock') {
-        // Resonant pitched wood transient
         const freq = accentLevel === 3 ? 1180 : (isSubdivision ? 680 : 880);
         osc.type = 'sine';
         osc.frequency.setValueAtTime(freq, time);
         osc.frequency.exponentialRampToValueAtTime(freq * 0.65, time + 0.045);
-
         gain.gain.setValueAtTime(0.001, time);
         gain.gain.linearRampToValueAtTime(vel * 0.9, time + 0.003);
         gain.gain.exponentialRampToValueAtTime(0.001, time + 0.055);
-
         osc.start(time);
         osc.stop(time + 0.06);
-      } 
-      else if (preset === 'digital') {
-        // Crisp high-tech digital impulse
+      } else if (preset === 'digital') {
         const freq = accentLevel === 3 ? 1760 : (isSubdivision ? 920 : 1200);
         osc.type = 'triangle';
         osc.frequency.setValueAtTime(freq, time);
-
         gain.gain.setValueAtTime(0.001, time);
         gain.gain.linearRampToValueAtTime(vel * 0.75, time + 0.001);
         gain.gain.exponentialRampToValueAtTime(0.001, time + 0.03);
-
         osc.start(time);
         osc.stop(time + 0.035);
-      }
-      else if (preset === 'analog') {
-        // Classic modular synth blip
+      } else if (preset === 'analog') {
         const freq = accentLevel === 3 ? 880 : (isSubdivision ? 330 : 440);
         osc.type = 'square';
         osc.frequency.setValueAtTime(freq, time);
         osc.frequency.exponentialRampToValueAtTime(freq * 0.5, time + 0.06);
-
-        // Lowpass filter for warmth
         const filter = audioCtx.createBiquadFilter();
         filter.type = 'lowpass';
         filter.frequency.setValueAtTime(2400, time);
         osc.disconnect();
         osc.connect(filter);
         filter.connect(gain);
-
         gain.gain.setValueAtTime(0.001, time);
         gain.gain.linearRampToValueAtTime(vel * 0.45, time + 0.004);
         gain.gain.exponentialRampToValueAtTime(0.001, time + 0.07);
-
         osc.start(time);
         osc.stop(time + 0.075);
-      }
-      else if (preset === 'percussion' || preset === 'kick') {
-        // Punchy studio kick drum / low perc
+      } else if (preset === 'percussion' || preset === 'kick') {
         const startFreq = accentLevel === 3 ? 155 : 130;
         osc.type = 'sine';
         osc.frequency.setValueAtTime(startFreq, time);
         osc.frequency.exponentialRampToValueAtTime(42, time + 0.11);
-
         gain.gain.setValueAtTime(0.001, time);
         gain.gain.linearRampToValueAtTime(vel * 1.1, time + 0.004);
         gain.gain.exponentialRampToValueAtTime(0.001, time + 0.14);
-
         osc.start(time);
         osc.stop(time + 0.15);
-      }
-      else if (preset === 'rim') {
-        // Sharp rimshot / snare snap
+      } else if (preset === 'rim') {
         osc.type = 'triangle';
         osc.frequency.setValueAtTime(accentLevel === 3 ? 520 : 420, time);
         osc.frequency.exponentialRampToValueAtTime(160, time + 0.045);
-
         gain.gain.setValueAtTime(0.001, time);
         gain.gain.linearRampToValueAtTime(vel * 0.85, time + 0.002);
         gain.gain.exponentialRampToValueAtTime(0.001, time + 0.06);
-
         osc.start(time);
         osc.stop(time + 0.065);
-      }
-      else if (preset === 'hihat') {
-        // Metallic high-frequency tick
+      } else if (preset === 'hihat') {
         osc.type = 'square';
         osc.frequency.setValueAtTime(accentLevel === 3 ? 4200 : 3400, time);
-
         const hp = audioCtx.createBiquadFilter();
         hp.type = 'highpass';
         hp.frequency.setValueAtTime(2800, time);
         osc.disconnect();
         osc.connect(hp);
         hp.connect(gain);
-
         gain.gain.setValueAtTime(0.001, time);
         gain.gain.linearRampToValueAtTime(vel * 0.4, time + 0.001);
         gain.gain.exponentialRampToValueAtTime(0.001, time + 0.032);
-
         osc.start(time);
         osc.stop(time + 0.035);
-      }
-      else if (preset === 'marimba') {
-        // Warm melodic marimba bar
-        const freq = accentLevel === 3 ? 587.33 : 440; // D5 / A4
+      } else if (preset === 'marimba') {
+        const freq = accentLevel === 3 ? 587.33 : 440;
         osc.type = 'sine';
         osc.frequency.setValueAtTime(freq, time);
-
         gain.gain.setValueAtTime(0.001, time);
         gain.gain.linearRampToValueAtTime(vel * 0.85, time + 0.005);
         gain.gain.exponentialRampToValueAtTime(0.001, time + 0.16);
-
         osc.start(time);
         osc.stop(time + 0.17);
-      }
-      else if (preset === 'bell') {
-        // Shimmering harmonic bell
-        const freq = accentLevel === 3 ? 1318.5 : 987.77; // E6 / B5
+      } else if (preset === 'bell') {
+        const freq = accentLevel === 3 ? 1318.5 : 987.77;
         osc.type = 'sine';
         osc.frequency.setValueAtTime(freq, time);
-
         gain.gain.setValueAtTime(0.001, time);
         gain.gain.linearRampToValueAtTime(vel * 0.65, time + 0.003);
         gain.gain.exponentialRampToValueAtTime(0.001, time + 0.24);
-
         osc.start(time);
         osc.stop(time + 0.25);
       }
     }
 
     /**
-     * SCHEDULER LOOP
+     * MASTER LOOKAHEAD SCHEDULER LOOP
      */
     function scheduler() {
       if (!appState.isPlaying) return;
 
       if (appState.activeTab === 'metronome') {
         scheduleMetronomeNotes();
-      } else {
+      } else if (appState.activeTab === 'polyrhythm') {
         schedulePolyrhythmNotes();
+      } else if (appState.activeTab === 'drdrum') {
+        scheduleDrDrumNotes();
       }
 
       schedulerTimer = setTimeout(scheduler, LOOKAHEAD_MS);
     }
 
     function scheduleMetronomeNotes() {
-      // Adjust beat duration based on denominator (4 = quarter note gets the beat)
       const beatDuration = (60.0 / appState.bpm) * (4.0 / metronomeState.denominator);
       const subDuration = beatDuration / metronomeState.subdivision;
 
@@ -737,15 +1206,12 @@
 
         const accentVal = metronomeState.accents[beatIdx] ?? 2;
 
-        // Play sound
         if (isMainBeat) {
           triggerSynthSound(nextMetroNoteTime, metronomeState.soundPreset, accentVal, false, 1.0);
         } else if (accentVal > 0) {
-          // Subdivision click (respects if parent beat is muted)
           triggerSynthSound(nextMetroNoteTime, metronomeState.soundPreset, 2, true, 1.0);
         }
 
-        // Handle Bar Progression & Tempo Ramp Trainer at start of new bar
         if (posInBar === 0 && metroStepIndex > 0) {
           metronomeState.barCount++;
           if (metronomeState.trainer.enabled) {
@@ -758,7 +1224,6 @@
           }
         }
 
-        // Schedule exact UI flash callback aligned with audio time
         const delayMs = Math.max(0, (nextMetroNoteTime - audioCtx.currentTime) * 1000);
         const capturedBar = metronomeState.barCount;
         setTimeout(() => {
@@ -773,20 +1238,14 @@
 
     function schedulePolyrhythmNotes() {
       const anySolo = polyState.layers.some(l => l.solo);
-
-      // Master cycle duration: 4 beats at current BPM
       const masterCycleSec = (60.0 / appState.bpm) * 4.0;
-      // Base pulse duration for polymeter mode (quarter note)
       const basePulseSec = 60.0 / appState.bpm;
 
       polyState.layers.forEach(layer => {
-        // Compute step duration depending on Polyrhythm vs Polymeter mode
         let stepDurationSec;
         if (polyState.mode === 'polyrhythm') {
-          // All layers fit their beat count evenly inside 1 master cycle (divided by multiplier)
           stepDurationSec = (masterCycleSec / layer.beats) / layer.multiplier;
         } else {
-          // Polymeter: shared pulse grid, independent measure length
           stepDurationSec = (basePulseSec * (4.0 / layer.denominator)) / layer.multiplier;
         }
 
@@ -799,7 +1258,6 @@
             triggerSynthSound(layer.nextNoteTime, layer.sound, accentVal, false, layer.volume);
           }
 
-          // Schedule visual pulse trigger
           const delayMs = Math.max(0, (layer.nextNoteTime - audioCtx.currentTime) * 1000);
           const colorHex = LAYER_COLORS[layer.colorIdx].hex;
           setTimeout(() => {
@@ -821,6 +1279,66 @@
       });
     }
 
+    function scheduleDrDrumNotes() {
+      const meterCfg = DR_DRUM_METERS[drDrumState.meter];
+      const stepsPerBar = meterCfg.stepsPerBar;
+      const sixteenthSec = (60.0 / appState.bpm) / 4.0;
+      const anySolo = drDrumState.channels.some(c => c.solo);
+
+      while (drDrumState.nextStepTime < audioCtx.currentTime + SCHEDULE_AHEAD_SEC) {
+        const stepInBar = drDrumState.stepIndex % stepsPerBar;
+
+        if (stepInBar === 0) {
+          if (drDrumState.stepIndex > 0) {
+            drDrumState.barInPhrase = (drDrumState.barInPhrase + 1) % 4;
+          }
+          if (drDrumState.fillQueued) {
+            drDrumState.fillActive = true;
+            drDrumState.fillQueued = false;
+          } else if (drDrumState.autoFill && drDrumState.barInPhrase === 3) {
+            drDrumState.fillActive = true;
+          } else {
+            drDrumState.fillActive = false;
+          }
+        }
+
+        let timingOffset = 0;
+        if (stepInBar % 2 === 1 && drDrumState.swing > 0) {
+          timingOffset += sixteenthSec * drDrumState.swing;
+        }
+        if (drDrumState.humanize > 0 && stepInBar !== 0) {
+          timingOffset += (Math.random() - 0.5) * 0.012 * drDrumState.humanize;
+        }
+        const scheduledTime = Math.max(audioCtx.currentTime, drDrumState.nextStepTime + timingOffset);
+
+        drDrumState.channels.forEach(ch => {
+          const isAudible = anySolo ? ch.solo : !ch.muted;
+          if (!isAudible) return;
+
+          const activePattern = drDrumState.fillActive
+            ? adaptPatternToMeter(ch.id, DR_DRUM_PATTERNS[ch.id].fill, drDrumState.meter, true)
+            : ch.steps;
+          const accentVal = activePattern[stepInBar] || 0;
+
+          if (accentVal > 0) {
+            triggerDrDrumVoice(scheduledTime, ch.voice, accentVal, ch.volume);
+          }
+        });
+
+        const delayMs = Math.max(0, (scheduledTime - audioCtx.currentTime) * 1000);
+        const capturedBar = drDrumState.barInPhrase + 1;
+        const capturedFill = drDrumState.fillActive;
+        const capturedSteps = stepsPerBar;
+        setTimeout(() => {
+          if (!appState.isPlaying || appState.activeTab !== 'drdrum') return;
+          highlightDrDrumStep(stepInBar, capturedBar, capturedFill, capturedSteps);
+        }, delayMs);
+
+        drDrumState.nextStepTime += sixteenthSec;
+        drDrumState.stepIndex++;
+      }
+    }
+
     /**
      * TRANSPORT CONTROLS (Play / Stop / Tap Tempo)
      */
@@ -838,19 +1356,22 @@
         appState.startTimeAudio = now;
         appState.startTimePerf = performance.now();
 
-        // Reset Metronome counters
         nextMetroNoteTime = now;
         metroStepIndex = 0;
         metronomeState.barCount = 1;
         metronomeState.trainer.barsElapsedInCycle = 0;
 
-        // Reset Polyrhythm layer clocks
         polyState.layers.forEach(l => {
           l.nextNoteTime = now;
           l.currentStep = 0;
           l.pulseFlash = 0;
         });
         polyState.ripples = [];
+
+        drDrumState.nextStepTime = now;
+        drDrumState.stepIndex = 0;
+        drDrumState.barInPhrase = 0;
+        drDrumState.fillActive = false;
 
         btn.classList.remove('bg-cyan-500', 'hover:bg-cyan-400', 'glow-cyan');
         btn.classList.add('bg-rose-500', 'hover:bg-rose-400', 'shadow-lg');
@@ -868,6 +1389,7 @@
         lbl.textContent = 'START';
 
         clearBeatHighlights();
+        clearDrDrumHighlights();
       }
     }
 
@@ -902,8 +1424,8 @@
       document.getElementById('bpmInput').value = bpm;
       document.getElementById('bpmSlider').value = bpm;
       document.getElementById('polyBpmInput').value = bpm;
+      document.getElementById('drDrumBpmInput').value = bpm;
 
-      // Classical Italian Tempo Marking
       let marking = 'Moderato';
       if (bpm < 45) marking = 'Grave / Largo';
       else if (bpm < 66) marking = 'Adagio';
@@ -927,7 +1449,6 @@
       document.getElementById('displayNumerator').textContent = num;
       document.getElementById('selectDenominator').value = den;
 
-      // Resize accents array preserving existing beats
       const newAccents = [];
       for (let i = 0; i < num; i++) {
         if (i < metronomeState.accents.length) {
@@ -962,7 +1483,6 @@
     }
 
     function cycleBeatAccent(beatIndex) {
-      // Cycle: 3 (Accent) -> 2 (Normal) -> 1 (Ghost) -> 0 (Mute) -> 3
       const curr = metronomeState.accents[beatIndex];
       metronomeState.accents[beatIndex] = curr === 0 ? 3 : curr - 1;
       renderMetronomeBeatGrid();
@@ -983,7 +1503,6 @@
       const grid = document.getElementById('beatSequencerGrid');
       grid.innerHTML = '';
 
-      // Adapt column count cleanly for odd/large time signatures
       if (metronomeState.numerator <= 4) {
         grid.className = 'grid grid-cols-2 sm:grid-cols-4 gap-3';
       } else if (metronomeState.numerator <= 8) {
@@ -1032,7 +1551,6 @@
     function highlightMetronomeBeat(beatIdx, subIdx, barNum) {
       document.getElementById('barCounterDisplay').textContent = barNum;
 
-      // Update sub-pulse dots
       for (let s = 0; s < metronomeState.subdivision; s++) {
         const dot = document.getElementById(`subDot-${s}`);
         if (dot) {
@@ -1044,7 +1562,6 @@
         }
       }
 
-      // Highlight active beat pad
       metronomeState.accents.forEach((level, idx) => {
         const pad = document.getElementById(`beatPad-${idx}`);
         if (!pad) return;
@@ -1066,6 +1583,254 @@
     }
 
     /**
+     * DR. DRUM GROOVE ENGINE UI & CONTROLS
+     */
+    function setDrDrumMeter(meterKey) {
+      if (!DR_DRUM_METERS[meterKey]) return;
+      drDrumState.meter = meterKey;
+      drDrumState.stepIndex = 0;
+      drDrumState.barInPhrase = 0;
+
+      drDrumState.channels.forEach(ch => {
+        const basePattern = DR_DRUM_PATTERNS[ch.id][ch.variant] || DR_DRUM_PATTERNS[ch.id]['Rock Backbeat'] || ch.steps;
+        ch.steps = adaptPatternToMeter(ch.id, basePattern, meterKey, false);
+      });
+
+      const badge = document.getElementById('drDrumBarBadge');
+      if (badge) badge.textContent = `BAR 1 / 4 • ${meterKey}`;
+      renderDrDrumChannels();
+    }
+
+    function triggerDrDrumFill() {
+      const stepsPerBar = DR_DRUM_METERS[drDrumState.meter].stepsPerBar;
+      if (!appState.isPlaying) {
+        drDrumState.fillActive = !drDrumState.fillActive;
+      } else {
+        const stepInBar = drDrumState.stepIndex % stepsPerBar;
+        if (stepInBar >= stepsPerBar - 4) {
+          drDrumState.fillQueued = true;
+        } else {
+          drDrumState.fillActive = true;
+        }
+      }
+      updateFillButtonUI();
+    }
+
+    function updateFillButtonUI() {
+      const btn = document.getElementById('btnDrDrumFill');
+      const dot = document.getElementById('fillIndicatorDot');
+      if (drDrumState.fillActive || drDrumState.fillQueued) {
+        btn.classList.add('bg-amber-500', 'text-obsidian', 'glow-amber');
+        btn.classList.remove('bg-amber-500/20', 'text-amber-300');
+        dot.classList.add('bg-obsidian', 'animate-ping');
+      } else {
+        btn.classList.remove('bg-amber-500', 'text-obsidian', 'glow-amber');
+        btn.classList.add('bg-amber-500/20', 'text-amber-300');
+        dot.classList.remove('bg-obsidian', 'animate-ping');
+      }
+    }
+
+    function changeDrDrumVariant(channelId, variantName) {
+      const ch = drDrumState.channels.find(c => c.id === channelId);
+      if (!ch || !DR_DRUM_PATTERNS[channelId][variantName]) return;
+      ch.variant = variantName;
+      ch.steps = adaptPatternToMeter(channelId, DR_DRUM_PATTERNS[channelId][variantName], drDrumState.meter, false);
+      renderDrDrumChannels();
+    }
+
+    function toggleDrDrumStep(channelId, stepIdx) {
+      const ch = drDrumState.channels.find(c => c.id === channelId);
+      if (!ch) return;
+      const cur = ch.steps[stepIdx];
+      ch.steps[stepIdx] = cur === 0 ? 2 : (cur === 2 ? 3 : (cur === 3 ? 1 : 0));
+      ch.variant = 'Custom';
+      renderDrDrumChannels();
+    }
+
+    function loadDrDrumPreset(presetKey) {
+      const presets = {
+        unplugged: {
+          swing: 0.08,
+          kick:   { variant: 'Syncopated',    voice: 'kick_cajon' },
+          snare:  { variant: 'Bossa Rim',     voice: 'snare_cajon' },
+          hihat:  { variant: 'Sparse',        voice: 'hat_closed' },
+          clap:   { variant: 'Beat 4 Accent', voice: 'clap_snap' },
+          shaker: { variant: '16th Groove',   voice: 'perc_shaker' }
+        },
+        popRock: {
+          swing: 0,
+          kick:   { variant: 'Rock Backbeat', voice: 'kick_acoustic' },
+          snare:  { variant: 'Backbeat 2&4',  voice: 'snare_crisp' },
+          hihat:  { variant: '8th Pulse',     voice: 'hat_closed' },
+          clap:   { variant: '2 & 4 Layer',   voice: 'clap_studio' },
+          shaker: { variant: '8th Light',     voice: 'perc_tamb' }
+        },
+        funk: {
+          swing: 0.14,
+          kick:   { variant: 'Syncopated',    voice: 'kick_acoustic' },
+          snare:  { variant: 'Ghost Groove',  voice: 'snare_crisp' },
+          hihat:  { variant: '16th Drive',    voice: 'hat_closed' },
+          clap:   { variant: 'Off-Beat Pop',  voice: 'clap_808' },
+          shaker: { variant: '16th Groove',   voice: 'perc_shaker' }
+        },
+        bossa: {
+          swing: 0,
+          kick:   { variant: 'Bossa Bass',    voice: 'kick_acoustic' },
+          snare:  { variant: 'Bossa Rim',     voice: 'snare_rim' },
+          hihat:  { variant: '8th Pulse',     voice: 'hat_ride' },
+          clap:   { variant: '3-2 Clave',     voice: 'clap_snap' },
+          shaker: { variant: 'Latin Salsa',   voice: 'perc_shaker' }
+        },
+        halfTime: {
+          swing: 0.28,
+          kick:   { variant: 'Half-Time',     voice: 'kick_808' },
+          snare:  { variant: 'Half-Time',     voice: 'snare_crisp' },
+          hihat:  { variant: 'Shuffle / Tri', voice: 'hat_open' },
+          clap:   { variant: 'Beat 4 Accent', voice: 'clap_studio' },
+          shaker: { variant: 'Upbeat Push',   voice: 'perc_tamb' }
+        }
+      };
+
+      const cfg = presets[presetKey];
+      if (!cfg) return;
+
+      drDrumState.swing = cfg.swing;
+      document.getElementById('drDrumSwingSlider').value = cfg.swing;
+      document.getElementById('drDrumSwingVal').textContent = Math.round((cfg.swing / 0.45) * 100) + '%';
+
+      drDrumState.channels.forEach(ch => {
+        if (cfg[ch.id]) {
+          ch.variant = cfg[ch.id].variant;
+          ch.voice = cfg[ch.id].voice;
+          ch.steps = adaptPatternToMeter(ch.id, DR_DRUM_PATTERNS[ch.id][ch.variant], drDrumState.meter, false);
+        }
+      });
+
+      renderDrDrumChannels();
+    }
+
+    function renderDrDrumChannels() {
+      const container = document.getElementById('drDrumChannelsContainer');
+      container.innerHTML = '';
+
+      const meterCfg = DR_DRUM_METERS[drDrumState.meter];
+      const stepsCount = meterCfg.stepsPerBar;
+      const groupSize = meterCfg.groupSize;
+
+      drDrumState.channels.forEach(ch => {
+        const variantNames = Object.keys(DR_DRUM_PATTERNS[ch.id]).filter(k => k !== 'fill');
+        const variantOptions = [
+          ...variantNames.map(v => `<option value="${v}" ${ch.variant === v ? 'selected' : ''}>${v}</option>`),
+          ch.variant === 'Custom' ? `<option value="Custom" selected>Custom Edit</option>` : ''
+        ].join('');
+
+        const voiceOptions = ch.voices.map(v =>
+          `<option value="${v.id}" ${ch.voice === v.id ? 'selected' : ''}>${v.label}</option>`
+        ).join('');
+
+        const stepsHtml = ch.steps.slice(0, stepsCount).map((val, idx) => {
+          // Group spacing tailored to meter (e.g. 2+2+3 in 7/8, 3s in 6/8, 4s in 4/4, 3/4, 5/4)
+          let isGroupStart = idx % groupSize === 0;
+          if (drDrumState.meter === '7/8') {
+            isGroupStart = (idx === 0 || idx === 4 || idx === 8);
+          }
+
+          let bgStyle = 'bg-obsidian border-panelBorder text-slate-600';
+          let inlineStyle = '';
+          if (val === 3) {
+            bgStyle = 'text-obsidian font-bold border-white/60';
+            inlineStyle = `background-color: ${ch.color};`;
+          } else if (val === 2) {
+            bgStyle = 'text-white border-white/25';
+            inlineStyle = `background-color: ${ch.color}55;`;
+          } else if (val === 1) {
+            bgStyle = 'text-slate-300 border-slate-700';
+            inlineStyle = `background-color: ${ch.color}22;`;
+          }
+
+          return `<button id="drStep-${ch.id}-${idx}" onclick="toggleDrDrumStep('${ch.id}', ${idx})" style="${inlineStyle}" class="h-8 rounded border ${bgStyle} ${isGroupStart && idx !== 0 ? 'ml-1.5' : ''} font-mono text-[10px] transition-all flex items-center justify-center" title="Step ${idx + 1}">
+            ${val === 3 ? '▲' : (val === 2 ? '●' : (val === 1 ? '·' : ''))}
+          </button>`;
+        }).join('');
+
+        const row = document.createElement('div');
+        row.className = `bg-obsidian/70 border border-panelBorder rounded-xl p-3 transition-opacity ${ch.muted ? 'opacity-50' : ''}`;
+        row.innerHTML = `
+          <div class="flex flex-col xl:flex-row xl:items-center justify-between gap-3">
+            
+            <!-- Left Controls: Name, Mute/Solo, Sound Voice, Pattern Variant, Volume -->
+            <div class="flex flex-wrap items-center gap-2 xl:w-[460px] shrink-0">
+              <div class="flex items-center gap-2 w-28">
+                <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background-color: ${ch.color}; box-shadow: 0 0 8px ${ch.color};"></span>
+                <span class="font-mono text-xs font-bold text-white truncate">${ch.name}</span>
+              </div>
+
+              <!-- M / S -->
+              <div class="flex items-center gap-1">
+                <button onclick="drDrumState.channels.find(c=>c.id==='${ch.id}').muted = !drDrumState.channels.find(c=>c.id==='${ch.id}').muted; renderDrDrumChannels();" class="px-2 py-1 rounded text-[10px] font-mono font-bold border ${ch.muted ? 'bg-rose-500/25 border-rose-500 text-rose-300' : 'bg-panel border-panelBorder text-slate-400 hover:text-white'}">M</button>
+                <button onclick="drDrumState.channels.find(c=>c.id==='${ch.id}').solo = !drDrumState.channels.find(c=>c.id==='${ch.id}').solo; renderDrDrumChannels();" class="px-2 py-1 rounded text-[10px] font-mono font-bold border ${ch.solo ? 'bg-amber-500/25 border-amber-400 text-amber-300' : 'bg-panel border-panelBorder text-slate-400 hover:text-white'}">S</button>
+              </div>
+
+              <!-- Sound Voice Selector -->
+              <select onchange="drDrumState.channels.find(c=>c.id==='${ch.id}').voice = this.value" class="bg-panel border border-panelBorder rounded-lg px-2 py-1 text-[11px] font-mono text-slate-200 focus:outline-none">
+                ${voiceOptions}
+              </select>
+
+              <!-- Pattern Variant Selector -->
+              <select onchange="changeDrDrumVariant('${ch.id}', this.value)" class="bg-panel border border-panelBorder rounded-lg px-2 py-1 text-[11px] font-mono text-cyan-300 focus:outline-none">
+                ${variantOptions}
+              </select>
+
+              <!-- Volume -->
+              <input type="range" min="0" max="1" step="0.05" value="${ch.volume}" oninput="drDrumState.channels.find(c=>c.id==='${ch.id}').volume = parseFloat(this.value)" class="w-16 ml-auto" title="Channel Level" />
+            </div>
+
+            <!-- Right Dynamic Step Grid -->
+            <div class="grid gap-1 flex-1" style="grid-template-columns: repeat(${stepsCount}, minmax(0, 1fr));">
+              ${stepsHtml}
+            </div>
+
+          </div>
+        `;
+        container.appendChild(row);
+      });
+    }
+
+    function highlightDrDrumStep(stepIdx, barNum, isFill, totalSteps) {
+      const badge = document.getElementById('drDrumBarBadge');
+      if (badge) {
+        badge.textContent = isFill
+          ? `BAR ${barNum} / 4 • ${drDrumState.meter} • FILL!`
+          : `BAR ${barNum} / 4 • ${drDrumState.meter}`;
+        badge.className = isFill
+          ? 'text-[11px] font-mono px-2 py-0.5 rounded bg-amber-500/20 border border-amber-400 text-amber-300 font-bold'
+          : 'text-[11px] font-mono px-2 py-0.5 rounded bg-obsidian border border-panelBorder text-cyan-300';
+      }
+      updateFillButtonUI();
+
+      drDrumState.channels.forEach(ch => {
+        for (let i = 0; i < totalSteps; i++) {
+          const cell = document.getElementById(`drStep-${ch.id}-${i}`);
+          if (!cell) continue;
+          if (i === stepIdx) {
+            cell.classList.add('ring-2', 'ring-white', 'brightness-125', 'scale-105');
+          } else {
+            cell.classList.remove('ring-2', 'ring-white', 'brightness-125', 'scale-105');
+          }
+        }
+      });
+    }
+
+    function clearDrDrumHighlights() {
+      document.querySelectorAll('[id^="drStep-"]').forEach(cell => {
+        cell.classList.remove('ring-2', 'ring-white', 'brightness-125', 'scale-105');
+      });
+      drDrumState.fillActive = false;
+      drDrumState.fillQueued = false;
+      updateFillButtonUI();
+    }
+
+    /**
      * POLYRHYTHM & POLYMETER LAB MANAGEMENT
      */
     function setPolyMode(mode) {
@@ -1084,7 +1849,6 @@
         desc.textContent = 'Polymeter Mode: Shared pulse speed; measures wrap independently.';
       }
 
-      // Re-sync timing cleanly if playing
       if (appState.isPlaying && audioCtx) {
         const now = audioCtx.currentTime + 0.03;
         appState.startTimeAudio = now;
@@ -1177,7 +1941,6 @@
       const layer = polyState.layers.find(l => l.id === layerId);
       if (!layer) return;
       const cur = layer.accents[stepIdx];
-      // Cycle: 3 (Accent) -> 2 (Normal) -> 0 (Mute) -> 3
       layer.accents[stepIdx] = cur === 3 ? 2 : (cur === 2 ? 0 : 3);
       renderPolyLayers();
     }
@@ -1237,11 +2000,9 @@
       const container = document.getElementById('polyLayersContainer');
       container.innerHTML = '';
 
-      // Update Ratio Readout Badge
       const ratioStr = polyState.layers.map(l => l.beats).join(' : ');
       document.getElementById('ratioReadout').textContent = ratioStr;
 
-      // Enable/Disable Add Layer button
       const addBtn = document.getElementById('btnAddLayer');
       addBtn.disabled = polyState.layers.length >= 6;
       addBtn.classList.toggle('opacity-40', polyState.layers.length >= 6);
@@ -1252,7 +2013,6 @@
         card.className = 'bg-panel border rounded-xl p-3.5 transition-all';
         card.style.borderColor = layer.muted ? '#252938' : color.border;
 
-        // Build mini beat step toggles
         const stepsHtml = layer.accents.map((acc, idx) => {
           let bg = 'bg-slate-800 text-slate-500 border-slate-700';
           if (acc === 3) bg = 'text-obsidian font-bold border-white/50';
@@ -1270,16 +2030,13 @@
             </div>
 
             <div class="flex items-center gap-1.5">
-              <!-- Mute / Solo -->
               <button onclick="polyState.layers.find(l=>l.id===${layer.id}).muted = !polyState.layers.find(l=>l.id===${layer.id}).muted; renderPolyLayers();" class="px-2 py-0.5 rounded text-[10px] font-mono font-bold border ${layer.muted ? 'bg-rose-500/20 border-rose-500 text-rose-300' : 'bg-obsidian border-panelBorder text-slate-400 hover:text-white'}">M</button>
               <button onclick="polyState.layers.find(l=>l.id===${layer.id}).solo = !polyState.layers.find(l=>l.id===${layer.id}).solo; renderPolyLayers();" class="px-2 py-0.5 rounded text-[10px] font-mono font-bold border ${layer.solo ? 'bg-amber-500/20 border-amber-400 text-amber-300' : 'bg-obsidian border-panelBorder text-slate-400 hover:text-white'}">S</button>
               ${polyState.layers.length > 1 ? `<button onclick="removePolyLayer(${layer.id})" class="px-2 py-0.5 rounded text-[10px] font-mono bg-obsidian hover:bg-rose-950 border border-panelBorder text-slate-400 hover:text-rose-400" title="Remove Layer">&times;</button>` : ''}
             </div>
           </div>
 
-          <!-- Controls Row: Beat Count, Multiplier, Sound, Volume -->
           <div class="flex flex-wrap items-center justify-between gap-2 bg-obsidian/70 p-2 rounded-lg border border-panelBorder mb-2.5">
-            <!-- Beats Stepper -->
             <div class="flex items-center gap-1.5">
               <span class="text-[10px] font-mono text-slate-500">BEATS:</span>
               <button onclick="updatePolyLayerBeats(${layer.id}, -1)" class="w-6 h-6 rounded bg-panel hover:bg-slate-700 font-mono text-xs text-white">-</button>
@@ -1287,7 +2044,6 @@
               <button onclick="updatePolyLayerBeats(${layer.id}, 1)" class="w-6 h-6 rounded bg-panel hover:bg-slate-700 font-mono text-xs text-white">+</button>
             </div>
 
-            <!-- Speed Multiplier -->
             <div class="flex items-center gap-1">
               <span class="text-[10px] font-mono text-slate-500">RATE:</span>
               <select onchange="polyState.layers.find(l=>l.id===${layer.id}).multiplier = parseFloat(this.value)" class="bg-panel border border-panelBorder rounded px-1.5 py-0.5 text-[11px] font-mono text-slate-200 focus:outline-none">
@@ -1298,7 +2054,6 @@
               </select>
             </div>
 
-            <!-- Sound Voice -->
             <select onchange="polyState.layers.find(l=>l.id===${layer.id}).sound = this.value" class="bg-panel border border-panelBorder rounded px-2 py-0.5 text-[11px] font-mono text-slate-200 focus:outline-none">
               <option value="kick" ${layer.sound === 'kick' ? 'selected' : ''}>Bass Kick</option>
               <option value="rim" ${layer.sound === 'rim' ? 'selected' : ''}>Rimshot</option>
@@ -1307,11 +2062,9 @@
               <option value="bell" ${layer.sound === 'bell' ? 'selected' : ''}>Synth Bell</option>
             </select>
 
-            <!-- Layer Volume -->
             <input type="range" min="0" max="1" step="0.05" value="${layer.volume}" oninput="polyState.layers.find(l=>l.id===${layer.id}).volume = parseFloat(this.value)" class="w-16" title="Layer Volume" />
           </div>
 
-          <!-- Step Accent Pads -->
           <div class="flex flex-wrap gap-1">
             ${stepsHtml}
           </div>
@@ -1325,25 +2078,34 @@
      */
     function switchTab(tab) {
       appState.activeTab = tab;
-      const viewMetro = document.getElementById('viewMetronome');
-      const viewPoly = document.getElementById('viewPolyrhythm');
-      const btnMetro = document.getElementById('tabBtnMetronome');
-      const btnPoly = document.getElementById('tabBtnPolyrhythm');
+      const views = {
+        metronome: document.getElementById('viewMetronome'),
+        polyrhythm: document.getElementById('viewPolyrhythm'),
+        drdrum: document.getElementById('viewDrDrum')
+      };
+      const btns = {
+        metronome: document.getElementById('tabBtnMetronome'),
+        polyrhythm: document.getElementById('tabBtnPolyrhythm'),
+        drdrum: document.getElementById('tabBtnDrDrum')
+      };
+      const activeStyles = {
+        metronome: 'bg-panel text-cyan-300 border border-cyan-500/30 shadow-sm',
+        polyrhythm: 'bg-panel text-pink-300 border border-pink-500/30 shadow-sm',
+        drdrum: 'bg-panel text-amber-300 border border-amber-500/30 shadow-sm'
+      };
 
-      if (tab === 'metronome') {
-        viewMetro.classList.remove('hidden');
-        viewPoly.classList.add('hidden');
-        btnMetro.className = 'flex-1 sm:flex-initial px-4 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all bg-panel text-cyan-300 border border-cyan-500/30 shadow-sm flex items-center justify-center gap-2';
-        btnPoly.className = 'flex-1 sm:flex-initial px-4 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all text-slate-400 hover:text-white flex items-center justify-center gap-2';
-      } else {
-        viewMetro.classList.add('hidden');
-        viewPoly.classList.remove('hidden');
-        btnPoly.className = 'flex-1 sm:flex-initial px-4 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all bg-panel text-pink-300 border border-pink-500/30 shadow-sm flex items-center justify-center gap-2';
-        btnMetro.className = 'flex-1 sm:flex-initial px-4 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all text-slate-400 hover:text-white flex items-center justify-center gap-2';
-        resizeCanvases();
-      }
+      Object.keys(views).forEach(key => {
+        if (key === tab) {
+          views[key].classList.remove('hidden');
+          btns[key].className = `flex-1 lg:flex-initial px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all flex items-center justify-center gap-1.5 ${activeStyles[key]}`;
+        } else {
+          views[key].classList.add('hidden');
+          btns[key].className = 'flex-1 lg:flex-initial px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all text-slate-400 hover:text-white flex items-center justify-center gap-1.5';
+        }
+      });
 
-      // Reset clocks cleanly if switching mid-playback
+      if (tab === 'polyrhythm') resizeCanvases();
+
       if (appState.isPlaying && audioCtx) {
         const now = audioCtx.currentTime + 0.04;
         appState.startTimeAudio = now;
@@ -1353,11 +2115,14 @@
           l.nextNoteTime = now;
           l.currentStep = 0;
         });
+        drDrumState.nextStepTime = now;
+        drDrumState.stepIndex = 0;
+        drDrumState.barInPhrase = 0;
       }
     }
 
     /**
-     * 60FPS VISUAL RENDER LOOP (Orbit Polygons + Linear Phase Grid + Timer)
+     * 60FPS VISUAL RENDER LOOP
      */
     const orbitCanvas = document.getElementById('orbitCanvas');
     const orbitCtx = orbitCanvas.getContext('2d');
@@ -1377,7 +2142,6 @@
     }
 
     function renderLoop() {
-      // Update elapsed practice timer
       if (appState.isPlaying) {
         const elapsedSec = Math.floor((performance.now() - appState.startTimePerf) / 1000);
         const mins = String(Math.floor(elapsedSec / 60)).padStart(2, '0');
@@ -1404,7 +2168,6 @@
 
       orbitCtx.clearRect(0, 0, w, h);
 
-      // Subtle radial guide rings
       orbitCtx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
       orbitCtx.lineWidth = 1;
       [0.4, 0.7, 1.0].forEach(scale => {
@@ -1413,7 +2176,6 @@
         orbitCtx.stroke();
       });
 
-      // Top 12 o'clock trigger strike line
       orbitCtx.strokeStyle = 'rgba(0, 240, 255, 0.35)';
       orbitCtx.lineWidth = 2;
       orbitCtx.beginPath();
@@ -1421,14 +2183,12 @@
       orbitCtx.lineTo(cx, cy - 12);
       orbitCtx.stroke();
 
-      // Calculate exact phase from audio clock
       const elapsedAudio = (appState.isPlaying && audioCtx)
         ? Math.max(0, audioCtx.currentTime - appState.startTimeAudio)
         : 0;
       const masterCycleSec = (60.0 / appState.bpm) * 4.0;
       const basePulseSec = 60.0 / appState.bpm;
 
-      // Draw expanding trigger ripples at 12 o'clock
       for (let i = polyState.ripples.length - 1; i >= 0; i--) {
         const rip = polyState.ripples[i];
         orbitCtx.strokeStyle = rip.color;
@@ -1443,25 +2203,21 @@
       }
       orbitCtx.globalAlpha = 1.0;
 
-      // Draw each rhythm layer's rotating geometric polygon
       const layerCount = polyState.layers.length;
       polyState.layers.forEach((layer, lIdx) => {
         if (layer.muted) return;
         const color = LAYER_COLORS[layer.colorIdx].hex;
         const radius = maxR * (1 - lIdx * (0.55 / Math.max(1, layerCount)));
 
-        // Determine cycle progress (0..1)
         let cycleSec = (polyState.mode === 'polyrhythm')
           ? (masterCycleSec / layer.multiplier)
           : ((basePulseSec * layer.beats) / layer.multiplier);
 
         const phase = (elapsedAudio % cycleSec) / cycleSec;
-        const rotationOffset = -phase * Math.PI * 2; // Counter-clockwise rotation so vertices hit 12 o'clock in order
+        const rotationOffset = -phase * Math.PI * 2;
 
-        // Decay flash
         layer.pulseFlash = Math.max(0, layer.pulseFlash - 0.06);
 
-        // Draw Polygon Edges
         orbitCtx.strokeStyle = color;
         orbitCtx.lineWidth = 1.8 + layer.pulseFlash * 2;
         orbitCtx.globalAlpha = 0.55 + layer.pulseFlash * 0.45;
@@ -1476,7 +2232,6 @@
         }
         orbitCtx.stroke();
 
-        // Draw Vertex Nodes
         for (let b = 0; b < layer.beats; b++) {
           const acc = layer.accents[b] ?? 2;
           if (acc === 0) continue;
@@ -1492,7 +2247,6 @@
         orbitCtx.globalAlpha = 1.0;
       });
 
-      // Center Hub
       orbitCtx.fillStyle = '#171a24';
       orbitCtx.strokeStyle = '#334155';
       orbitCtx.lineWidth = 2;
@@ -1528,7 +2282,6 @@
         const y = padY + laneH * idx + laneH / 2;
         const color = LAYER_COLORS[layer.colorIdx].hex;
 
-        // Horizontal lane track
         linearCtx.strokeStyle = 'rgba(255,255,255,0.08)';
         linearCtx.lineWidth = 1;
         linearCtx.beginPath();
@@ -1536,7 +2289,6 @@
         linearCtx.lineTo(padX + drawW, y);
         linearCtx.stroke();
 
-        // Beat markers along the lane
         const totalMarkers = polyState.mode === 'polyrhythm'
           ? Math.max(1, Math.round(layer.beats * layer.multiplier))
           : layer.beats;
@@ -1545,7 +2297,6 @@
           const x = padX + (b / totalMarkers) * drawW;
           const acc = layer.accents[b % layer.beats] ?? 2;
 
-          // Subtle vertical coincidence guide on beat 0
           if (b === 0) {
             linearCtx.strokeStyle = 'rgba(255,255,255,0.15)';
             linearCtx.beginPath();
@@ -1564,7 +2315,6 @@
         }
       });
 
-      // Sweeping Playhead
       if (appState.isPlaying) {
         const playheadX = padX + masterPhase * drawW;
         linearCtx.strokeStyle = '#00f0ff';
@@ -1580,9 +2330,13 @@
      * KEYBOARD SHORTCUTS & INITIALIZATION
      */
     window.addEventListener('keydown', (e) => {
-      if (e.code === 'Space' && document.activeElement.tagName !== 'INPUT') {
+      if (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'SELECT') return;
+      if (e.code === 'Space') {
         e.preventDefault();
         togglePlay();
+      } else if (e.code === 'KeyF' && appState.activeTab === 'drdrum') {
+        e.preventDefault();
+        triggerDrDrumFill();
       }
     });
 
@@ -1593,6 +2347,7 @@
       renderMetronomeBeatGrid();
       renderSubPulseDots();
       renderPolyLayers();
+      renderDrDrumChannels();
       resizeCanvases();
       requestAnimationFrame(renderLoop);
     };
