@@ -112,30 +112,39 @@
         <div>
           <div class="flex items-center gap-2">
             <span class="font-mono font-bold tracking-tight text-white text-base sm:text-lg">time<span class="text-cyan-400">.sarimoko</span>.com</span>
-            <span class="hidden sm:inline-block text-[10px] font-mono uppercase tracking-widest px-1.5 py-0.5 rounded bg-cyan-500/10 text-cyan-300 border border-cyan-500/20">Audio Clock v3.1</span>
+            <span class="hidden sm:inline-block text-[10px] font-mono uppercase tracking-widest px-1.5 py-0.5 rounded bg-cyan-500/10 text-cyan-300 border border-cyan-500/20">Audio Clock v3.2</span>
           </div>
           <p class="text-[11px] text-slate-400 hidden md:block">Sample-Accurate Time Signature, Polyrhythm & Groove Workstation</p>
         </div>
       </div>
 
       <!-- Mode Switcher Tabs -->
-      <nav class="flex items-center bg-obsidian p-1 rounded-xl border border-panelBorder order-3 lg:order-2 w-full lg:w-auto justify-center">
-        <button id="tabBtnMetronome" onclick="switchTab('metronome')" class="flex-1 lg:flex-initial px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all bg-panel text-cyan-300 border border-cyan-500/30 shadow-sm flex items-center justify-center gap-1.5">
+      <nav class="flex items-center bg-obsidian p-1 rounded-xl border border-panelBorder order-3 lg:order-2 w-full lg:w-auto justify-center overflow-x-auto">
+        <button id="tabBtnMetronome" onclick="switchTab('metronome')" class="flex-1 lg:flex-initial px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all bg-panel text-cyan-300 border border-cyan-500/30 shadow-sm flex items-center justify-center gap-1.5 whitespace-nowrap">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2L6 20h12L12 2z"/><path d="M12 14l4-7"/></svg>
           <span>Metronome</span>
         </button>
-        <button id="tabBtnPolyrhythm" onclick="switchTab('polyrhythm')" class="flex-1 lg:flex-initial px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all text-slate-400 hover:text-white flex items-center justify-center gap-1.5">
+        <button id="tabBtnPolyrhythm" onclick="switchTab('polyrhythm')" class="flex-1 lg:flex-initial px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all text-slate-400 hover:text-white flex items-center justify-center gap-1.5 whitespace-nowrap">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><line x1="12" y1="3" x2="12" y2="12"/></svg>
           <span>Polyrhythm Lab</span>
         </button>
-        <button id="tabBtnDrDrum" onclick="switchTab('drdrum')" class="flex-1 lg:flex-initial px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all text-slate-400 hover:text-white flex items-center justify-center gap-1.5">
+        <button id="tabBtnDrDrum" onclick="switchTab('drdrum')" class="flex-1 lg:flex-initial px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all text-slate-400 hover:text-white flex items-center justify-center gap-1.5 whitespace-nowrap">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8" cy="10" r="1.5"/><circle cx="12" cy="10" r="1.5"/><circle cx="16" cy="10" r="1.5"/><line x1="7" y1="15" x2="17" y2="15"/></svg>
           <span>Dr. Drum</span>
+        </button>
+        <button id="tabBtnSongMap" onclick="switchTab('songmap')" class="flex-1 lg:flex-initial px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all text-slate-400 hover:text-white flex items-center justify-center gap-1.5 whitespace-nowrap">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h10M4 18h14"/><circle cx="19" cy="12" r="2"/></svg>
+          <span>Song Map</span>
         </button>
       </nav>
 
       <!-- Master Transport Controls -->
       <div class="flex items-center gap-2 sm:gap-3 order-2 lg:order-3">
+        <!-- Modulation Calculator Trigger -->
+        <button onclick="toggleModulationModal()" class="hw-btn hidden sm:flex px-2.5 py-2 rounded-lg bg-panel hover:bg-slate-800 border border-panelBorder text-xs font-mono font-semibold text-cyan-300 items-center gap-1.5" title="Metric Modulation Calculator">
+          <span>Modulation Calc</span>
+        </button>
+
         <!-- Tap Tempo -->
         <button id="btnTapTempo" onclick="handleTapTempo()" class="hw-btn px-3 py-2 rounded-lg bg-panel hover:bg-slate-800 border border-panelBorder text-xs font-mono font-semibold text-amber-300 flex items-center gap-1.5" title="Tap repeatedly to detect BPM">
           <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
@@ -215,11 +224,12 @@
             <div class="flex items-center justify-between mb-3">
               <span class="text-xs font-mono uppercase tracking-wider text-slate-400">Time Signature</span>
               <!-- Quick Common Signatures -->
-              <div class="flex gap-1">
+              <div class="flex items-center gap-1">
                 <button onclick="setTimeSignature(4,4)" class="px-2 py-0.5 text-[11px] font-mono rounded bg-obsidian hover:bg-slate-800 border border-panelBorder text-slate-300">4/4</button>
                 <button onclick="setTimeSignature(3,4)" class="px-2 py-0.5 text-[11px] font-mono rounded bg-obsidian hover:bg-slate-800 border border-panelBorder text-slate-300">3/4</button>
                 <button onclick="setTimeSignature(5,4)" class="px-2 py-0.5 text-[11px] font-mono rounded bg-obsidian hover:bg-slate-800 border border-panelBorder text-slate-300">5/4</button>
                 <button onclick="setTimeSignature(7,8)" class="px-2 py-0.5 text-[11px] font-mono rounded bg-obsidian hover:bg-slate-800 border border-panelBorder text-slate-300">7/8</button>
+                <button onclick="toggleModulationModal()" class="px-2 py-0.5 text-[11px] font-mono rounded bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-500/40 text-cyan-300" title="Open Metric Modulation Calculator">Mod</button>
               </div>
             </div>
 
@@ -247,10 +257,26 @@
                 </select>
               </div>
             </div>
+
+            <!-- Odd-Meter Pulse Groupings -->
+            <div class="mt-3">
+              <div class="flex items-center justify-between mb-1.5">
+                <span class="text-[10px] font-mono uppercase tracking-wider text-slate-400">Odd-Meter Pulse Groupings</span>
+                <span id="activeGroupingLabel" class="text-[10px] font-mono text-emerald-300">Standard</span>
+              </div>
+              <div class="flex flex-wrap gap-1">
+                <button onclick="applyPulseGrouping(5, 8, [3, 2], '5/8 (3+2)')" class="hw-btn px-1.5 py-1 rounded bg-obsidian hover:bg-slate-800 border border-panelBorder text-[10px] font-mono text-cyan-300">5/8 (3+2)</button>
+                <button onclick="applyPulseGrouping(5, 8, [2, 3], '5/8 (2+3)')" class="hw-btn px-1.5 py-1 rounded bg-obsidian hover:bg-slate-800 border border-panelBorder text-[10px] font-mono text-cyan-300">5/8 (2+3)</button>
+                <button onclick="applyPulseGrouping(7, 8, [2, 2, 3], '7/8 (2+2+3)')" class="hw-btn px-1.5 py-1 rounded bg-obsidian hover:bg-slate-800 border border-panelBorder text-[10px] font-mono text-amber-300">7/8 (2+2+3)</button>
+                <button onclick="applyPulseGrouping(7, 8, [3, 2, 2], '7/8 (3+2+2)')" class="hw-btn px-1.5 py-1 rounded bg-obsidian hover:bg-slate-800 border border-panelBorder text-[10px] font-mono text-amber-300">7/8 (3+2+2)</button>
+                <button onclick="applyPulseGrouping(9, 8, [2, 2, 2, 3], '9/8 (2+2+2+3)')" class="hw-btn px-1.5 py-1 rounded bg-obsidian hover:bg-slate-800 border border-panelBorder text-[10px] font-mono text-pink-300">9/8 (2+2+2+3)</button>
+                <button onclick="applyPulseGrouping(11, 8, [3, 3, 3, 2], '11/8 (3+3+3+2)')" class="hw-btn px-1.5 py-1 rounded bg-obsidian hover:bg-slate-800 border border-panelBorder text-[10px] font-mono text-emerald-300">11/8 (3+3+3+2)</button>
+              </div>
+            </div>
           </div>
 
           <!-- Subdivisions -->
-          <div class="mt-4">
+          <div class="mt-3 pt-3 border-t border-panelBorder/60">
             <div class="flex items-center justify-between mb-1.5">
               <span class="text-xs font-mono uppercase tracking-wider text-slate-400">Subdivision</span>
               <div class="flex items-center gap-2">
@@ -355,18 +381,21 @@
             </button>
           </div>
 
-          <!-- Base BPM Control inside Polyrhythm Tab -->
-          <div class="flex items-center gap-2 bg-obsidian px-3 py-1.5 rounded-xl border border-panelBorder">
-            <span class="text-[11px] font-mono text-slate-400">CYCLE/BASE BPM:</span>
-            <button onclick="adjustBpm(-5)" class="text-slate-400 hover:text-white font-mono px-1">-</button>
-            <input id="polyBpmInput" type="number" min="20" max="300" value="100" onchange="setBpm(this.value)" class="w-14 bg-transparent text-center font-mono font-bold text-cyan-300 focus:outline-none" />
-            <button onclick="adjustBpm(5)" class="text-slate-400 hover:text-white font-mono px-1">+</button>
+          <!-- Unified BPM Control inside Polyrhythm Tab (-5 / -1 / Input / +1 / +5) -->
+          <div class="flex items-center gap-1.5 bg-obsidian px-3 py-1.5 rounded-xl border border-panelBorder">
+            <span class="text-[10px] font-mono text-slate-500 mr-1">BPM:</span>
+            <button onclick="adjustBpm(-5)" class="hw-btn w-7 h-7 rounded bg-panel hover:bg-slate-800 border border-panelBorder font-mono text-[11px] text-slate-300">-5</button>
+            <button onclick="adjustBpm(-1)" class="hw-btn w-7 h-7 rounded bg-panel hover:bg-slate-800 border border-panelBorder font-mono text-sm font-bold text-white">-</button>
+            <input id="polyBpmInput" type="number" min="20" max="300" value="120" onchange="setBpm(this.value)" class="w-14 bg-transparent text-center font-mono text-base font-bold text-cyan-300 focus:outline-none" />
+            <button onclick="adjustBpm(1)" class="hw-btn w-7 h-7 rounded bg-panel hover:bg-slate-800 border border-panelBorder font-mono text-sm font-bold text-white">+</button>
+            <button onclick="adjustBpm(5)" class="hw-btn w-7 h-7 rounded bg-panel hover:bg-slate-800 border border-panelBorder font-mono text-[11px] text-slate-300">+5</button>
           </div>
         </div>
 
-        <!-- Instant Presets -->
+        <!-- Instant Presets with Default Reset First -->
         <div class="flex flex-wrap items-center gap-1.5">
           <span class="text-[11px] font-mono text-slate-500 mr-1">PRESETS:</span>
+          <button onclick="loadPolyPreset('default')" class="hw-btn px-2.5 py-1.5 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/40 text-xs font-mono font-bold text-emerald-300" title="Reset to Default 4:3 Setup">&#8634; Default</button>
           <button onclick="loadPolyPreset('3:2')" class="hw-btn px-2.5 py-1.5 rounded-lg bg-obsidian hover:bg-slate-800 border border-panelBorder text-xs font-mono text-cyan-300">3:2 Hemiola</button>
           <button onclick="loadPolyPreset('4:3')" class="hw-btn px-2.5 py-1.5 rounded-lg bg-obsidian hover:bg-slate-800 border border-panelBorder text-xs font-mono text-amber-300">4:3 Classic</button>
           <button onclick="loadPolyPreset('5:4')" class="hw-btn px-2.5 py-1.5 rounded-lg bg-obsidian hover:bg-slate-800 border border-panelBorder text-xs font-mono text-pink-300">5:4 Groove</button>
@@ -448,6 +477,7 @@
           </div>
           <div class="flex flex-wrap items-center gap-1.5">
             <span class="text-[11px] font-mono text-slate-500 mr-1">STYLE:</span>
+            <button onclick="loadDrDrumPreset('default')" class="hw-btn px-2.5 py-1 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/40 text-xs font-mono font-bold text-emerald-300" title="Reset Dr. Drum to Default 4/4 Studio Kit">&#8634; Default</button>
             <button onclick="loadDrDrumPreset('unplugged')" class="hw-btn px-2.5 py-1 rounded-lg bg-obsidian hover:bg-slate-800 border border-panelBorder text-xs font-mono text-amber-300">Unplugged Jam</button>
             <button onclick="loadDrDrumPreset('popRock')" class="hw-btn px-2.5 py-1 rounded-lg bg-obsidian hover:bg-slate-800 border border-panelBorder text-xs font-mono text-cyan-300">Pop / Rock</button>
             <button onclick="loadDrDrumPreset('funk')" class="hw-btn px-2.5 py-1 rounded-lg bg-obsidian hover:bg-slate-800 border border-panelBorder text-xs font-mono text-pink-300">16th Funk</button>
@@ -456,7 +486,7 @@
           </div>
         </div>
 
-        <!-- Center: Meter, Tempo, Swing & Humanize -->
+        <!-- Center: Meter, Unified BPM, Swing & Humanize -->
         <div class="flex flex-wrap items-center gap-3 bg-obsidian/80 p-3 rounded-xl border border-panelBorder">
           <!-- Time Signature Selector -->
           <div class="flex items-center gap-1.5 pr-3 border-r border-panelBorder">
@@ -470,12 +500,14 @@
             </select>
           </div>
 
-          <!-- BPM -->
-          <div class="flex items-center gap-1.5 pr-3 border-r border-panelBorder">
-            <span class="text-[10px] font-mono text-slate-500">BPM:</span>
-            <button onclick="adjustBpm(-2)" class="w-6 h-6 rounded bg-panel hover:bg-slate-700 font-mono text-xs text-white">-</button>
-            <input id="drDrumBpmInput" type="number" min="20" max="300" value="120" onchange="setBpm(this.value)" class="w-12 bg-transparent text-center font-mono font-bold text-cyan-300 focus:outline-none" />
-            <button onclick="adjustBpm(2)" class="w-6 h-6 rounded bg-panel hover:bg-slate-700 font-mono text-xs text-white">+</button>
+          <!-- Unified BPM (-5 / -1 / Input / +1 / +5) -->
+          <div class="flex items-center gap-1 pr-3 border-r border-panelBorder">
+            <span class="text-[10px] font-mono text-slate-500 mr-0.5">BPM:</span>
+            <button onclick="adjustBpm(-5)" class="hw-btn w-7 h-7 rounded bg-panel hover:bg-slate-800 border border-panelBorder font-mono text-[11px] text-slate-300">-5</button>
+            <button onclick="adjustBpm(-1)" class="hw-btn w-7 h-7 rounded bg-panel hover:bg-slate-800 border border-panelBorder font-mono text-sm font-bold text-white">-</button>
+            <input id="drDrumBpmInput" type="number" min="20" max="300" value="120" onchange="setBpm(this.value)" class="w-12 bg-transparent text-center font-mono text-sm font-bold text-cyan-300 focus:outline-none" />
+            <button onclick="adjustBpm(1)" class="hw-btn w-7 h-7 rounded bg-panel hover:bg-slate-800 border border-panelBorder font-mono text-sm font-bold text-white">+</button>
+            <button onclick="adjustBpm(5)" class="hw-btn w-7 h-7 rounded bg-panel hover:bg-slate-800 border border-panelBorder font-mono text-[11px] text-slate-300">+5</button>
           </div>
 
           <!-- Swing -->
@@ -525,7 +557,142 @@
 
     </section>
 
+    <!-- ===================================================================== -->
+    <!-- TAB 4: SONG MAP ARRANGEMENT TAB                                       -->
+    <!-- ===================================================================== -->
+    <section id="viewSongMap" class="hidden space-y-6">
+
+      <!-- Top Console: Unified BPM, Playback Telemetry, Loop & JSON Import/Export -->
+      <div class="bg-panel border border-panelBorder rounded-2xl p-4 sm:p-5 flex flex-wrap items-center justify-between gap-4">
+        
+        <div class="flex flex-wrap items-center gap-3">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="px-2 py-0.5 rounded bg-emerald-500/15 border border-emerald-500/40 text-emerald-300 font-mono text-[11px] font-bold tracking-wider">SONG MAP</span>
+              <span class="text-xs font-mono text-slate-400">Section & Tempo Chart Sequencer</span>
+            </div>
+            <p class="text-[11px] text-slate-400 mt-1">Automatically shifts time signatures and BPM bar-by-bar during playback.</p>
+          </div>
+
+          <!-- Unified BPM (-5 / -1 / Input / +1 / +5) -->
+          <div class="flex items-center gap-1.5 bg-obsidian px-3 py-1.5 rounded-xl border border-panelBorder">
+            <span class="text-[10px] font-mono text-slate-500 mr-1">BPM:</span>
+            <button onclick="adjustBpm(-5)" class="hw-btn w-7 h-7 rounded bg-panel hover:bg-slate-800 border border-panelBorder font-mono text-[11px] text-slate-300">-5</button>
+            <button onclick="adjustBpm(-1)" class="hw-btn w-7 h-7 rounded bg-panel hover:bg-slate-800 border border-panelBorder font-mono text-sm font-bold text-white">-</button>
+            <input id="songMapBpmInput" type="number" min="20" max="300" value="120" onchange="setBpm(this.value)" class="w-14 bg-transparent text-center font-mono text-base font-bold text-cyan-300 focus:outline-none" />
+            <button onclick="adjustBpm(1)" class="hw-btn w-7 h-7 rounded bg-panel hover:bg-slate-800 border border-panelBorder font-mono text-sm font-bold text-white">+</button>
+            <button onclick="adjustBpm(5)" class="hw-btn w-7 h-7 rounded bg-panel hover:bg-slate-800 border border-panelBorder font-mono text-[11px] text-slate-300">+5</button>
+          </div>
+        </div>
+
+        <!-- Live Section Status & Chart Actions -->
+        <div class="flex flex-wrap items-center gap-2">
+          <div class="bg-obsidian px-3 py-1.5 rounded-xl border border-panelBorder flex items-center gap-3 mr-1">
+            <div>
+              <div class="text-[9px] font-mono text-slate-500 uppercase">Active Section</div>
+              <div id="songMapActiveBadge" class="text-xs font-mono font-bold text-emerald-300">Intro (4/4)</div>
+            </div>
+            <div class="h-6 w-px bg-panelBorder"></div>
+            <div>
+              <div class="text-[9px] font-mono text-slate-500 uppercase">Bar</div>
+              <div id="songMapBarBadge" class="text-xs font-mono font-bold text-white">1 / 4</div>
+            </div>
+          </div>
+
+          <label class="flex items-center gap-1.5 bg-obsidian px-3 py-2 rounded-xl border border-panelBorder cursor-pointer text-xs font-mono text-slate-300">
+            <input id="songMapLoopCheckbox" type="checkbox" checked onchange="songMapState.loop = this.checked" class="accent-emerald-400 rounded" />
+            <span>Loop</span>
+          </label>
+
+          <button onclick="addSongMapSection()" class="hw-btn px-3 py-2 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-500/40 text-xs font-mono font-bold text-cyan-300">
+            + Add Section
+          </button>
+
+          <button onclick="exportSongMapJson()" class="hw-btn px-2.5 py-2 rounded-xl bg-obsidian hover:bg-slate-800 border border-panelBorder text-xs font-mono text-slate-300" title="Export chart to JSON">
+            Export JSON
+          </button>
+
+          <button onclick="document.getElementById('songMapImportInput').click()" class="hw-btn px-2.5 py-2 rounded-xl bg-obsidian hover:bg-slate-800 border border-panelBorder text-xs font-mono text-slate-300" title="Import chart from JSON">
+            Import JSON
+          </button>
+          <input id="songMapImportInput" type="file" accept=".json" class="hidden" onchange="importSongMapJson(event)" />
+        </div>
+      </div>
+
+      <!-- Song Sections List -->
+      <div id="songMapSectionsContainer" class="space-y-3">
+        <!-- Dynamically rendered section cards -->
+      </div>
+
+    </section>
+
   </main>
+
+  <!-- METRIC MODULATION CALCULATOR MODAL -->
+  <div id="modulationModal" class="fixed inset-0 z-50 hidden bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-panel border border-cyan-500/40 rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between border-b border-panelBorder pb-3">
+        <div>
+          <h3 class="font-mono text-sm font-bold text-white uppercase tracking-wider">Metric Modulation Calculator</h3>
+          <p class="text-xs text-slate-400">Equate old vs. new note subdivisions or polyrhythmic ratios</p>
+        </div>
+        <button onclick="toggleModulationModal(false)" class="text-slate-400 hover:text-white font-mono text-xl px-2">&times;</button>
+      </div>
+
+      <div class="space-y-3">
+        <div class="bg-obsidian p-3 rounded-xl border border-panelBorder flex items-center justify-between">
+          <span class="text-xs font-mono text-slate-400">Current Tempo:</span>
+          <span id="modSourceBpmLabel" class="font-mono text-base font-bold text-cyan-300">120 BPM</span>
+        </div>
+
+        <!-- Mode Selector: Note Equivalence vs Ratio -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div class="bg-obsidian/70 p-3 rounded-xl border border-panelBorder">
+            <label class="block text-[10px] font-mono uppercase text-slate-400 mb-1.5">Old Note Value</label>
+            <select id="modOldNote" onchange="calculateModulation()" class="w-full bg-panel border border-panelBorder rounded-lg px-2.5 py-2 text-xs font-mono text-white focus:outline-none">
+              <option value="1">Quarter Note (1)</option>
+              <option value="1.5" selected>Dotted Quarter (1.5)</option>
+              <option value="0.5">Eighth Note (0.5)</option>
+              <option value="0.6666667">Quarter Triplet (2/3)</option>
+            </select>
+          </div>
+
+          <div class="bg-obsidian/70 p-3 rounded-xl border border-panelBorder">
+            <label class="block text-[10px] font-mono uppercase text-slate-400 mb-1.5">= New Note Value</label>
+            <select id="modNewNote" onchange="calculateModulation()" class="w-full bg-panel border border-panelBorder rounded-lg px-2.5 py-2 text-xs font-mono text-white focus:outline-none">
+              <option value="1" selected>Quarter Note (1)</option>
+              <option value="1.5">Dotted Quarter (1.5)</option>
+              <option value="0.5">Eighth Note (0.5)</option>
+              <option value="0.6666667">Quarter Triplet (2/3)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Quick Polyrhythmic Ratio Overlays -->
+        <div>
+          <span class="block text-[10px] font-mono uppercase text-slate-400 mb-1.5">Or Quick Ratio Pivot:</span>
+          <div class="flex flex-wrap gap-1.5">
+            <button onclick="setModRatioPreset(1.5, 1)" class="hw-btn px-2.5 py-1 rounded bg-obsidian hover:bg-slate-800 border border-panelBorder text-xs font-mono text-cyan-300">3:2 (x1.5)</button>
+            <button onclick="setModRatioPreset(1, 1.5)" class="hw-btn px-2.5 py-1 rounded bg-obsidian hover:bg-slate-800 border border-panelBorder text-xs font-mono text-cyan-300">2:3 (x0.667)</button>
+            <button onclick="setModRatioPreset(4, 3)" class="hw-btn px-2.5 py-1 rounded bg-obsidian hover:bg-slate-800 border border-panelBorder text-xs font-mono text-amber-300">4:3 (x1.333)</button>
+            <button onclick="setModRatioPreset(3, 4)" class="hw-btn px-2.5 py-1 rounded bg-obsidian hover:bg-slate-800 border border-panelBorder text-xs font-mono text-amber-300">3:4 (x0.75)</button>
+            <button onclick="setModRatioPreset(5, 4)" class="hw-btn px-2.5 py-1 rounded bg-obsidian hover:bg-slate-800 border border-panelBorder text-xs font-mono text-pink-300">5:4 (x1.25)</button>
+          </div>
+        </div>
+
+        <!-- Result & Apply -->
+        <div class="bg-obsidian p-4 rounded-xl border border-emerald-500/40 flex items-center justify-between">
+          <div>
+            <div class="text-[10px] font-mono text-slate-400 uppercase">Modulated Target BPM</div>
+            <div id="modTargetBpmResult" class="font-mono text-2xl font-bold text-emerald-300">180 BPM</div>
+          </div>
+          <button onclick="applyModulatedBpm()" class="hw-btn px-4 py-2 rounded-xl bg-emerald-400 hover:bg-emerald-300 text-obsidian font-mono text-xs font-bold">
+            Apply BPM
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- FOOTER -->
   <footer class="border-t border-panelBorder bg-studio/60 py-3 px-4 mt-8">
@@ -555,7 +722,7 @@
      * GLOBAL APPLICATION STATE
      */
     const appState = {
-      activeTab: 'metronome', // 'metronome' | 'polyrhythm' | 'drdrum'
+      activeTab: 'metronome', // 'metronome' | 'polyrhythm' | 'drdrum' | 'songmap'
       isPlaying: false,
       bpm: 120,
       masterVolume: 0.85,
@@ -580,6 +747,19 @@
         barStep: 4,
         barsElapsedInCycle: 0
       }
+    };
+
+    const songMapState = {
+      loop: true,
+      activeSectionIdx: 0,
+      barInSection: 1,
+      nextSectionId: 5,
+      sections: [
+        { id: 1, name: 'Intro',  bars: 4, numerator: 4, denominator: 4, bpm: 120 },
+        { id: 2, name: 'Verse',  bars: 8, numerator: 4, denominator: 4, bpm: 120 },
+        { id: 3, name: 'Bridge', bars: 4, numerator: 7, denominator: 8, bpm: 120 },
+        { id: 4, name: 'Chorus', bars: 8, numerator: 4, denominator: 4, bpm: 128 }
+      ]
     };
 
     const polyState = {
@@ -625,14 +805,13 @@
 
     /**
      * DR. DRUM METER CONFIGURATIONS & PATTERN BANK
-     * Values: 3 = Accent, 2 = Normal, 1 = Ghost, 0 = Off
      */
     const DR_DRUM_METERS = {
-      '4/4': { label: '4/4', stepsPerBar: 16, groupSize: 4, stepNoteSub: 4 }, // 16th notes
-      '3/4': { label: '3/4', stepsPerBar: 12, groupSize: 4, stepNoteSub: 4 }, // 16th notes
-      '5/4': { label: '5/4', stepsPerBar: 20, groupSize: 4, stepNoteSub: 4 }, // 16th notes
-      '6/8': { label: '6/8', stepsPerBar: 12, groupSize: 3, stepNoteSub: 4 }, // 16th subdivisions of 6 eighths (2 groups of 6)
-      '7/8': { label: '7/8', stepsPerBar: 14, groupSize: 4, stepNoteSub: 4 }  // 16th subdivisions of 7 eighths (2+2+3 grouping)
+      '4/4': { label: '4/4', stepsPerBar: 16, groupSize: 4, stepNoteSub: 4 },
+      '3/4': { label: '3/4', stepsPerBar: 12, groupSize: 4, stepNoteSub: 4 },
+      '5/4': { label: '5/4', stepsPerBar: 20, groupSize: 4, stepNoteSub: 4 },
+      '6/8': { label: '6/8', stepsPerBar: 12, groupSize: 3, stepNoteSub: 4 },
+      '7/8': { label: '7/8', stepsPerBar: 14, groupSize: 4, stepNoteSub: 4 }
     };
 
     const DR_DRUM_PATTERNS = {
@@ -678,14 +857,10 @@
       }
     };
 
-    /**
-     * Adapts any 16-step pattern or fill cleanly into alternate meters (3/4, 5/4, 6/8, 7/8)
-     */
     function adaptPatternToMeter(channelId, base16, meterKey, isFill = false) {
       const targetLen = DR_DRUM_METERS[meterKey].stepsPerBar;
       if (meterKey === '4/4') return [...base16];
 
-      // Musical meter-aware overrides for compound/odd grooves
       if (!isFill) {
         if (meterKey === '6/8') {
           if (channelId === 'kick' && base16.some(v => v > 0)) return [3,0,0,0,0,0, 2,0,0,0,2,0];
@@ -695,7 +870,6 @@
           if (channelId === 'shaker' && base16.some(v => v > 0)) return [3,1,2,1,2,1, 3,1,2,1,2,1];
         }
         if (meterKey === '7/8') {
-          // Grouped 2 + 2 + 3 (steps 0..3, 4..7, 8..13)
           if (channelId === 'kick' && base16.some(v => v > 0)) return [3,0,0,0, 2,0,0,0, 3,0,0,0,2,0];
           if (channelId === 'snare' && base16.some(v => v > 0)) return [0,0,0,0, 3,0,0,0, 0,0,3,0,0,0];
           if (channelId === 'hihat' && base16.some(v => v > 0)) return [3,0,2,0, 3,0,2,0, 3,0,2,0,2,0];
@@ -707,14 +881,12 @@
           if (channelId === 'clap' && base16.some(v => v > 0)) return [0,0,0,0, 3,0,0,0, 0,0,0,0];
         }
         if (meterKey === '5/4') {
-          // Grouped 3 + 2 (beats 1,2,3 + beats 4,5)
           if (channelId === 'kick' && base16.some(v => v > 0)) return [3,0,0,0, 0,0,2,0, 0,0,0,0, 3,0,0,0, 0,0,2,0];
           if (channelId === 'snare' && base16.some(v => v > 0)) return [0,0,0,0, 3,0,0,1, 0,0,0,0, 0,0,0,0, 3,0,0,0];
           if (channelId === 'clap' && base16.some(v => v > 0)) return [0,0,0,0, 0,0,0,0, 0,0,0,0, 3,0,0,0, 0,0,0,0];
         }
       }
 
-      // Generic step resizing + dynamic turnaround fill on final beat
       const out = Array.from({ length: targetLen }, (_, i) => base16[i % base16.length]);
       if (isFill) {
         const tailStart = Math.max(0, targetLen - 4);
@@ -1182,7 +1354,7 @@
     function scheduler() {
       if (!appState.isPlaying) return;
 
-      if (appState.activeTab === 'metronome') {
+      if (appState.activeTab === 'metronome' || appState.activeTab === 'songmap') {
         scheduleMetronomeNotes();
       } else if (appState.activeTab === 'polyrhythm') {
         schedulePolyrhythmNotes();
@@ -1194,27 +1366,16 @@
     }
 
     function scheduleMetronomeNotes() {
-      const beatDuration = (60.0 / appState.bpm) * (4.0 / metronomeState.denominator);
-      const subDuration = beatDuration / metronomeState.subdivision;
-
       while (nextMetroNoteTime < audioCtx.currentTime + SCHEDULE_AHEAD_SEC) {
         const totalSubsPerBar = metronomeState.numerator * metronomeState.subdivision;
         const posInBar = metroStepIndex % totalSubsPerBar;
-        const beatIdx = Math.floor(posInBar / metronomeState.subdivision);
-        const subIdx = posInBar % metronomeState.subdivision;
-        const isMainBeat = (subIdx === 0);
 
-        const accentVal = metronomeState.accents[beatIdx] ?? 2;
-
-        if (isMainBeat) {
-          triggerSynthSound(nextMetroNoteTime, metronomeState.soundPreset, accentVal, false, 1.0);
-        } else if (accentVal > 0) {
-          triggerSynthSound(nextMetroNoteTime, metronomeState.soundPreset, 2, true, 1.0);
-        }
-
+        // Handle Bar Progression at start of new bar (when metroStepIndex > 0)
         if (posInBar === 0 && metroStepIndex > 0) {
           metronomeState.barCount++;
-          if (metronomeState.trainer.enabled) {
+          if (appState.activeTab === 'songmap' && songMapState.sections.length > 0) {
+            advanceSongMapBar();
+          } else if (metronomeState.trainer.enabled) {
             metronomeState.trainer.barsElapsedInCycle++;
             if (metronomeState.trainer.barsElapsedInCycle >= metronomeState.trainer.barStep) {
               metronomeState.trainer.barsElapsedInCycle = 0;
@@ -1224,13 +1385,33 @@
           }
         }
 
+        const currentTotalSubs = metronomeState.numerator * metronomeState.subdivision;
+        const curPosInBar = metroStepIndex % currentTotalSubs;
+        const beatIdx = Math.floor(curPosInBar / metronomeState.subdivision);
+        const subIdx = curPosInBar % metronomeState.subdivision;
+        const isMainBeat = (subIdx === 0);
+        const accentVal = metronomeState.accents[beatIdx] ?? 2;
+
+        if (isMainBeat) {
+          triggerSynthSound(nextMetroNoteTime, metronomeState.soundPreset, accentVal, false, 1.0);
+        } else if (accentVal > 0) {
+          triggerSynthSound(nextMetroNoteTime, metronomeState.soundPreset, 2, true, 1.0);
+        }
+
         const delayMs = Math.max(0, (nextMetroNoteTime - audioCtx.currentTime) * 1000);
         const capturedBar = metronomeState.barCount;
+        const capturedSecIdx = songMapState.activeSectionIdx;
+        const capturedSecBar = songMapState.barInSection;
         setTimeout(() => {
           if (!appState.isPlaying) return;
           highlightMetronomeBeat(beatIdx, subIdx, capturedBar);
+          if (appState.activeTab === 'songmap') {
+            updateSongMapPlayheadUI(capturedSecIdx, capturedSecBar);
+          }
         }, delayMs);
 
+        const beatDuration = (60.0 / appState.bpm) * (4.0 / metronomeState.denominator);
+        const subDuration = beatDuration / metronomeState.subdivision;
         nextMetroNoteTime += subDuration;
         metroStepIndex++;
       }
@@ -1361,6 +1542,12 @@
         metronomeState.barCount = 1;
         metronomeState.trainer.barsElapsedInCycle = 0;
 
+        if (appState.activeTab === 'songmap' && songMapState.sections.length > 0) {
+          songMapState.activeSectionIdx = 0;
+          songMapState.barInSection = 1;
+          applySongSectionToClock(songMapState.sections[0]);
+        }
+
         polyState.layers.forEach(l => {
           l.nextNoteTime = now;
           l.currentStep = 0;
@@ -1425,6 +1612,8 @@
       document.getElementById('bpmSlider').value = bpm;
       document.getElementById('polyBpmInput').value = bpm;
       document.getElementById('drDrumBpmInput').value = bpm;
+      const songMapInput = document.getElementById('songMapBpmInput');
+      if (songMapInput) songMapInput.value = bpm;
 
       let marking = 'Moderato';
       if (bpm < 45) marking = 'Grave / Largo';
@@ -1435,19 +1624,30 @@
       else if (bpm < 172) marking = 'Vivace';
       else marking = 'Presto';
       document.getElementById('tempoMarking').textContent = marking;
+
+      const modSource = document.getElementById('modSourceBpmLabel');
+      if (modSource) {
+        modSource.textContent = `${bpm} BPM`;
+        calculateModulation();
+      }
     }
 
     function adjustBpm(delta) {
       setBpm(appState.bpm + delta);
     }
 
-    function setTimeSignature(num, den) {
+    function setTimeSignature(num, den, resetGroupingTag = true) {
       num = Math.max(1, Math.min(32, num));
       metronomeState.numerator = num;
       metronomeState.denominator = den;
 
       document.getElementById('displayNumerator').textContent = num;
       document.getElementById('selectDenominator').value = den;
+
+      if (resetGroupingTag) {
+        const tag = document.getElementById('activeGroupingLabel');
+        if (tag) tag.textContent = 'Standard';
+      }
 
       const newAccents = [];
       for (let i = 0; i < num; i++) {
@@ -1458,6 +1658,20 @@
         }
       }
       metronomeState.accents = newAccents;
+      renderMetronomeBeatGrid();
+    }
+
+    function applyPulseGrouping(num, den, groups, label) {
+      setTimeSignature(num, den, false);
+      const pattern = [];
+      groups.forEach(groupLen => {
+        for (let i = 0; i < groupLen; i++) {
+          pattern.push(i === 0 ? 3 : 2);
+        }
+      });
+      metronomeState.accents = pattern.slice(0, num);
+      const tag = document.getElementById('activeGroupingLabel');
+      if (tag) tag.textContent = label;
       renderMetronomeBeatGrid();
     }
 
@@ -1591,6 +1805,9 @@
       drDrumState.stepIndex = 0;
       drDrumState.barInPhrase = 0;
 
+      const meterSelect = document.getElementById('drDrumMeterSelect');
+      if (meterSelect) meterSelect.value = meterKey;
+
       drDrumState.channels.forEach(ch => {
         const basePattern = DR_DRUM_PATTERNS[ch.id][ch.variant] || DR_DRUM_PATTERNS[ch.id]['Rock Backbeat'] || ch.steps;
         ch.steps = adaptPatternToMeter(ch.id, basePattern, meterKey, false);
@@ -1649,6 +1866,17 @@
 
     function loadDrDrumPreset(presetKey) {
       const presets = {
+        default: {
+          meter: '4/4',
+          swing: 0,
+          humanize: 0.25,
+          autoFill: false,
+          kick:   { variant: 'Rock Backbeat', voice: 'kick_acoustic', volume: 0.9 },
+          snare:  { variant: 'Backbeat 2&4',  voice: 'snare_crisp',   volume: 0.85 },
+          hihat:  { variant: '8th Pulse',     voice: 'hat_closed',    volume: 0.75 },
+          clap:   { variant: '2 & 4 Layer',   voice: 'clap_studio',   volume: 0.7 },
+          shaker: { variant: '16th Groove',   voice: 'perc_shaker',   volume: 0.65 }
+        },
         unplugged: {
           swing: 0.08,
           kick:   { variant: 'Syncopated',    voice: 'kick_cajon' },
@@ -1694,6 +1922,24 @@
       const cfg = presets[presetKey];
       if (!cfg) return;
 
+      if (cfg.meter) {
+        drDrumState.meter = cfg.meter;
+        const meterSelect = document.getElementById('drDrumMeterSelect');
+        if (meterSelect) meterSelect.value = cfg.meter;
+        const badge = document.getElementById('drDrumBarBadge');
+        if (badge) badge.textContent = `BAR 1 / 4 • ${cfg.meter}`;
+      }
+      if (typeof cfg.humanize === 'number') {
+        drDrumState.humanize = cfg.humanize;
+        const humSlider = document.getElementById('drDrumHumanizeSlider');
+        if (humSlider) humSlider.value = cfg.humanize;
+      }
+      if (typeof cfg.autoFill === 'boolean') {
+        drDrumState.autoFill = cfg.autoFill;
+        const autoFillEl = document.getElementById('drDrumAutoFill');
+        if (autoFillEl) autoFillEl.checked = cfg.autoFill;
+      }
+
       drDrumState.swing = cfg.swing;
       document.getElementById('drDrumSwingSlider').value = cfg.swing;
       document.getElementById('drDrumSwingVal').textContent = Math.round((cfg.swing / 0.45) * 100) + '%';
@@ -1702,6 +1948,11 @@
         if (cfg[ch.id]) {
           ch.variant = cfg[ch.id].variant;
           ch.voice = cfg[ch.id].voice;
+          if (typeof cfg[ch.id].volume === 'number') ch.volume = cfg[ch.id].volume;
+          if (presetKey === 'default') {
+            ch.muted = false;
+            ch.solo = false;
+          }
           ch.steps = adaptPatternToMeter(ch.id, DR_DRUM_PATTERNS[ch.id][ch.variant], drDrumState.meter, false);
         }
       });
@@ -1729,7 +1980,6 @@
         ).join('');
 
         const stepsHtml = ch.steps.slice(0, stepsCount).map((val, idx) => {
-          // Group spacing tailored to meter (e.g. 2+2+3 in 7/8, 3s in 6/8, 4s in 4/4, 3/4, 5/4)
           let isGroupStart = idx % groupSize === 0;
           if (drDrumState.meter === '7/8') {
             isGroupStart = (idx === 0 || idx === 4 || idx === 8);
@@ -1947,6 +2197,10 @@
 
     function loadPolyPreset(presetKey) {
       const presets = {
+        'default': [
+          { name: 'Voice A', beats: 4, sound: 'kick', colorIdx: 0, volume: 0.85 },
+          { name: 'Voice B', beats: 3, sound: 'marimba', colorIdx: 1, volume: 0.8 }
+        ],
         '3:2': [
           { name: '3-Beat Hemiola', beats: 3, sound: 'marimba', colorIdx: 0 },
           { name: '2-Beat Pulse', beats: 2, sound: 'kick', colorIdx: 1 }
@@ -1973,6 +2227,10 @@
       const chosen = presets[presetKey];
       if (!chosen) return;
 
+      if (presetKey === 'default') {
+        setPolyMode('polyrhythm');
+      }
+
       const now = audioCtx ? audioCtx.currentTime + 0.04 : 0;
       if (audioCtx) appState.startTimeAudio = now;
 
@@ -1983,7 +2241,7 @@
         denominator: 4,
         multiplier: 1,
         sound: cfg.sound,
-        volume: 0.85,
+        volume: cfg.volume ?? 0.85,
         muted: false,
         solo: false,
         colorIdx: cfg.colorIdx,
@@ -2074,6 +2332,219 @@
     }
 
     /**
+     * METRIC MODULATION CALCULATOR
+     */
+    function toggleModulationModal(forceState = null) {
+      const modal = document.getElementById('modulationModal');
+      const open = forceState !== null ? forceState : modal.classList.contains('hidden');
+      if (open) {
+        modal.classList.remove('hidden');
+        document.getElementById('modSourceBpmLabel').textContent = `${appState.bpm} BPM`;
+        calculateModulation();
+      } else {
+        modal.classList.add('hidden');
+      }
+    }
+
+    function setModRatioPreset(oldVal, newVal) {
+      document.getElementById('modOldNote').value = String(oldVal);
+      document.getElementById('modNewNote').value = String(newVal);
+      const targetBpm = Math.round(appState.bpm * (oldVal / newVal));
+      document.getElementById('modTargetBpmResult').textContent = `${targetBpm} BPM`;
+      document.getElementById('modTargetBpmResult').dataset.bpm = String(targetBpm);
+    }
+
+    function calculateModulation() {
+      const oldVal = parseFloat(document.getElementById('modOldNote').value) || 1;
+      const newVal = parseFloat(document.getElementById('modNewNote').value) || 1;
+      const targetBpm = Math.max(20, Math.min(300, Math.round(appState.bpm * (oldVal / newVal))));
+      const el = document.getElementById('modTargetBpmResult');
+      el.textContent = `${targetBpm} BPM`;
+      el.dataset.bpm = String(targetBpm);
+    }
+
+    function applyModulatedBpm() {
+      const el = document.getElementById('modTargetBpmResult');
+      const target = parseInt(el.dataset.bpm, 10);
+      if (!isNaN(target)) setBpm(target);
+      toggleModulationModal(false);
+    }
+
+    /**
+     * SONG MAP ARRANGEMENT SEQUENCER
+     */
+    function applySongSectionToClock(sec) {
+      if (!sec) return;
+      setBpm(sec.bpm);
+      setTimeSignature(sec.numerator, sec.denominator);
+      updateSongMapPlayheadUI(songMapState.activeSectionIdx, songMapState.barInSection);
+    }
+
+    function advanceSongMapBar() {
+      const curSec = songMapState.sections[songMapState.activeSectionIdx];
+      if (!curSec) return;
+
+      songMapState.barInSection++;
+      if (songMapState.barInSection > curSec.bars) {
+        songMapState.barInSection = 1;
+        songMapState.activeSectionIdx++;
+
+        if (songMapState.activeSectionIdx >= songMapState.sections.length) {
+          if (songMapState.loop) {
+            songMapState.activeSectionIdx = 0;
+          } else {
+            songMapState.activeSectionIdx = 0;
+            togglePlay();
+            return;
+          }
+        }
+        applySongSectionToClock(songMapState.sections[songMapState.activeSectionIdx]);
+      }
+    }
+
+    function updateSongMapPlayheadUI(secIdx, barNum) {
+      const sec = songMapState.sections[secIdx];
+      if (!sec) return;
+      const activeBadge = document.getElementById('songMapActiveBadge');
+      const barBadge = document.getElementById('songMapBarBadge');
+      if (activeBadge) activeBadge.textContent = `${sec.name} (${sec.numerator}/${sec.denominator})`;
+      if (barBadge) barBadge.textContent = `${barNum} / ${sec.bars}`;
+
+      document.querySelectorAll('[id^="songMapCard-"]').forEach((card, idx) => {
+        if (idx === secIdx && appState.isPlaying) {
+          card.classList.add('border-emerald-400', 'bg-emerald-500/10');
+          card.classList.remove('border-panelBorder');
+        } else {
+          card.classList.remove('border-emerald-400', 'bg-emerald-500/10');
+          card.classList.add('border-panelBorder');
+        }
+      });
+    }
+
+    function addSongMapSection() {
+      songMapState.sections.push({
+        id: songMapState.nextSectionId++,
+        name: `Section ${songMapState.sections.length + 1}`,
+        bars: 4,
+        numerator: metronomeState.numerator,
+        denominator: metronomeState.denominator,
+        bpm: appState.bpm
+      });
+      renderSongMapSections();
+    }
+
+    function moveSongMapSection(idx, dir) {
+      const targetIdx = idx + dir;
+      if (targetIdx < 0 || targetIdx >= songMapState.sections.length) return;
+      const temp = songMapState.sections[idx];
+      songMapState.sections[idx] = songMapState.sections[targetIdx];
+      songMapState.sections[targetIdx] = temp;
+      songMapState.activeSectionIdx = 0;
+      renderSongMapSections();
+    }
+
+    function removeSongMapSection(id) {
+      if (songMapState.sections.length <= 1) return;
+      songMapState.sections = songMapState.sections.filter(s => s.id !== id);
+      songMapState.activeSectionIdx = 0;
+      renderSongMapSections();
+    }
+
+    function renderSongMapSections() {
+      const container = document.getElementById('songMapSectionsContainer');
+      if (!container) return;
+      container.innerHTML = '';
+
+      songMapState.sections.forEach((sec, idx) => {
+        const card = document.createElement('div');
+        card.id = `songMapCard-${idx}`;
+        card.className = 'bg-panel border border-panelBorder rounded-2xl p-4 flex flex-wrap items-center justify-between gap-4 transition-all';
+        card.innerHTML = `
+          <div class="flex items-center gap-2.5">
+            <span class="w-7 h-7 rounded-lg bg-obsidian border border-panelBorder flex items-center justify-center font-mono text-xs font-bold text-cyan-300">${idx + 1}</span>
+            <input type="text" value="${sec.name}" onchange="songMapState.sections[${idx}].name = this.value; updateSongMapPlayheadUI(songMapState.activeSectionIdx, songMapState.barInSection);" class="bg-obsidian border border-panelBorder rounded-lg px-2.5 py-1.5 font-mono text-xs font-bold text-white w-36 focus:outline-none focus:border-cyan-400" />
+          </div>
+
+          <div class="flex flex-wrap items-center gap-2.5">
+            <div class="flex items-center gap-1.5 bg-obsidian px-2.5 py-1.5 rounded-lg border border-panelBorder">
+              <span class="text-[10px] font-mono text-slate-400">BARS:</span>
+              <input type="number" min="1" max="64" value="${sec.bars}" onchange="songMapState.sections[${idx}].bars = Math.max(1, parseInt(this.value)||1)" class="w-11 bg-transparent font-mono text-xs font-bold text-center text-white focus:outline-none" />
+            </div>
+
+            <div class="flex items-center gap-1 bg-obsidian px-2.5 py-1.5 rounded-lg border border-panelBorder">
+              <span class="text-[10px] font-mono text-slate-400">METER:</span>
+              <input type="number" min="1" max="32" value="${sec.numerator}" onchange="songMapState.sections[${idx}].numerator = Math.max(1, Math.min(32, parseInt(this.value)||4))" class="w-9 bg-transparent font-mono text-xs font-bold text-center text-cyan-300 focus:outline-none" />
+              <span class="text-slate-500 font-mono">/</span>
+              <select onchange="songMapState.sections[${idx}].denominator = parseInt(this.value)" class="bg-transparent font-mono text-xs font-bold text-amber-300 focus:outline-none">
+                <option value="2" ${sec.denominator === 2 ? 'selected' : ''}>2</option>
+                <option value="4" ${sec.denominator === 4 ? 'selected' : ''}>4</option>
+                <option value="8" ${sec.denominator === 8 ? 'selected' : ''}>8</option>
+                <option value="16" ${sec.denominator === 16 ? 'selected' : ''}>16</option>
+              </select>
+            </div>
+
+            <div class="flex items-center gap-1.5 bg-obsidian px-2.5 py-1.5 rounded-lg border border-panelBorder">
+              <span class="text-[10px] font-mono text-slate-400">BPM:</span>
+              <input type="number" min="20" max="300" value="${sec.bpm}" onchange="songMapState.sections[${idx}].bpm = Math.max(20, Math.min(300, parseInt(this.value)||120))" class="w-12 bg-transparent font-mono text-xs font-bold text-center text-emerald-300 focus:outline-none" />
+            </div>
+
+            <button onclick="songMapState.activeSectionIdx = ${idx}; songMapState.barInSection = 1; applySongSectionToClock(songMapState.sections[${idx}]);" class="hw-btn px-2.5 py-1.5 rounded-lg bg-obsidian hover:bg-slate-800 border border-panelBorder text-[11px] font-mono text-cyan-300" title="Load this section's BPM & meter">
+              Cue
+            </button>
+
+            <div class="flex items-center gap-1">
+              <button onclick="moveSongMapSection(${idx}, -1)" ${idx === 0 ? 'disabled' : ''} class="hw-btn px-2 py-1 rounded bg-obsidian hover:bg-slate-800 border border-panelBorder font-mono text-xs text-slate-300 disabled:opacity-30" title="Move Up">&uarr;</button>
+              <button onclick="moveSongMapSection(${idx}, 1)" ${idx === songMapState.sections.length - 1 ? 'disabled' : ''} class="hw-btn px-2 py-1 rounded bg-obsidian hover:bg-slate-800 border border-panelBorder font-mono text-xs text-slate-300 disabled:opacity-30" title="Move Down">&darr;</button>
+              ${songMapState.sections.length > 1 ? `<button onclick="removeSongMapSection(${sec.id})" class="hw-btn px-2 py-1 rounded bg-obsidian hover:bg-rose-950 border border-panelBorder font-mono text-xs text-rose-400" title="Delete Section">&times;</button>` : ''}
+            </div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function exportSongMapJson() {
+      const dataStr = JSON.stringify({ app: 'time.sarimoko.com', sections: songMapState.sections }, null, 2);
+      const blob = new Blob([dataStr], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'sarimoko-song-map.json';
+      link.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function importSongMapJson(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const parsed = JSON.parse(e.target.result);
+          if (Array.isArray(parsed.sections) && parsed.sections.length > 0) {
+            songMapState.sections = parsed.sections.map((s, idx) => ({
+              id: idx + 1,
+              name: String(s.name || `Section ${idx + 1}`),
+              bars: Math.max(1, parseInt(s.bars, 10) || 4),
+              numerator: Math.max(1, Math.min(32, parseInt(s.numerator, 10) || 4)),
+              denominator: [2, 4, 8, 16].includes(parseInt(s.denominator, 10)) ? parseInt(s.denominator, 10) : 4,
+              bpm: Math.max(20, Math.min(300, parseInt(s.bpm, 10) || 120))
+            }));
+            songMapState.nextSectionId = songMapState.sections.length + 1;
+            songMapState.activeSectionIdx = 0;
+            songMapState.barInSection = 1;
+            renderSongMapSections();
+            updateSongMapPlayheadUI(0, 1);
+          }
+        } catch (err) {
+          console.error('Invalid Song Map JSON', err);
+        }
+      };
+      reader.readAsText(file);
+      event.target.value = '';
+    }
+
+    /**
      * TAB NAVIGATION
      */
     function switchTab(tab) {
@@ -2081,30 +2552,38 @@
       const views = {
         metronome: document.getElementById('viewMetronome'),
         polyrhythm: document.getElementById('viewPolyrhythm'),
-        drdrum: document.getElementById('viewDrDrum')
+        drdrum: document.getElementById('viewDrDrum'),
+        songmap: document.getElementById('viewSongMap')
       };
       const btns = {
         metronome: document.getElementById('tabBtnMetronome'),
         polyrhythm: document.getElementById('tabBtnPolyrhythm'),
-        drdrum: document.getElementById('tabBtnDrDrum')
+        drdrum: document.getElementById('tabBtnDrDrum'),
+        songmap: document.getElementById('tabBtnSongMap')
       };
       const activeStyles = {
         metronome: 'bg-panel text-cyan-300 border border-cyan-500/30 shadow-sm',
         polyrhythm: 'bg-panel text-pink-300 border border-pink-500/30 shadow-sm',
-        drdrum: 'bg-panel text-amber-300 border border-amber-500/30 shadow-sm'
+        drdrum: 'bg-panel text-amber-300 border border-amber-500/30 shadow-sm',
+        songmap: 'bg-panel text-emerald-300 border border-emerald-500/30 shadow-sm'
       };
 
       Object.keys(views).forEach(key => {
         if (key === tab) {
           views[key].classList.remove('hidden');
-          btns[key].className = `flex-1 lg:flex-initial px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all flex items-center justify-center gap-1.5 ${activeStyles[key]}`;
+          btns[key].className = `flex-1 lg:flex-initial px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all flex items-center justify-center gap-1.5 whitespace-nowrap ${activeStyles[key]}`;
         } else {
           views[key].classList.add('hidden');
-          btns[key].className = 'flex-1 lg:flex-initial px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all text-slate-400 hover:text-white flex items-center justify-center gap-1.5';
+          btns[key].className = 'flex-1 lg:flex-initial px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all text-slate-400 hover:text-white flex items-center justify-center gap-1.5 whitespace-nowrap';
         }
       });
 
       if (tab === 'polyrhythm') resizeCanvases();
+      if (tab === 'songmap' && songMapState.sections.length > 0) {
+        songMapState.activeSectionIdx = 0;
+        songMapState.barInSection = 1;
+        applySongSectionToClock(songMapState.sections[0]);
+      }
 
       if (appState.isPlaying && audioCtx) {
         const now = audioCtx.currentTime + 0.04;
@@ -2348,6 +2827,7 @@
       renderSubPulseDots();
       renderPolyLayers();
       renderDrDrumChannels();
+      renderSongMapSections();
       resizeCanvases();
       requestAnimationFrame(renderLoop);
     };
